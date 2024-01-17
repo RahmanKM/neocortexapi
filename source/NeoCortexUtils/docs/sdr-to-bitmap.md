@@ -25,3 +25,8 @@ Overload 1
 public static void DrawBitmap(int[,] twoDimArray, int width, int height, String filePath, string text = null)
 ```
 
+Overload 1
+```csharp
+public static void DrawBitmap(int[,] twoDimArray, int width, int height, String filePath, Color inactiveCellColor, Color activeCellColor, string text = null)
+```
+
