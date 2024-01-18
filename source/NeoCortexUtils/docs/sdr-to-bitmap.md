@@ -1,7 +1,8 @@
-# SDR to Bitmap representation
+## DrawBitmap Method
 
-## Why do we need SDR to Bitmap representation
-SDR is a crucial part of Temporal Memory Algorithm. SDR stands for sparse distributed representations (SDRs)
+### Description
+The `DrawBitmap` method in the `NeoCortexUtils` class is responsible for generating a bitmap representation from a 1D, 2D, 3D array of active columns. This method supports customization of colors, text overlay, and bitmap scaling.
 
-We have represented the generated SDRs in the form of Bitmap.
-For generating bitmaps we have used a common method ```DrawBitmap()``` for all the encoders and spatial pooler.
+### Method Signature
+```csharp
+public static void DrawBitmap(int[,] twoDimArray, int width, int height, String filePath, Color inactiveCellColor, Color activeCellColor, string text = null)
