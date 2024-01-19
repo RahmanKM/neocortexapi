@@ -10,10 +10,18 @@ public static void DrawBitmap(int[,] twoDimArray, int width, int height, String 
 
 ### Parameters
 
-1. twoDimArray (int[,]): Array of active columns.
+1. twoDimArray (int[,]): Array of active columns with two dimensions.
 2. width (int): Output width of the bitmap.
 3. height (int): Output height of the bitmap.
 4. filePath (String): The filename of the generated bitmap (PNG format).
 5. inactiveCellColor (Color): Color of inactive cells in the bitmap.
 6. activeCellColor (Color): Color of active cells in the bitmap.
 7. text (string, optional): Text to be written on the bitmap.
+
+### Overloaded Methods
+
+Overload 1
+```csharp
+public static void DrawBitmap(int[,] twoDimArray, int width, int height, String filePath, string text = null)
+```
+
