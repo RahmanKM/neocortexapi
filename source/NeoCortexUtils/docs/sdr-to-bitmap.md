@@ -20,13 +20,17 @@ public static void DrawBitmap(int[,] twoDimArray, int width, int height, String 
 
 ### Overloaded Methods
 
-Overload 1
+Overload 1 Default colors, no text overlay
 ```csharp
 public static void DrawBitmap(int[,] twoDimArray, int width, int height, String filePath, string text = null)
 ```
 
-Overload 1
+Overload 2 Custom colors and text overlay
 ```csharp
 public static void DrawBitmap(int[,] twoDimArray, int width, int height, String filePath, Color inactiveCellColor, Color activeCellColor, string text = null)
 ```
+
+
+
+
 
