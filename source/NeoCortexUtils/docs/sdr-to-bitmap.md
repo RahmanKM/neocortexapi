@@ -30,6 +30,11 @@ Overload 2 Custom colors and text overlay
 public static void DrawBitmap(int[,] twoDimArray, int width, int height, String filePath, Color inactiveCellColor, Color activeCellColor, string text = null)
 ```
 
+Overload 3: Scale bitmap with custom colors and text overlay
+```csharp
+public static void DrawBitmap(int[,] twoDimArray, int scale, String filePath, Color inactiveCellColor, Color activeCellColor, string text = null)
+```
+
 
 
 
