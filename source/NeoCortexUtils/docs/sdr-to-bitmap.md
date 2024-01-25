@@ -35,6 +35,11 @@ Overload 3: Scale bitmap with custom colors and text overlay
 public static void DrawBitmap(int[,] twoDimArray, int scale, String filePath, Color inactiveCellColor, Color activeCellColor, string text = null)
 ```
 
+Example Usage for DrawBitmaps
+```csharp
+DrawBitmaps(listOfArrays, "output_combined_bitmap.png", Color.DarkGray, Color.Yellow, 1024, 1024);
+```
+
 
 
 
