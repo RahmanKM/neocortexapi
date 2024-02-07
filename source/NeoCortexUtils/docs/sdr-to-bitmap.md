@@ -1,7 +1,7 @@
 ## DrawBitmap Method
 
 ## Purpose
-The DrawBitmap method in the BitmapDrawer class serves the purpose of creating a bitmap image from an array of active columns. This method provides flexibility in generating visual representations of data in the form of a bitmap. Its easy to visualize the active cells in array of 
+The DrawBitmap method in the BitmapDrawer class serves the purpose of creating a bitmap image from an array of active columns. This method provides flexibility in generating visual representations of data in the form of a bitmap. Its easy to visualize the active cells in array of cells
 
 ### Description
 The `DrawBitmap` method in the `NeoCortexUtils` class is responsible for generating a bitmap representation from a 1D, 2D, 3D array of active columns. This method supports customization of colors, text overlay, and bitmap scaling.
