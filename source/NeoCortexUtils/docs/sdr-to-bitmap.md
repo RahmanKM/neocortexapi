@@ -43,8 +43,10 @@ public static void DrawBitmap(int[,] twoDimArray, int scale, String filePath, Co
 
 Example Usage for DrawBitmaps
 ```csharp
-DrawBitmaps(listOfArrays, "output_combined_bitmap.png", Color.DarkGray, Color.Yellow, 1024, 1024);
+DrawBitmaps(listOfArrays, "output_combined_bitmap.png", Color.DarkGray, Color.Yellow, 1024, 1024); 
 ```
+
+Example 
 
 
 
