@@ -46,7 +46,7 @@ Example Usage for DrawBitmaps
 DrawBitmaps(listOfArrays, "output_combined_bitmap.png", Color.DarkGray, Color.Yellow, 1024, 1024); 
 ```
 
-Example 
+Example of Drawbit
 
 
 
