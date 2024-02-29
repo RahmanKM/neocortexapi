@@ -48,6 +48,8 @@ DrawBitmaps(listOfArrays, "output_combined_bitmap.png", Color.DarkGray, Color.Ye
 
 Example of Drawbitmaps output of Images 
 ```
+DrawBitMaps
+```
 
 
 
