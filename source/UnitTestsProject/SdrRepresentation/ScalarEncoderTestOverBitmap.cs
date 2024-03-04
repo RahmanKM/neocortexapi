@@ -60,9 +60,15 @@ namespace UnitTestsProject.Sdr
             }
         }
 
+        //[DataRow(new string[] { "13.0", "20.0", "48.0" })]
+        //[DataRow(new string[] { "52", "111", "147" })]
+        //[DataRow(new string[] { "152", "215", "248" })]
+        //[DataRow(new string[] { "252", "329", "347" })]
+        //[DataRow(new string[] { "351", "402", "447" })]
+        [DataRow(new double[] { 45.0, 497.0 })]
         private void ScalarEncoderTest(int[] inputs)
         {
-            var outFolder = @"..\..\..\TestFiles\ScalarEncoderResults";
+            var outFolder = @"EncoderOutputImages\ScalarEncoderOutput";
 
             ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
             {
@@ -148,7 +154,7 @@ namespace UnitTestsProject.Sdr
         {
             Object[] d1 = new Object[] { "05/02/2020 22:58:06", "06/04/2020 01:28:07", "07/09/2019 21:15:07", "08/01/2017 11:27:07" };
 
-            this.DateTimeEncoderTest(d1);
+            //this.DateTimeEncoderTest(d1);
 
 
             Object[] inputs = { "05/02/2020 22:58:07", "06/04/2020 01:28:07", "07/09/2019 21:15:07", "08/01/2018 11:27:07" };
@@ -376,7 +382,47 @@ namespace UnitTestsProject.Sdr
         }
 
 
+        /// <summary>
+        /// Describe the Air Quality Index values and min values and max values of ScalarEncoders
+        /// </summary>
+        [DataRow(new int[] { 13, 20, 48 }, 0.0, 50.0)]
+        [DataRow(new int[] { 52, 111, 147 }, 50.0, 150.0)]
+        [DataRow(new int[] { 152, 215, 248 }, 150.0, 250.0)]
+        [DataRow(new int[] { 252, 329, 347 }, 250.0, 350.0)]
+        [DataRow(new int[] { 351, 402, 447 }, 350.0, 450.0)]
+        [DataRow(new int[] { 450, 497 }, 450.0, 500.0)]
+        [TestMethod]
+        [TestCategory("Experiment")]
+        public void ScalarEncodingExperimentWithAQI(int[] inputs, double minValue, double maxValue)
+        {
+            string outFolder = nameof(ScalarEncodingExperimentWithAQI);
 
+            Directory.CreateDirectory(outFolder);
+
+            DateTime now = DateTime.Now;
+
+            ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+            {
+                { "W", 21},
+                { "N", 100},
+                { "Radius", -1.0},
+                { "MinVal", minValue},
+                { "MaxVal", maxValue },
+                { "Periodic", false},
+                { "Name", "scalar"},
+                { "ClipInput", false},
+            });
+
+            foreach (int i in inputs)
+            {
+                var result = encoder.Encode(i);
+
+                int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
+                var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
+
+                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{outFolder}\\{i}.png", Color.White, Color.Blue);
+            }
+        }
 
 
 
