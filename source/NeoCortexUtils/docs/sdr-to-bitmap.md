@@ -4,6 +4,10 @@ This document outlines the method for visualizing Sparse Distributed Representat
 
 ## Introduction
 
+### What is SDR:
+
+Sparse Distributed Representation (SDR) is a concept used in computing that mirrors the brain's method of processing information. Essentially, it's a way of storing data where most of the bits are off (0), and only a few are on (1). This setup allows for handling a wide variety of information efficiently and robustly, much like how the brain operates with its neurons.
+
 ### What is Bitmap:
 
 Bitmap is a type of file format which is used to store images. A bitmap is a spatially mapped array of bits i.e. a map of bits. For the purpose of representing SDRs as bitmaps, we first feed the output of encoders as inputs to the SP.
@@ -58,11 +62,12 @@ This method simplifies analyzing and understanding SDR patterns by providing a v
 #### Example of visualizing a Number
 Let's visualize a basic SDR with a pattern of activation. This simple example will help understand the visualization process. So for this we can take a simple value say ```40148```. Now we need SDR encode this data in order to visualize.
 ```csharp
-var encoderSettings = new Dictionary<string, object>
+            var encoderSettings = new Dictionary<string, object>
             {
                 { "N", 156},
             };
 
+               
             var encoder = new BinaryEncoder(encoderSettings);
 
             // Input value to encode. This is the value that will be converted into a binary representation.
@@ -84,9 +89,8 @@ NeoCortexUtils.DrawBitmap(twoDimArray, 16, 16, filePath, Color.Black, Color.Yell
 ```
 We can get the below image from the DrawBitMap method
 
-![EncodedValueVisualization18](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/88946733-7ae2-4d0c-bd04-0332b18f3e28)
+![EncodedValueVisualization-18_112](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/9bfc6c35-925a-41cc-95db-50f494a8cedd)
 
-Figure 1: Outpit image for "40148".
 
 #### Example of visualizing a number
 For this example we will take a random integer value ```50149```. We will encode the value by setting up the sdr encoder settings and encode the value with that settings. and also set up the two dimensional array
@@ -112,49 +116,50 @@ Now lets draw this using DrawBitMap method
 ```csharp
 NeoCortexUtils.DrawBitmap(twoDimArray, 160, 160, "EncodedValueVisualization-45_67.png", Color.Black, Color.Yellow);
 ```
-It treturns the below picture,
+It returns the below picture,
 
-![EncodedValueVisualization-str](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/81fe228b-468b-43f3-9023-419543a946ff)
+![EncodedValueVisualization-50148](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/16ccc118-d5f6-494c-a9c4-71a5ab86c50d)
 
-Figure 2: Outpit image for "50149"
 
 ### DrawBitmap example for DateTime Encoder
 
-We can use different types of encoder to visualize that particular type of data in order to visualize them. We can take a datetime data and encode them with DateTime encoder and visualize them with DrawBitMaps method. For this example we can take "05/27/2017 21:58:07" and send it through datetime encoder to get sdr.
+A DateTime encoder is a type of encoder that transforms datetime information—such as dates and times into Sparse Distributed Representations (SDRs)
+We can make and use different types of encoder to visualize that particular type of data in order to visualize them. We can take a datetime data and encode them with DateTime encoder and visualize them with DrawBitMaps method. For this example we can take "08/03/2024 21:58:07" and send it through datetime encoder to get sdr.
 
 ```csharp
 //taking the input
-object input = "05/27/2017 21:58:07";
-//set the encoder with appropriate datetime encoder settings
+object input = "08/03/2024 21:58:07";
+//This line creates a new instance of a DateTimeEncoder with specified settings (encoderSettings) and precision. The DateTimeEncoder.Precision.Days parameter
+//indicates that the encoder should focus on the day-level granularity of datetime values. This means that the encoder will represent datetime values in a way that emphasizes their day component, which could be //particularly useful for tasks where daily patterns are important, such as analyzing daily sales data or daily weather patterns.
 var encoder = new DateTimeEncoder(encoderSettings, DateTimeEncoder.Precision.Days);
-//Getting the results after encoding the input
+//DateTimeOffset.Parse(input.ToString()) converts the input (which is expected to be a datetime value in a string or similar format) into a
+//DateTimeOffset object, which represents a point in time, typically expressed as a date and time of day, along with an offset indicating the time zone. The Encode method of the DateTimeEncoder then processes this //datetime object according to the encoder's configuration, producing an encoded representation
 var result = encoder.Encode(DateTimeOffset.Parse(input.ToString(), CultureInfo.InvariantCulture));
 ```
 
 Now we can get the result from here and make it a 2D array for DrawBitMap method
 ```csharp
-//making the two dimensional array from the result
+// converts the one-dimensional array result into a two-dimensional array twoDimenArray. The ArrayUtils.Make2DArray method is used for this conversion,
+// where result is the source array. The dimensions for the new 2D array are determined by the square root of the length of result, suggesting that the original data is reshaped into a square matrix
 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
-//Transpose the array
+// ArrayUtils.Transpose method reorganizes twoDimenArray by flipping it over its diagonal, effectively swapping its rows and columns.
 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 ```
 
-If we see the data we got out of SDR, it looks like this
+If we see the SDR we got after converting the DateTime , it looks like this
 
 ```
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, ]
 ```
 Now if wee send the transposed 2D data in DrawBitMap method:
 ```csharp
-//we set the active bits to yellow, inactive bits to black and we named the file datetime.png
-NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, "datetime.png", Color.Yellow, Color.Black);
+//we set the active bits to green, inactive bits to black and we named the file datetime.png, we set the height and width of the bitmap to 1024
+NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, "datetime.png", Color.Black, Color.Green);
 ```
 
 The generated image is this
 
-<img src="https://user-images.githubusercontent.com/74201238/113520614-90162180-9594-11eb-83c1-3878aaa16e93.png" width="450"><br />
+![DateTime_out_08-03-2024 21-58-07_32x32-N-1024-W-21](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/7f4625e2-eb36-43ff-bf9b-b78a67c77f9b)
 
 ### Drawing AQI Values with Scalar Encoder
 The Scalar Encoder converts AQI levels into SDRs, capturing the essence of air quality in a binary format. For instance, the AQI levels are segmented into:
@@ -224,6 +229,7 @@ NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{folderName}\\{j}.png", Col
 ```
 
 The bitmap generated are as follows:
+
 <img src="https://user-images.githubusercontent.com/74201238/114312848-68730c00-9af4-11eb-814b-f93abc095885.png" width="450"><br />
 
 The bitmap images generated for geographical coordinates offer a unique view of the spatial patterns encoded within the SDRs. For example, the image for latitude 51.85 illustrates the encoded location's characteristics, providing a visual representation of the geographical information.
@@ -284,18 +290,4 @@ Consider an SDR generated from the Spatial Pooler that encodes the shape of the 
 
     Changing the scale can adjust the bitmap's granularity and size of the represented 'L'.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   
