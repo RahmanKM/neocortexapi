@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Damir Dobric. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+using LearningFoundation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NeoCortex;
 using NeoCortexApi.Encoders;
@@ -112,39 +113,63 @@ namespace UnitTestsProject.EncoderTests
         }
 
         [TestMethod]
-        public void EncodeAndVisualizeSingleValueTest()
+        public void EncodeAndVisualizeSingleValueTest1()
         {
             var encoderSettings = new Dictionary<string, object>
             {
-                { "W", 3},
-                { "N", 16},
-                { "MinVal", 0},
-                { "MaxVal", 100},
-                { "ClipInput", true},
-                { "Padding", 10}, 
+                { "N", 156}
             };
 
             var encoder = new BinaryEncoder(encoderSettings);
 
             // Input value to encode. This is the value that will be converted into a binary representation.
-            string inputValue = "18";
+            string inputValue = "50149";
 
             // Encode the input value.
             var result = encoder.Encode(inputValue);
 
             // Preparing for visualization by converting the 1D result array into a 2D array for the 'DrawBitmap' method.
-            int[,] twoDimArray = new int[1, result.Length];
-            for (int i = 0; i < result.Length; i++)
-            {
-                twoDimArray[0, i] = result[i];
-            }
+            int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
+
+            var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
             // Specify the file path for the output image.
-            string filePath = "EncodedValueVisualization18.png";
+            string filePath = "EncodedValueVisualization-18_112.png";
 
             // Drawing the bitmap with the calculated dimensions.
             // This call needs to match the signature and expectations of your implementation of 'DrawBitmap'.
-            NeoCortexUtils.DrawBitmap(twoDimArray, 16, 16, filePath,Color.Black, Color.Yellow);
+            NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, filePath,Color.Black, Color.Yellow);
+
+            // Ensure your 'DrawBitmap' method is prepared to handle the dimensions and scaling correctly.
+        }
+
+        [TestMethod]
+        public void EncodeAndVisualizeSingleValueTest2()
+        {
+            var encoderSettings = new Dictionary<string, object>
+            {
+                { "N", 156},
+            };
+
+            var encoder = new BinaryEncoder(encoderSettings);
+
+            // Input value to encode. This is the value that will be converted into a binary representation.
+            string inputValue = "40148";
+
+            // Encode the input value.
+            var result = encoder.Encode(inputValue);
+
+            // Preparing for visualization by converting the 1D result array into a 2D array for the 'DrawBitmap' method.
+            int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
+
+            var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
+
+            // Specify the file path for the output image.
+            string filePath = "EncodedValueVisualization-40148.png";
+
+            // Drawing the bitmap with the calculated dimensions.
+            // This call needs to match the signature and expectations of your implementation of 'DrawBitmap'.
+            NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, filePath, Color.Black, Color.Yellow);
 
             // Ensure your 'DrawBitmap' method is prepared to handle the dimensions and scaling correctly.
         }
