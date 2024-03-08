@@ -6,7 +6,23 @@ This document outlines the method for visualizing Sparse Distributed Representat
 
 The `DrawBitmap` method offers a versatile approach to represent SDRs visually, enabling the examination of their properties and behaviors. By converting SDRs into bitmap images, we can observe the activation patterns and interactions within the data, providing insights into the encoding and processing mechanisms at play. This document serves as a guide to utilizing the `DrawBitmap` method across different scenarios, highlighting its application with simple SDR examples as well as encoder-generated SDRs.
 
+## The DrawBitmap Method
 
+### Syntax
+
+```csharp
+void DrawBitmap(int[,] twoDimArray, int width, int height, string filePath, Color inactiveCellColor, Color activeCellColor, string text = null)
+```
+
+### Parameters
+
+- `int[,] twoDimArray`: The SDR represented as a two-dimensional array of active columns.
+- `int width`: The desired output width of the bitmap.
+- `int height`: The desired output height of the bitmap.
+- `string filePath`: The path where the bitmap PNG file will be saved.
+- `Color inactiveCellColor`: The color used to represent inactive cells.
+- `Color activeCellColor`: The color used to represent active cells.
+- `string text`: Optional text to be included with the bitmap image.
 
 
 
