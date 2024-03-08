@@ -24,6 +24,23 @@ void DrawBitmap(int[,] twoDimArray, int width, int height, string filePath, Colo
 - `Color activeCellColor`: The color used to represent active cells.
 - `string text`: Optional text to be included with the bitmap image.
 
+### Description
+
+The `DrawBitmap` method transforms a two-dimensional array representing an SDR into a visual bitmap image. By specifying the dimensions, colors, and additional text, users can customize the visualization to suit their analysis needs. The method scales the SDR array to fit the specified bitmap dimensions, allowing for a clear and adjustable representation of the SDR's structure.
+
+## Examples
+
+### Basic SDR Example
+
+Let's visualize a basic SDR with a pattern of activation. This simple example will help understand the visualization process:
+
+```csharp
+// Simple SDR array representing a basic pattern
+int[,] sdr = new int[,] { {0, 1, 1, 0}, {1, 0, 0, 1}, {1, 1, 0, 0}, {0, 0, 1, 1} };
+// Visualizing the SDR using DrawBitmap
+DrawBitmap(sdr, 4, 4, "basic_sdr_bitmap.png", Color.White, Color.Black);
+```
+
 
 
 
