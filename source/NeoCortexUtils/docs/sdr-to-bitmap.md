@@ -28,6 +28,26 @@ void DrawBitmap(int[,] twoDimArray, int width, int height, string filePath, Colo
 
 The `DrawBitmap` method transforms a two-dimensional array representing an SDR into a visual bitmap image. By specifying the dimensions, colors, and additional text, users can customize the visualization to suit their analysis needs. The method scales the SDR array to fit the specified bitmap dimensions, allowing for a clear and adjustable representation of the SDR's structure.
 
+Turning an SDR into a visual bitmap involves a few straightforward steps:
+
+1. **Setting the Scene**:
+   - Determine the `width` and `height` for the bitmap, scaling the image to fit your needs.
+   - Choose colors for the active and inactive cells to make the SDR's structure clear.
+
+2. **Calculating the Scale**:
+   - A scale factor is calculated based on the ratio of the bitmap's width to the SDR array's width. This helps adjust the cell sizes in the bitmap to fit the entire SDR.
+
+3. **Drawing the Bitmap**:
+   - Go through each cell in the SDR:
+     - Color it with the active cell color if it's active (`1`).
+     - Use the inactive cell color if it's inactive (`0`).
+   - The scale factor ensures each cell in the bitmap represents the SDR accurately.
+
+4. **Saving the drawn bitmaps**:
+   - Once every cell is colored, the bitmap is saved to the location specified in `filePath`.
+
+This method simplifies analyzing and understanding SDR patterns by providing a visual representation.
+
 ## Examples
 
 ### Basic SDR Example
