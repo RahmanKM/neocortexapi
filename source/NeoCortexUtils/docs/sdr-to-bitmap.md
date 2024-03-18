@@ -52,14 +52,43 @@ This method simplifies analyzing and understanding SDR patterns by providing a v
 
 ### Basic SDR Example
 
-Let's visualize a basic SDR with a pattern of activation. This simple example will help understand the visualization process:
-
+Let's visualize a basic SDR with a pattern of activation. This simple example will help understand the visualization process. So for this we can take a simple value say ```18```. Now we need SDR encode this data in order to visualize.
 ```csharp
-// Simple SDR array representing a basic pattern
-int[,] sdr = new int[,] { {0, 1, 1, 0}, {1, 0, 0, 1}, {1, 1, 0, 0}, {0, 0, 1, 1} };
-// Visualizing the SDR using DrawBitmap
-DrawBitmap(sdr, 4, 4, "basic_sdr_bitmap.png", Color.White, Color.Black);
+var encoderSettings = new Dictionary<string, object>
+            {
+                { "W", 3},
+                { "N", 16},
+                { "MinVal", 0},
+                { "MaxVal", 100},
+                { "ClipInput", true},
+                { "Padding", 10}, 
+            };
+
+            var encoder = new BinaryEncoder(encoderSettings);
+
+            // Input value to encode. This is the value that will be converted into a binary representation.
+            string inputValue = "18";
+
+            // Encode the input value.
+            var result = encoder.Encode(inputValue);
+```  
+
+Now we can make this result 2D as this is now 1 dimension and we need two dimension for drawing the bitmap.
+```csharp
+int[,] twoDimenArray = new int[1, result.Length];
+for (int i = 0; i < result.Length; i++)
+{
+   twoDimenArray[0, i] = result[i];
+}
+//Transpose of the 2-D array
+var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 ```
+Now we can draw this data in the DrawBitMap method. 
+```csharp
+NeoCortexUtils.DrawBitmap(twoDimArray, 16, 16, filePath,Color.Black, Color.Yellow);
+```
+
+
 
 
 
