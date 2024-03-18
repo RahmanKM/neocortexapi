@@ -50,8 +50,8 @@ This method simplifies analyzing and understanding SDR patterns by providing a v
 
 ## Examples
 
-### Basic SDR Example
-
+### Basic SDR Examples
+#### Example of visualizing a Number
 Let's visualize a basic SDR with a pattern of activation. This simple example will help understand the visualization process. So for this we can take a simple value say ```18```. Now we need SDR encode this data in order to visualize.
 ```csharp
 var encoderSettings = new Dictionary<string, object>
@@ -87,6 +87,51 @@ Now we can draw this data in the DrawBitMap method.
 ```csharp
 NeoCortexUtils.DrawBitmap(twoDimArray, 16, 16, filePath,Color.Black, Color.Yellow);
 ```
+We can get the below image from the DrawBitMap method
+
+![EncodedValueVisualization18](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/88946733-7ae2-4d0c-bd04-0332b18f3e28)
+
+Figure 1: Outpit image for 18.
+
+#### Example of visualizing a random double value
+For this example we will take the value ```45.67```. We will encode the value by setting up the sdr encoder settings and encode the value with that settings. and also set up the two dimensional array
+```csharp
+var encoderSettings = new Dictionary<string, object>
+            {
+                { "W", 3},
+                { "N", 160},
+                { "MinVal", 0},
+                { "MaxVal", 100},
+                { "ClipInput", true},
+                { "Padding", 10}, 
+            };
+
+            var encoder = new BinaryEncoder(encoderSettings);
+            // Input value to encode. This is the value that will be converted into a binary representation.
+            string inputValue = "str";
+
+            // Encode the input value.
+            var result = encoder.Encode(inputValue);
+
+            // Preparing for visualization by converting the 1D result array into a 2D array for the 'DrawBitmap' method.
+            int[,] twoDimenArray = new int[1, result.Length];
+            for (int i = 0; i < result.Length; i++)
+            {
+                twoDimenArray[0, i] = result[i];
+            }
+
+            var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
+```
+Now lets draw this using DrawBitMap method
+```csharp
+NeoCortexUtils.DrawBitmap(twoDimArray, 160, 160, "EncodedValueVisualization-str.png", Color.Black, Color.Yellow);
+```
+It treturns the below picture,
+
+![EncodedValueVisualization-str](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/81fe228b-468b-43f3-9023-419543a946ff)
+
+Figure 2: Outpit image for "45.67"
+
 
 
 
