@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 
 namespace UnitTestsProject.EncoderTests
 {
@@ -107,7 +108,45 @@ namespace UnitTestsProject.EncoderTests
 
             NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"FullDateTime_out_{input.ToString().Replace("/", "-").Replace(":", "-")}_32x32-N-{encoderSettings["DateTimeEncoder"]["N"]}-W-{encoderSettings["DateTimeEncoder"]["W"]}.png", Color.Yellow, Color.Black);
 
-            // Assert.IsTrue(result.SequenceEqual(expectedOutput));
+            //Assert.IsTrue(result.SequenceEqual(expectedOutput));
+        }
+
+        [TestMethod]
+        public void EncodeAndVisualizeSingleValueTest()
+        {
+            var encoderSettings = new Dictionary<string, object>
+            {
+                { "W", 3},
+                { "N", 16},
+                { "MinVal", 0},
+                { "MaxVal", 100},
+                { "ClipInput", true},
+                { "Padding", 10}, 
+            };
+
+            var encoder = new BinaryEncoder(encoderSettings);
+
+            // Input value to encode. This is the value that will be converted into a binary representation.
+            string inputValue = "18";
+
+            // Encode the input value.
+            var result = encoder.Encode(inputValue);
+
+            // Preparing for visualization by converting the 1D result array into a 2D array for the 'DrawBitmap' method.
+            int[,] twoDimArray = new int[1, result.Length];
+            for (int i = 0; i < result.Length; i++)
+            {
+                twoDimArray[0, i] = result[i];
+            }
+
+            // Specify the file path for the output image.
+            string filePath = "EncodedValueVisualization18.png";
+
+            // Drawing the bitmap with the calculated dimensions.
+            // This call needs to match the signature and expectations of your implementation of 'DrawBitmap'.
+            NeoCortexUtils.DrawBitmap(twoDimArray, 16, 16, filePath,Color.Black, Color.Yellow);
+
+            // Ensure your 'DrawBitmap' method is prepared to handle the dimensions and scaling correctly.
         }
 
 

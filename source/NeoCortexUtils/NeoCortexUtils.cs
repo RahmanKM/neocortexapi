@@ -204,6 +204,36 @@ namespace NeoCortex
             myBitmap.Save(filePath, ImageFormat.Png);
         }
 
+        /// <summary>
+        /// Draws a 1D bitmap from an array of values.
+        /// </summary>
+        /// <param name="array">1D array of values where each value should be 0 or 1.</param>
+        /// <param name="filePath">The bitmap PNG filename.</param>
+        /// <param name="scale">Scale factor for each bit in the array. Determines the width of each bit in the image.</param>
+        public static void Draw1DBitmap(int[] array, string filePath, int scale = 10)
+        {
+            // The height is fixed to a small value since we're creating a 1D image (a line)
+            int height = 5;
+            int width = array.Length * scale;
+            using (var bitmap = new System.Drawing.Bitmap(width, height))
+            {
+                using (var g = Graphics.FromImage(bitmap))
+                {
+                    g.Clear(Color.White); // Background color
+
+                    // Drawing each bit
+                    for (int i = 0; i < array.Length; i++)
+                    {
+                        Color color = array[i] == 1 ? Color.Black : Color.White; // Active bits are black
+                        int x = i * scale;
+                        g.FillRectangle(new SolidBrush(color), x, 0, scale, height);
+                    }
+                }
+
+                bitmap.Save(filePath, ImageFormat.Png);
+            }
+        }
+
 
         /// <summary>
         /// Drawas bitmaps from list of arrays.
