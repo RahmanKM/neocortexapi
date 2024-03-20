@@ -222,6 +222,7 @@ NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{folderName}\\{j}.png", Col
 ```
 
 The bitmap generated are as follows:
+
 <img src="https://user-images.githubusercontent.com/74201238/114312848-68730c00-9af4-11eb-814b-f93abc095885.png" width="450"><br />
 
 The bitmap images generated for geographical coordinates offer a unique view of the spatial patterns encoded within the SDRs. For example, the image for latitude 51.85 illustrates the encoded location's characteristics, providing a visual representation of the geographical information.
