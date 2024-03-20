@@ -84,9 +84,8 @@ NeoCortexUtils.DrawBitmap(twoDimArray, 16, 16, filePath, Color.Black, Color.Yell
 ```
 We can get the below image from the DrawBitMap method
 
-![EncodedValueVisualization18](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/88946733-7ae2-4d0c-bd04-0332b18f3e28)
+![EncodedValueVisualization-18_112](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/9bfc6c35-925a-41cc-95db-50f494a8cedd)
 
-Figure 1: Outpit image for "40148".
 
 #### Example of visualizing a number
 For this example we will take a random integer value ```50149```. We will encode the value by setting up the sdr encoder settings and encode the value with that settings. and also set up the two dimensional array
@@ -114,9 +113,8 @@ NeoCortexUtils.DrawBitmap(twoDimArray, 160, 160, "EncodedValueVisualization-45_6
 ```
 It treturns the below picture,
 
-![EncodedValueVisualization-str](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/81fe228b-468b-43f3-9023-419543a946ff)
+![EncodedValueVisualization-50148](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/16ccc118-d5f6-494c-a9c4-71a5ab86c50d)
 
-Figure 2: Outpit image for "50149"
 
 ### DrawBitmap example for DateTime Encoder
 
@@ -284,18 +282,4 @@ Consider an SDR generated from the Spatial Pooler that encodes the shape of the 
 
     Changing the scale can adjust the bitmap's granularity and size of the represented 'L'.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   
