@@ -1,9 +1,15 @@
 ﻿// Copyright (c) Damir Dobric. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NeoCortex;
+using NeoCortexApi;
 using NeoCortexApi.Encoders;
+using NeoCortexApi.Utility;
+using System;
 using System.Collections.Generic;
-
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 
 namespace UnitTestsProject.EncoderTests
 {
@@ -318,6 +324,8 @@ namespace UnitTestsProject.EncoderTests
 
 
 
+
+
         [TestMethod]
 
         /// <summary>
@@ -364,10 +372,10 @@ namespace UnitTestsProject.EncoderTests
             GeoSpatialEncoderExperimental encoder = new GeoSpatialEncoderExperimental(encoderSettings);
 
             var result = encoder.Encode(input1);// it use for encoding the input according to the given parameters.
-                                                // printImage(encoder, nameof(GermanyToItalyLatitude));// ít is use to generate the bit map image 
-                                                //  Debug.WriteLine(input);
-                                                //  Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
-                                                // Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
+            printImage(encoder, nameof(GermanyToItalyLatitude));// ít is use to generate the bit map image 
+                                                                //  Debug.WriteLine(input);
+                                                                //  Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(result));
+                                                                // Debug.WriteLine(NeoCortexApi.Helpers.StringifyVector(expectedResult));
             return result;
 
         }
@@ -397,13 +405,36 @@ namespace UnitTestsProject.EncoderTests
 
         }
 
+        [DataRow(48.75)]
+        [TestMethod]
+        public void GeoSpatialEncoderTestDrawBitMap(double input)
+        {
+            string outFolder = nameof(GeoSpatialEncoderTestDrawBitMap);
+
+            Dictionary<string, object> encoderSettings = new Dictionary<string, object>();
+            encoderSettings.Add("W", 21);
+            encoderSettings.Add("N", 40);
+            encoderSettings.Add("MinVal", (double)48.75); // latitude value of Italy 
+            encoderSettings.Add("MaxVal", (double)51.86);// latitude value of Germany
+            encoderSettings.Add("Radius", (double)1.5);
+            encoderSettings.Add("Periodic", (bool)false);
+            encoderSettings.Add("ClipInput", (bool)true);
+            encoderSettings.Add("IsRealCortexModel", false);
+
+            GeoSpatialEncoderExperimental encoder = new GeoSpatialEncoderExperimental(encoderSettings);
+
+            var result = encoder.Encode(input);// it use for encoding the input according to the given parameters.
+            printImage(encoder, nameof(GeoSpatialEncoderTestDrawBitMap));
+
+        }
+
 
         /// <summary>
         ///  The following method is used by all the UnitTests which is given below and it is use create a separate folder for each UnitTest cases and  generates Bitmap files in same folder.
         /// The Bitmap is use to generate the image file, the output is generated with given data.
         /// </summary>
-        /*
-        public void printImage(GeoSpatialEncoder encoder, string folderName)
+
+        public void printImage(GeoSpatialEncoderExperimental encoder, string folderName)
         {
             Directory.CreateDirectory(folderName); // to cerate the folders 
             for (double j = (long)encoder.MinVal; j < (long)encoder.MaxVal; j += 1)
@@ -411,10 +442,10 @@ namespace UnitTestsProject.EncoderTests
                 var result2 = encoder.Encode(j);
                 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result2, (int)Math.Sqrt(result2.Length), (int)Math.Sqrt(result2.Length));
                 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
-                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{folderName}\\{j}.png", Color.Red, Color.Black, text: j.ToString());
+                NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{folderName}\\{j}.png", Color.LightSeaGreen, Color.Black, text: j.ToString());
             }
         }
-        */
+
 
     }
 }
