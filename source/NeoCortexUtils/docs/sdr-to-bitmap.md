@@ -244,18 +244,22 @@ This array, with dimensions inferred from the SDR's length, is then transposed t
 
 3. The transposed 2-D array is passed to the DrawBitmap method along with visualization parameters such as dimensions (1024x1024 pixels), file path, and colors for active and inactive cells (Active: Green, Inactive: Red):
 ```csharp
-NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{folderName}\\{j}.png", Color.Red, Color.Green, text: j.ToString());
+NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{folderName}\\{j}.png", Color.LightSeaGreen, Color.Black, text: j.ToString());
 ```
 
 The bitmap generated are as follows:
 
-<img src="https://user-images.githubusercontent.com/74201238/114312848-68730c00-9af4-11eb-814b-f93abc095885.png" width="450"><br />
+![geospatial_output](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/bece1fe1-c62d-4d48-aa9a-4994deff26af)
 
-The bitmap images generated for geographical coordinates offer a unique view of the spatial patterns encoded within the SDRs. For example, the image for latitude 51.85 illustrates the encoded location's characteristics, providing a visual representation of the geographical information.
+The bitmap images generated for geographical coordinates offer a unique view of the spatial patterns encoded within the SDRs. Now if we change the encoder settings and provide the below settings:
+```
+encoderSettings.Add("W", 21);
+encoderSettings.Add("N", 40);
+```
+The output will be different for the same value. The bitmaps generated in this case are:
 
-The bitmaps generated in this case are:
+![geospatio_changed_input_parameter](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/dc7b04a4-4183-4628-a8b6-784e999d6299)
 
-<img src="https://user-images.githubusercontent.com/74201238/114312899-a2441280-9af4-11eb-8a29-c3379d280fe0.png" width="450"><br />
 
 ### Bitmap representation of Image using Spatial Pooler
 
