@@ -260,6 +260,8 @@ The output will be different for the same value. The bitmaps generated in this c
 
 ![geospatio_changed_input_parameter](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/dc7b04a4-4183-4628-a8b6-784e999d6299)
 
+The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/2220f6f125c412a236e7ed88402878c9e4cbaa61/source/UnitTestsProject/EncoderTests/GeoSpatialEncoderExperimentalTests.cs#L410). 
+
 
 ### Bitmap representation of Image using Spatial Pooler
 
