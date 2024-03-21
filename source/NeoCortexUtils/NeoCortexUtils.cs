@@ -213,7 +213,7 @@ namespace NeoCortex
         public static void Draw1DBitmap(int[] array, string filePath, int scale = 10)
         {
             // The height is fixed to a small value since we're creating a 1D image (a line)
-            int height = 5;
+            int height = 300;
             int width = array.Length * scale;
             using (var bitmap = new System.Drawing.Bitmap(width, height))
             {
