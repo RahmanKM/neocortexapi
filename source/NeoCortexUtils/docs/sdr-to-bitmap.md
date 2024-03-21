@@ -370,7 +370,8 @@ NeoCortexUtils.DrawBitmaps(arrays, outputImage, Color.Red, Color.Black, OutImgSi
 ```
 The DrawBitmaps utility function generates bitmap images that visually represent the active columns as a result of the SP's processing. The generated Images looks like this.
 
-![cycle-112-Test7_2](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/905cf4ed-a8d0-4b9a-9b11-73fa3f4c222d)
+![image](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/81b70435-9fd1-4205-9547-f797f80fa11a)
+
 
 On the right side we can see the images generated from the binarized file of the input training image, on the left we have the sdr representation by SpatialPooler after feeding the training image.
 
@@ -378,8 +379,7 @@ On the right side we can see the images generated from the binarized file of the
 
 Here we can see the Alphabet T and Neumeric 3
 
-![cycle-112-Test7_2](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/8be750ec-153d-4547-9f77-5b5872991c8e)
-![cycle-112-Test10_1](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/f32cebda-f20d-432d-b3dd-5b1177a6e298)
+![Screenshot 2024-03-22 000510](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/4922914d-5bc9-4a6e-9d1b-6e79f2706928)
 
 Below are the represenatation for Overlap, Difference and Union:
 
