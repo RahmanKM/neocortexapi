@@ -137,6 +137,71 @@ It returns the below picture,
 
 The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/44772a45ac31c48e74a648ca9b1386fb82520590/source/UnitTestsProject/EncoderTests/DateTimeEncoderTests.cs#L116)
 
+### DrawBitMap example with Binary Encoder 1D image
+
+We can also use DrawBitMap method for generating 1D images by getting the binary encoded value from our input. 
+
+```csharp
+            // This snippet creates a dictionary, encoderSettings, to hold the configuration parameters for the encoder. The dictionary contains key-value pairs where each key is a setting name,and the associated value               // is the setting's value. In this case, the only parameter specified is "N", set to 156. The parameter "N" represents the size of the output encoded vector, 
+            var encoderSettings = new Dictionary<string, object>
+            {
+                { "N", 156},
+            };
+
+            // Here, a BinaryEncoder instance is created with the previously defined encoderSettings. The BinaryEncoder utilizes these settings to determine how to encode input values into binary format.
+            // The size of the encoded output is determined by the "N" parameter in the settings,    
+            var encoder = new BinaryEncoder(encoderSettings);
+
+            // Input value to encode. This is the value that will be converted into a binary representation.
+            string inputValue = "50149";
+
+            // Encode the input value.
+            var result = encoder.Encode(inputValue);
+```
+Now we can create a method which can generate Images from the 1D sdrs from the binary encoder and make the data suitable for the DrawBitMap method to generate a 1D Image
+```csharp
+
+// We can call our created method and pass the sdrs named result, filepath and a sample scale vale of 200
+NeoCortexUtils.Draw1DBitmap(result, filePath, 200);
+```
+
+Here is the Modified Draw1DBitmap
+```csharp
+        /// <summary>
+        /// Draws a 1D bitmap from an array of values.
+        /// </summary>
+        /// <param name="array">1D array of values where each value should be 0 or 1.</param>
+        /// <param name="filePath">The bitmap PNG filename.</param>
+        /// <param name="scale">Scale factor for each bit in the array. Determines the width of each bit in the image.</param>
+        public static void Draw1DBitmap(int[] array, string filePath, int scale = 10)
+        {
+            // The height is fixed to a small value since we're creating a 1D image (a line)
+            int height = 300;
+            int width = array.Length * scale;
+            using (var bitmap = new System.Drawing.Bitmap(width, height))
+            {
+                using (var g = Graphics.FromImage(bitmap))
+                {
+                    g.Clear(Color.White); // Background color
+
+                    // Drawing each bit
+                    for (int i = 0; i < array.Length; i++)
+                    {
+                        Color color = array[i] == 1 ? Color.Black : Color.White; // Active bits are black
+                        int x = i * scale;
+                        g.FillRectangle(new SolidBrush(color), x, 0, scale, height);
+                    }
+                }
+
+                bitmap.Save(filePath, ImageFormat.Png);
+            }
+        }
+```
+
+Here is the output image:
+
+![1D_example](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/169d238f-6e4f-444c-8413-d3823596edfe)
+
 
 ### DrawBitmap example for DateTime Encoder
 
@@ -397,6 +462,8 @@ Below are the represenatation for Overlap, Difference and Union:
 ![generate_diffusion_2](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/57a4b93b-934c-423e-ab60-3e3e29469fde)
 
 On comaprison between two SDRs, the overlap.png shows more overlaps/intersections in comparison to the above example. SDRs are simlar to each other.
+
+The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/8de0bf4d823b94393381b63984c8c1c5a47e330d/source/UnitTestsProject/SdrRepresentation/SpatialPoolerColumnActivityTest.cs#L19).
 
 
 
