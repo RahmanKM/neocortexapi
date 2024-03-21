@@ -242,7 +242,7 @@ int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result2, (int)Math.Sqrt(resul
 ```
 This array, with dimensions inferred from the SDR's length, is then transposed to align with the bitmap generation process.
 
-3. The transposed 2-D array is passed to the DrawBitmap method along with visualization parameters such as dimensions (1024x1024 pixels), file path, and colors for active and inactive cells (Active: Green, Inactive: Red):
+3. The transposed 2-D array is passed to the DrawBitmap method along with visualization parameters such as dimensions (1024x1024 pixels), file path, and colors for active and inactive cells (Active: Black, Inactive: LightSeaGreen):
 ```csharp
 NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, $"{folderName}\\{j}.png", Color.LightSeaGreen, Color.Black, text: j.ToString());
 ```
