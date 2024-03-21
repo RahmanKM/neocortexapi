@@ -370,8 +370,7 @@ NeoCortexUtils.DrawBitmaps(arrays, outputImage, Color.Red, Color.Black, OutImgSi
 ```
 The DrawBitmaps utility function generates bitmap images that visually represent the active columns as a result of the SP's processing. The generated Images looks like this.
 
-![image](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/81b70435-9fd1-4205-9547-f797f80fa11a)
-
+![Screenshot 2024-031331 000538](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/8368a405-0900-4516-973c-91a3e6882852)
 
 On the right side we can see the images generated from the binarized file of the input training image, on the left we have the sdr representation by SpatialPooler after feeding the training image.
 
