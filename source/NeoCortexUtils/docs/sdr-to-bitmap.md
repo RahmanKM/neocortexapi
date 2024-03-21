@@ -58,16 +58,19 @@ This method simplifies analyzing and understanding SDR patterns by providing a v
 
 ## Examples
 
-### Basic SDR Examples with scalar encoders
-#### Example of visualizing a Number
+### Basic SDR Examples with binary encoders
+#### 1. Example of visualizing a Number
+
 Let's visualize a basic SDR with a pattern of activation. This simple example will help understand the visualization process. So for this we can take a simple value say ```40148```. Now we need SDR encode this data in order to visualize.
 ```csharp
+            // This snippet creates a dictionary, encoderSettings, to hold the configuration parameters for the encoder. The dictionary contains key-value pairs where each key is a setting name,and the associated value               // is the setting's value. In this case, the only parameter specified is "N", set to 156. The parameter "N" represents the size of the output encoded vector, 
             var encoderSettings = new Dictionary<string, object>
             {
                 { "N", 156},
             };
 
-               
+            // Here, a BinaryEncoder instance is created with the previously defined encoderSettings. The BinaryEncoder utilizes these settings to determine how to encode input values into binary format.
+            // The size of the encoded output is determined by the "N" parameter in the settings,    
             var encoder = new BinaryEncoder(encoderSettings);
 
             // Input value to encode. This is the value that will be converted into a binary representation.
@@ -79,52 +82,64 @@ Let's visualize a basic SDR with a pattern of activation. This simple example wi
 
 Now we can make this result 2D as this is now 1 dimension and we need two dimension for drawing the bitmap.
 ```csharp
+// converts the one-dimensional array result into a two-dimensional array twoDimenArray. The ArrayUtils.Make2DArray method is used for this conversion,
+// where result is the source array. The dimensions for the new 2D array are determined by the square root of the length of result, suggesting that the original data is reshaped into a square matrix
 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
-//Transpose of the 2-D array
+// ArrayUtils.Transpose method reorganizes twoDimenArray by flipping it over its diagonal, effectively swapping its rows and columns.
 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 ```
 Now we can draw this data in the DrawBitMap method. 
 ```csharp
-NeoCortexUtils.DrawBitmap(twoDimArray, 16, 16, filePath, Color.Black, Color.Yellow);
+NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, filePath, Color.Black, Color.Yellow);
 ```
 We can get the below image from the DrawBitMap method
 
 ![EncodedValueVisualization-18_112](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/9bfc6c35-925a-41cc-95db-50f494a8cedd)
 
 
-#### Example of visualizing a number
+#### 2. Example of visualizing a number
 For this example we will take a random integer value ```50149```. We will encode the value by setting up the sdr encoder settings and encode the value with that settings. and also set up the two dimensional array
 ```csharp
-var encoderSettings = new Dictionary<string, object>
+            // This snippet creates a dictionary, encoderSettings, to hold the configuration parameters for the encoder. The dictionary contains key-value pairs where each key is a setting name,and the associated value               // is the setting's value. In this case, the only parameter specified is "N", set to 156. The parameter "N" represents the size of the output encoded vector, 
+            var encoderSettings = new Dictionary<string, object>
             {
                 { "N", 156},
             };
 
+            // Here, a BinaryEncoder instance is created with the previously defined encoderSettings. The BinaryEncoder utilizes these settings to determine how to encode input values into binary format.
+            // The size of the encoded output is determined by the "N" parameter in the settings,    
             var encoder = new BinaryEncoder(encoderSettings);
+
             // Input value to encode. This is the value that will be converted into a binary representation.
             string inputValue = "50149";
 
             // Encode the input value.
             var result = encoder.Encode(inputValue);
 
-            // Preparing for visualization by converting the 1D result array into a 2D array for the 'DrawBitmap' method.
+            // converts the one-dimensional array result into a two-dimensional array twoDimenArray. The ArrayUtils.Make2DArray method is used for this conversion,
+            // where result is the source array. The dimensions for the new 2D array are determined by the square root of the length of result, suggesting that the original data is reshaped into a square matrix
             int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
 
+            // ArrayUtils.Transpose method reorganizes twoDimenArray by flipping it over its diagonal, effectively swapping its rows and columns.
             var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 ```
 Now lets draw this using DrawBitMap method
 ```csharp
-NeoCortexUtils.DrawBitmap(twoDimArray, 160, 160, "EncodedValueVisualization-45_67.png", Color.Black, Color.Yellow);
+// DrawBitMap method is called with the 2D array we made, then we pass the width and the height consecutively which is 1024 for bitmap drawing,
+// and we set the inactive bits to black by passing the Color.Black, and active bits to yellow.
+NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, "EncodedValueVisualization-45_67.png", Color.Black, Color.Yellow);
 ```
 It returns the below picture,
 
 ![EncodedValueVisualization-50148](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/16ccc118-d5f6-494c-a9c4-71a5ab86c50d)
 
+The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/44772a45ac31c48e74a648ca9b1386fb82520590/source/UnitTestsProject/EncoderTests/DateTimeEncoderTests.cs#L116)
+
 
 ### DrawBitmap example for DateTime Encoder
 
-A DateTime encoder is a type of encoder that transforms datetime information—such as dates and times into Sparse Distributed Representations (SDRs)
-We can make and use different types of encoder to visualize that particular type of data in order to visualize them. We can take a datetime data and encode them with DateTime encoder and visualize them with DrawBitMaps method. For this example we can take "08/03/2024 21:58:07" and send it through datetime encoder to get sdr.
+A DateTime encoder is a type of encoder that transforms datetime information such as dates and times into Sparse Distributed Representations (SDRs)
+We can make and use different types of encoder to visualize that particular type of data in order to visualize them. We can take a datetime data and encode them with DateTime encoder and visualize them with DrawBitMaps method. For this example we can take "08/03/2024 21:58:07" and send it through datetime encoder to get SDR.
 
 ```csharp
 //taking the input
@@ -160,6 +175,8 @@ NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, "datetime.png", Color.Black, 
 The generated image is this
 
 ![DateTime_out_08-03-2024 21-58-07_32x32-N-1024-W-21](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/7f4625e2-eb36-43ff-bf9b-b78a67c77f9b)
+
+The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/44772a45ac31c48e74a648ca9b1386fb82520590/source/UnitTestsProject/EncoderTests/DateTimeEncoderTests.cs#L78). 
 
 ### Drawing AQI Values with Scalar Encoder
 The Scalar Encoder converts AQI levels into SDRs, capturing the essence of air quality in a binary format. For instance, the AQI levels are segmented into:
@@ -198,7 +215,7 @@ The DrawBitmap method is instrumental in converting SDRs into insightful bitmap 
 
 The generated bitmap are as follows:
 
-<img src="https://user-images.githubusercontent.com/74201238/114312695-de2aa800-9af3-11eb-926f-a0f7dbe20c41.png" width="450"><br />
+![AQI_scalar_encoder](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/2b474bcf-9e92-48df-b8ae-4b92c6d09bbe)
 
 ### DrawBitmap sample for Geospatial Encoder
 
