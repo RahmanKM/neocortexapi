@@ -217,6 +217,8 @@ The generated bitmap are as follows:
 
 ![AQI_scalar_encoder](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/2b474bcf-9e92-48df-b8ae-4b92c6d09bbe)
 
+The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/f9953ba73c30c4dd24d979e1ca5eb52c5eab4137/source/UnitTestsProject/SdrRepresentation/ScalarEncoderTestOverBitmap.cs#L396).
+
 ### DrawBitmap sample for Geospatial Encoder
 
 In the exploration of geospatial data through Sparse Distributed Representations (SDRs), we utilize the DrawBitmap method to translate encoded geographical coordinates into visually interpretable bitmap images. This approach allows for the visualization of spatial information encoded within SDRs, offering insights into the encoded geographical regions.
