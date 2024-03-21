@@ -90,6 +90,8 @@ var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 ```
 Now we can draw this data in the DrawBitMap method. 
 ```csharp
+// DrawBitMap method is called with the 2D array we made, then we pass the width and the height consecutively which is 1024 for bitmap drawing,
+// and we set the inactive bits to black by passing the Color.Black, and active bits to yellow.
 NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, filePath, Color.Black, Color.Yellow);
 ```
 We can get the below image from the DrawBitMap method
