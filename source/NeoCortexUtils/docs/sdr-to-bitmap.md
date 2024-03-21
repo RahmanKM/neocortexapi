@@ -202,6 +202,9 @@ Here is the output image:
 
 ![1D_example](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/169d238f-6e4f-444c-8413-d3823596edfe)
 
+The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/7d329e02b165acd03deff0926121d06d9e04b71e/source/UnitTestsProject/EncoderTests/DateTimeEncoderTests.cs#L179).
+The Draw1DBitmap method can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/7d329e02b165acd03deff0926121d06d9e04b71e/source/NeoCortexUtils/NeoCortexUtils.cs#L213)
+
 
 ### DrawBitmap example for DateTime Encoder
 
