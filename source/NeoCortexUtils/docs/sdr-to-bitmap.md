@@ -192,22 +192,58 @@ To visualize the encoded AQI values:
 
 Encode AQI Levels: Use the Scalar Encoder to transform AQI values into SDRs, which are stored in a 1-D array, result1.
 ```csharp
-int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result1, (int)Math.Sqrt(result1.Length), (int)Math.Sqrt(result1.Length));
+// Initializes a ScalarEncoder to convert numerical values into Sparse Distributed Representations (SDRs).
+// Configuration:
+// - "W": 21, sets the width of the encoding to represent the active bits in the output SDR.
+// - "N": 100, defines the total size of the output SDR.
+// - "Radius": -1.0, disables the radius-based input value grouping, preferring exact value encoding.
+// - "MinVal" and "MaxVal": specify the range of input values the encoder can handle.
+// - "Periodic": false, indicates that the encoder should not treat input values as cyclic.
+// - "Name": "scalar", assigns a name to this encoder instance for identification.
+// - "ClipInput": false, allows input values outside the MinVal-MaxVal range without clipping them.
+// This setup is ideal for encoding scalar values into SDRs, which are then used in Hierarchical Temporal Memory (HTM) systems for further processing.
+ScalarEncoder encoder = new ScalarEncoder(new Dictionary<string, object>()
+            {
+                { "W", 21},
+                { "N", 100},
+                { "Radius", -1.0},
+                { "MinVal", minValue},
+                { "MaxVal", maxValue },
+                { "Periodic", false},
+                { "Name", "scalar"},
+                { "ClipInput", false},
+            });
+
+// Encodes the scalar inputValue into a Sparse Distributed Representation (SDR) using the ScalarEncoder.
+// The input value is transformed based on the encoder's configuration (e.g., value range, output size).
+// The resulting SDR is a binary array where '1's represent the encoded value's features in a high-dimensional space,
+// facilitating the processing of numerical data in Hierarchical Temporal Memory (HTM) systems. The encoded SDR
+// is stored in the 'result' variable for further use.
+var result = encoder.Encode(inputValue);
+
 ```
 Convert to 2-D Array:
 
 ```csharp
+
+// converts the one-dimensional array result into a two-dimensional array twoDimenArray. The ArrayUtils.Make2DArray method is used for this conversion,
+// where result is the source array. The dimensions for the new 2D array are determined by the square root of the length of result,
+// suggesting that the original data is reshaped into a square matrix
 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result1, (int)Math.Sqrt(result1.Length), (int)Math.Sqrt(result1.Length));
+
 ```
 
 Transpose the 2-D Array:
 ```csharp
+// // ArrayUtils.Transpose method reorganizes twoDimenArray by flipping it over its diagonal, effectively swapping its rows and columns, making the array usable for converting into bitmaps
 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 ```
 
 Draw the Bitmap: Utilize DrawBitmap for visual representation.
 ```csharp
-NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, Path.Combine(folderName, filename), Color.Yellow, Color.DarkOrange, text: i.ToString());
+// DrawBitMap method is called with the 2D array we made, then we pass the width and the height consecutively which is 1024 for bitmap drawing,
+// and we set the inactive bits to white by passing the Color.White, and active bits to Blue by passing the color Blue.
+NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, Path.Combine(folderName, filename), Color.White, Color.Blue, text: i.ToString());
 ```
 
 Bitmap Visualization Outcomes
@@ -221,15 +257,24 @@ The full example can be found [here](https://github.com/TanzeemHasan/neocortexap
 
 ### DrawBitmap sample for Geospatial Encoder
 
-In the exploration of geospatial data through Sparse Distributed Representations (SDRs), we utilize the DrawBitmap method to translate encoded geographical coordinates into visually interpretable bitmap images. This approach allows for the visualization of spatial information encoded within SDRs, offering insights into the encoded geographical regions.
+Geospatial encoder is used to encode latitude or longitude values into Sparse Distributed Representations (SDRs) for Hierarchical Temporal Memory (HTM) systems.. In the exploration of geospatial data through Sparse Distributed Representations (SDRs), we utilize the DrawBitmap method to translate encoded geographical coordinates into visually interpretable bitmap images. This approach allows for the visualization of spatial information encoded within SDRs, offering insights into the encoded geographical regions.
 
 Encoding Process for Geographical Coordinates
 To encode and visualize geographical coordinates, we set the encoder parameters as follows, aiming to cover a specific range of latitude and longitude:
 ```csharp
-encoderSettings.Add("W", 103);
-encoderSettings.Add("N", 238);
-encoderSettings.Add("MinVal", 48.75);
-encoderSettings.Add("MaxVal", 51.86);
+// Initializes encoderSettings with specific parameters for the GeoSpatialEncoderExperimental.
+encoderSettings.Add("W", 21); // The width of the encoder's output SDR. Specifies the number of bits set to 1.
+encoderSettings.Add("N", 40); // The total number of bits in the output SDR. Determines the SDR's dimensionality.
+encoderSettings.Add("MinVal", (double)48.75); // The minimum value of the input range, representing the latitude of Italy.
+encoderSettings.Add("MaxVal", (double)51.86); // The maximum value of the input range, representing the latitude of Germany.
+encoderSettings.Add("Radius", (double)1.5); // The radius of coverage around a point. Influences how input values are encoded.
+encoderSettings.Add("Periodic", (bool)false); // Determines if the encoder should treat inputs as cyclical values.
+encoderSettings.Add("ClipInput", (bool)true); // If true, inputs outside the range [MinVal, MaxVal] are clipped to the range's endpoints.
+encoderSettings.Add("IsRealCortexModel", false); // Custom setting, potentially indicating if the encoder mimics real cortical encoding.
+
+// Instantiates a new GeoSpatialEncoderExperimental with the configured settings.
+// This encoder is designed to handle geospatial data, likely converting latitude (or longitude) values into an SDR.
+GeoSpatialEncoderExperimental encoder = new GeoSpatialEncoderExperimental(encoderSettings);
 ```
 These settings enable the encoding of geographical data within the specified latitude range, capturing the essence of spatial information in binary form.
 
