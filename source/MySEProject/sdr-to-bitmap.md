@@ -460,11 +460,11 @@ Generated Bitmap representation of T and l is shown below:
 
 ![Screenshot 2024-03-22 001009](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/61375b26-37eb-46d6-9448-fb2fec6d190d)
 
-Below are the represenatation for Overlap, Difference and Union:
+Below are the representation for Overlap, Difference and Union:
 
 ![generate_diffusion_2](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/57a4b93b-934c-423e-ab60-3e3e29469fde)
 
-On comaprison between two SDRs, the overlap.png shows more overlaps/intersections in comparison to the above example. SDRs are simlar to each other.
+On comparison between two SDRs, the overlap.png shows more overlaps/intersections in comparison to the above example. SDRs are similar to each other.
 
 The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/8de0bf4d823b94393381b63984c8c1c5a47e330d/source/UnitTestsProject/SdrRepresentation/SpatialPoolerColumnActivityTest.cs#L19).
 
