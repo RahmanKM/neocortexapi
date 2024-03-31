@@ -96,7 +96,7 @@ NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, filePath, Color.Black, Color.
 ```
 We can get the below image from the DrawBitMap method
 
-![EncodedValueVisualization-18_112](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/9bfc6c35-925a-41cc-95db-50f494a8cedd)
+<img src="https://github.com/TanzeemHasan/neocortexapi/assets/74203937/9bfc6c35-925a-41cc-95db-50f494a8cedd" width="400" height="400" />
 
 
 #### 2. Example of visualizing a number
@@ -133,7 +133,7 @@ NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, "EncodedValueVisualization-45
 ```
 It returns the below picture,
 
-![EncodedValueVisualization-50148](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/16ccc118-d5f6-494c-a9c4-71a5ab86c50d)
+<img src="https://github.com/TanzeemHasan/neocortexapi/assets/74203937/16ccc118-d5f6-494c-a9c4-71a5ab86c50d" width="400" height="400" />
 
 The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/44772a45ac31c48e74a648ca9b1386fb82520590/source/UnitTestsProject/EncoderTests/DateTimeEncoderTests.cs#L116)
 
@@ -244,7 +244,7 @@ NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, "datetime.png", Color.Black, 
 
 The generated image is this
 
-![DateTime_out_08-03-2024 21-58-07_32x32-N-1024-W-21](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/7f4625e2-eb36-43ff-bf9b-b78a67c77f9b)
+<img src="https://github.com/TanzeemHasan/neocortexapi/assets/74203937/7f4625e2-eb36-43ff-bf9b-b78a67c77f9b" width="400" height="400" />
 
 The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/44772a45ac31c48e74a648ca9b1386fb82520590/source/UnitTestsProject/EncoderTests/DateTimeEncoderTests.cs#L78). 
 
