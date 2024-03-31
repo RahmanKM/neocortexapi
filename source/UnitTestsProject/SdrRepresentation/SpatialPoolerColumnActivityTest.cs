@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace UnitTestsProject.Sdr
 {
@@ -110,6 +111,10 @@ namespace UnitTestsProject.Sdr
 
                             var activeCols = ArrayUtils.IndexWhere(activeArray, (el) => el == 1);
 
+                            string activeColsStr = string.Join(", ", activeCols);
+
+                            Debug.WriteLine($"SDR generated for {fI.Name}: [{activeColsStr}]");
+
                             if (isInStableState)
                             {
                                 CalculateResult(sdrs, inputVectors, numOfCols, activeCols, outFolder, trainingImage, inputVector);
@@ -123,6 +128,20 @@ namespace UnitTestsProject.Sdr
 
                                 int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(activeArray, colDims[0], colDims[1]);
                                 twoDimenArray = ArrayUtils.Transpose(twoDimenArray);
+
+                                StringBuilder sb = new StringBuilder();
+                                for (int i = 0; i < twoDimenArray.GetLength(0); i++)
+                                {
+                                    for (int j = 0; j < twoDimenArray.GetLength(1); j++)
+                                    {
+                                        sb.Append(twoDimenArray[i, j] + " ");
+                                    }
+                                    sb.AppendLine(); // New line for each row
+                                }
+
+                                Debug.WriteLine($"Transposed array for {fI.Name}:\n{sb.ToString()}");
+
+
                                 List<int[,]> arrays = new List<int[,]>();
                                 arrays.Add(twoDimenArray);
                                 arrays.Add(ArrayUtils.Transpose(ArrayUtils.Make2DArray<int>(inputVector, (int)Math.Sqrt(inputVector.Length), (int)Math.Sqrt(inputVector.Length))));
