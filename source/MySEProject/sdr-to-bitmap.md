@@ -209,7 +209,7 @@ The Draw1DBitmap method can be found [here](https://github.com/TanzeemHasan/neoc
 ### DrawBitmap example for DateTime Encoder
 
 A DateTime encoder is a type of encoder that transforms datetime information such as dates and times into Sparse Distributed Representations (SDRs)
-We can make and use different types of encoder to visualize that particular type of data in order to visualize them. We can take a datetime data and encode them with DateTime encoder and visualize them with DrawBitMaps method. For this example we can take "08/03/2024 21:58:07" and send it through datetime encoder to get SDR.
+We can make and use different types of encoder to visualize that particular type of data in order to visualize them. We can take a datetime data and encode them with DateTime encoder and visualize them with DrawBitMaps method. For this example we can take "08/03/2024 21:58:07" or any other datetime values and send it through datetime encoder to get SDR.
 
 ```csharp
 //taking the input
@@ -245,6 +245,13 @@ NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, "datetime.png", Color.Black, 
 The generated image is this
 
 <img src="https://github.com/TanzeemHasan/neocortexapi/assets/74203937/7f4625e2-eb36-43ff-bf9b-b78a67c77f9b" width="400" height="400" />
+
+Here is some other example generated bitmap of different datetimes
+
+|       | 05/01/2024 21:58:07                                                                         | 06/02/2024 21:58:07                                                                         | 07/01/2024 21:58:07                                                                         | 08/03/2024 21:58:07                                                                         |
+|-------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
+|       | <img src="images/1.png" alt="" height="400" width="400"/>                                   | <img src="images/2.png" alt="" height="400" width="400"/>                                   | <img src="images/3.png" alt="" height="400" width="400"/>                                   | <img src="images/4.png" alt="" height="400" width="400"/>                                   |
+
 
 The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/44772a45ac31c48e74a648ca9b1386fb82520590/source/UnitTestsProject/EncoderTests/DateTimeEncoderTests.cs#L78). 
 
