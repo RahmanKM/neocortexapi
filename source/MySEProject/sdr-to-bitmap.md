@@ -248,9 +248,9 @@ The generated image is this
 
 Here is some other example generated bitmap of different datetimes
 
-|       | 05/01/2024 21:58:07                                                                         | 06/02/2024 21:58:07                                                                         | 07/01/2024 21:58:07                                                                         | 08/03/2024 21:58:07                                                                         |
+|    Datetime   | 05/01/2024 21:58:07                                                                         | 06/02/2024 21:58:07                                                                         | 07/01/2024 21:58:07                                                                         | 08/03/2024 21:58:07                                                                         |
 |-------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-|       | <img src="images/1.png" alt="" height="400" width="400"/>                                   | <img src="images/2.png" alt="" height="400" width="400"/>                                   | <img src="images/3.png" alt="" height="400" width="400"/>                                   | <img src="images/4.png" alt="" height="400" width="400"/>                                   |
+|    results   | <img src="images/1.png" height="200" width="200"/>                                   | <img src="images/2.png" alt="" height="200" width="200"/>                                   | <img src="images/3.png" alt="" height="200" width="200"/>                                   | <img src="images/4.png" alt="" height="200" width="200"/>                                   |
 
 
 The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/44772a45ac31c48e74a648ca9b1386fb82520590/source/UnitTestsProject/EncoderTests/DateTimeEncoderTests.cs#L78). 
