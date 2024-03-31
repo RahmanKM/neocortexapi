@@ -456,7 +456,7 @@ Two SDRs are compared with the help of UnionSDRFun(), DiffSDRFun() and OverlapSD
 
 #### Example representing Overlap(Intersection),Difference and Union for Alphabet T and 1 in Bitmap after computing in spatial pooler
 
-Generated Bitmap representation of T and l is shown below:
+Generated Bitmap representation of T and 1 is shown below:
 
 ![Screenshot 2024-03-22 001009](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/61375b26-37eb-46d6-9448-fb2fec6d190d)
 
