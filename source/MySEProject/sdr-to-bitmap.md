@@ -59,9 +59,8 @@ This method simplifies analyzing and understanding SDR patterns by providing a v
 ## Examples
 
 ### Basic SDR Examples with binary encoders
-#### 1. Example of visualizing a Number
 
-Visualizing a basic SDR with a pattern of activation. This simple example will help understand the visualization process. So for this by taking a simple value say ```40148```. Now it needs SDR to encode this data in order to visualize.
+At first, visualizing a basic SDR with a pattern of activation. This simple example will help understand the visualization process. So for this by taking a simple value say ```40148```. Now it needs SDR to encode this data in order to visualize.
 ```csharp
             // This snippet creates a dictionary, encoderSettings, to hold the configuration parameters for the encoder. The dictionary contains key-value pairs where each key is a setting name,and the associated value               // is the setting's value. In this case, the only parameter specified is "N", set to 156. The parameter "N" represents the size of the output encoded vector, 
             var encoderSettings = new Dictionary<string, object>
@@ -99,8 +98,7 @@ As next the below image is generated from the DrawBitMap method
 <img src="https://github.com/TanzeemHasan/neocortexapi/assets/74203937/9bfc6c35-925a-41cc-95db-50f494a8cedd" width="400" height="400" />
 
 
-#### 2. Example of visualizing a number
-For this example, take a random integer value ```50149```. This value will encode by setting up the sdr encoder settings and encode the value with that settings and also set up the two dimensional array
+For another example, take a random integer value ```50149```. This value will encode by setting up the sdr encoder settings and encode the value with that settings and also set up the two dimensional array
 ```csharp
             // This snippet creates a dictionary, encoderSettings, to hold the configuration parameters for the encoder. The dictionary contains key-value pairs where each key is a setting name,and the associated value               // is the setting's value. In this case, the only parameter specified is "N", set to 156. The parameter "N" represents the size of the output encoded vector, 
             var encoderSettings = new Dictionary<string, object>
