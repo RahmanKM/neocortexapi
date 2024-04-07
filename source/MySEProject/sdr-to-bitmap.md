@@ -14,7 +14,7 @@ Bitmap is a type of file format which is used to store images. A bitmap is a spa
 
 ### The DrawBitmap Method
 
-The `DrawBitmap` method offers a versatile approach to represent SDRs visually, enabling the examination of their properties and behaviors. By converting SDRs into bitmap images, we can observe the activation patterns and interactions within the data, providing insights into the encoding and processing mechanisms at play. This document serves as a guide to utilizing the `DrawBitmap` method across different scenarios, highlighting its application with simple SDR examples as well as encoder-generated SDRs.
+The `DrawBitmap` method offers a versatile approach to represent SDRs visually, enabling the examination of their properties and behaviors. By converting SDRs into bitmap images, which can observe the activation patterns and interactions within the data, providing insights into the encoding and processing mechanisms at play. This document serves as a guide to utilizing the `DrawBitmap` method across different scenarios, highlighting its application with simple SDR examples as well as encoder-generated SDRs.
 
 ### Syntax
 
@@ -61,7 +61,7 @@ This method simplifies analyzing and understanding SDR patterns by providing a v
 ### Basic SDR Examples with binary encoders
 #### 1. Example of visualizing a Number
 
-Let's visualize a basic SDR with a pattern of activation. This simple example will help understand the visualization process. So for this we can take a simple value say ```40148```. Now we need SDR encode this data in order to visualize.
+Visualizing a basic SDR with a pattern of activation. This simple example will help understand the visualization process. So for this by taking a simple value say ```40148```. Now it needs SDR to encode this data in order to visualize.
 ```csharp
             // This snippet creates a dictionary, encoderSettings, to hold the configuration parameters for the encoder. The dictionary contains key-value pairs where each key is a setting name,and the associated value               // is the setting's value. In this case, the only parameter specified is "N", set to 156. The parameter "N" represents the size of the output encoded vector, 
             var encoderSettings = new Dictionary<string, object>
@@ -80,7 +80,7 @@ Let's visualize a basic SDR with a pattern of activation. This simple example wi
             var result = encoder.Encode(inputValue);
 ```  
 
-Now we can make this result 2D as this is now 1 dimension and we need two dimension for drawing the bitmap.
+Now by making this result 2D as this is now 1 dimension and which needs two dimension for drawing the bitmap.
 ```csharp
 // converts the one-dimensional array result into a two-dimensional array twoDimenArray. The ArrayUtils.Make2DArray method is used for this conversion,
 // where result is the source array. The dimensions for the new 2D array are determined by the square root of the length of result, suggesting that the original data is reshaped into a square matrix
@@ -88,19 +88,19 @@ int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result
 // ArrayUtils.Transpose method reorganizes twoDimenArray by flipping it over its diagonal, effectively swapping its rows and columns.
 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 ```
-Now we can draw this data in the DrawBitMap method. 
+After that put this data in the DrawBitMap method. 
 ```csharp
-// DrawBitMap method is called with the 2D array we made, then we pass the width and the height consecutively which is 1024 for bitmap drawing,
-// and we set the inactive bits to black by passing the Color.Black, and active bits to yellow.
+// DrawBitMap method is called with the 2D array which is made, then pass the width and the height consecutively which is 1024 for bitmap drawing,
+// and set the inactive bits to black by passing the Color.Black, and active bits to yellow.
 NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, filePath, Color.Black, Color.Yellow);
 ```
-We can get the below image from the DrawBitMap method
+As next the below image is generated from the DrawBitMap method
 
 <img src="https://github.com/TanzeemHasan/neocortexapi/assets/74203937/9bfc6c35-925a-41cc-95db-50f494a8cedd" width="400" height="400" />
 
 
 #### 2. Example of visualizing a number
-For this example we will take a random integer value ```50149```. We will encode the value by setting up the sdr encoder settings and encode the value with that settings. and also set up the two dimensional array
+For this example, take a random integer value ```50149```. This value will encode by setting up the sdr encoder settings and encode the value with that settings and also set up the two dimensional array
 ```csharp
             // This snippet creates a dictionary, encoderSettings, to hold the configuration parameters for the encoder. The dictionary contains key-value pairs where each key is a setting name,and the associated value               // is the setting's value. In this case, the only parameter specified is "N", set to 156. The parameter "N" represents the size of the output encoded vector, 
             var encoderSettings = new Dictionary<string, object>
@@ -125,10 +125,10 @@ For this example we will take a random integer value ```50149```. We will encode
             // ArrayUtils.Transpose method reorganizes twoDimenArray by flipping it over its diagonal, effectively swapping its rows and columns.
             var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 ```
-Now lets draw this using DrawBitMap method
+Now drawing this using DrawBitMap method
 ```csharp
-// DrawBitMap method is called with the 2D array we made, then we pass the width and the height consecutively which is 1024 for bitmap drawing,
-// and we set the inactive bits to black by passing the Color.Black, and active bits to yellow.
+// DrawBitMap method is called with the 2D array that is made, then the width and the height is passed consecutively which is 1024 for bitmap drawing,
+// and set the inactive bits to black by passing the Color.Black, and active bits to yellow.
 NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, "EncodedValueVisualization-45_67.png", Color.Black, Color.Yellow);
 ```
 It returns the below picture,
@@ -139,7 +139,7 @@ The full example can be found [here](https://github.com/TanzeemHasan/neocortexap
 
 ### DrawBitMap example with Binary Encoder 1D image
 
-We can also use DrawBitMap method for generating 1D images by getting the binary encoded value from our input. 
+This one can also use DrawBitMap method for generating 1D images by getting the binary encoded value from the input. 
 
 ```csharp
             // This snippet creates a dictionary, encoderSettings, to hold the configuration parameters for the encoder. The dictionary contains key-value pairs where each key is a setting name,and the associated value               // is the setting's value. In this case, the only parameter specified is "N", set to 156. The parameter "N" represents the size of the output encoded vector, 
@@ -158,10 +158,10 @@ We can also use DrawBitMap method for generating 1D images by getting the binary
             // Encode the input value.
             var result = encoder.Encode(inputValue);
 ```
-Now we can create a method which can generate Images from the 1D sdrs from the binary encoder and make the data suitable for the DrawBitMap method to generate a 1D Image
+As next method which can generate Images from the 1D sdrs from the binary encoder and make the data suitable for the DrawBitMap method to generate a 1D Image is created
 ```csharp
 
-// We can call our created method and pass the sdrs named result, filepath and a sample scale vale of 200
+// The created method can be called and pass the sdrs named result, filepath and a sample scale vale of 200
 NeoCortexUtils.Draw1DBitmap(result, filePath, 200);
 ```
 
@@ -209,7 +209,7 @@ The Draw1DBitmap method can be found [here](https://github.com/TanzeemHasan/neoc
 ### DrawBitmap example for DateTime Encoder
 
 A DateTime encoder is a type of encoder that transforms datetime information such as dates and times into Sparse Distributed Representations (SDRs)
-We can make and use different types of encoder to visualize that particular type of data in order to visualize them. We can take a datetime data and encode them with DateTime encoder and visualize them with DrawBitMaps method. For this example we can take "08/03/2024 21:58:07" or any other datetime values and send it through datetime encoder to get SDR.
+Different types of encoders can be made and used to visualize that particular type of data in order to visualize them. A datetime data can be taken and encoded them with DateTime encoder and visualize them with DrawBitMaps method. For this example "08/03/2024 21:58:07" can be taken or any other datetime values and send it through datetime encoder to get SDR.
 
 ```csharp
 //taking the input
@@ -222,7 +222,7 @@ var encoder = new DateTimeEncoder(encoderSettings, DateTimeEncoder.Precision.Day
 var result = encoder.Encode(DateTimeOffset.Parse(input.ToString(), CultureInfo.InvariantCulture));
 ```
 
-Now we can get the result from here and make it a 2D array for DrawBitMap method
+Now the result can be found from here and make it a 2D array for DrawBitMap method
 ```csharp
 // converts the one-dimensional array result into a two-dimensional array twoDimenArray. The ArrayUtils.Make2DArray method is used for this conversion,
 // where result is the source array. The dimensions for the new 2D array are determined by the square root of the length of result, suggesting that the original data is reshaped into a square matrix
@@ -231,22 +231,22 @@ int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result
 var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 ```
 
-If we see the SDR we got after converting the DateTime , it looks like this
+The SDR found after converting the DateTime looks like this
 
 ```
 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, ]
 ```
-Now if wee send the transposed 2D data in DrawBitMap method:
+Now the transposed 2D data is sent in DrawBitMap method:
 ```csharp
-//we set the active bits to green, inactive bits to black and we named the file datetime.png, we set the height and width of the bitmap to 1024
+//the active bits set to green, inactive bits to black and named the file datetime.png, the height and width of the bitmap is set to 1024
 NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, "datetime.png", Color.Black, Color.Green);
 ```
 
-The generated image is this
+The generated image looks like this
 
 <img src="https://github.com/TanzeemHasan/neocortexapi/assets/74203937/7f4625e2-eb36-43ff-bf9b-b78a67c77f9b" width="400" height="400" />
 
-Here is some other example generated bitmap of different datetimes
+Here are some other example generated bitmap of different datetimes
 
 |    Datetime   | 05/01/2024 21:58:07                                                                         | 06/02/2024 21:58:07                                                                         | 07/01/2024 21:58:07                                                                         | 01/02/2024 21:58:07                                                                         |
 |-------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
@@ -318,8 +318,8 @@ var twoDimArray = ArrayUtils.Transpose(twoDimenArray);
 
 Draw the Bitmap: Utilize DrawBitmap for visual representation.
 ```csharp
-// DrawBitMap method is called with the 2D array we made, then we pass the width and the height consecutively which is 1024 for bitmap drawing,
-// and we set the inactive bits to white by passing the Color.White, and active bits to Blue by passing the color Blue.
+// DrawBitMap method is called with the 2D array which is made, then passed the width and the height consecutively which is 1024 for bitmap drawing,
+// and set the inactive bits to white by passing the Color.White, and active bits to Blue by passing the color Blue.
 NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, Path.Combine(folderName, filename), Color.White, Color.Blue, text: i.ToString());
 ```
 
@@ -334,10 +334,10 @@ The full example can be found [here](https://github.com/TanzeemHasan/neocortexap
 
 ### DrawBitmap sample for Geospatial Encoder
 
-Geospatial encoder is used to encode latitude or longitude values into Sparse Distributed Representations (SDRs) for Hierarchical Temporal Memory (HTM) systems.. In the exploration of geospatial data through Sparse Distributed Representations (SDRs), we utilize the DrawBitmap method to translate encoded geographical coordinates into visually interpretable bitmap images. This approach allows for the visualization of spatial information encoded within SDRs, offering insights into the encoded geographical regions.
+Geospatial encoder is used to encode latitude or longitude values into Sparse Distributed Representations (SDRs) for Hierarchical Temporal Memory (HTM) systems. In the exploration of geospatial data through Sparse Distributed Representations (SDRs), the DrawBitmap method is utilized to translate encoded geographical coordinates into visually interpretable bitmap images. This approach allows for the visualization of spatial information encoded within SDRs, offering insights into the encoded geographical regions.
 
 Encoding Process for Geographical Coordinates
-To encode and visualize geographical coordinates, we set the encoder parameters as follows, aiming to cover a specific range of latitude and longitude:
+To encode and visualize geographical coordinates, the encoder parameters are set as follows, aiming to cover a specific range of latitude and longitude:
 ```csharp
 // Initializes encoderSettings with specific parameters for the GeoSpatialEncoderExperimental.
 encoderSettings.Add("W", 21); // The width of the encoder's output SDR. Specifies the number of bits set to 1.
@@ -373,7 +373,7 @@ The bitmap generated are as follows:
 
 ![geospatial_output](https://github.com/TanzeemHasan/neocortexapi/assets/74203937/bece1fe1-c62d-4d48-aa9a-4994deff26af)
 
-The bitmap images generated for geographical coordinates offer a unique view of the spatial patterns encoded within the SDRs. Now if we change the encoder settings and provide the below settings:
+The bitmap images generated for geographical coordinates offer a unique view of the spatial patterns encoded within the SDRs. Now if the encoder settings is changed and the below settings is provided:
 ```
 encoderSettings.Add("W", 21);
 encoderSettings.Add("N", 40);
@@ -387,7 +387,7 @@ The full example can be found [here](https://github.com/TanzeemHasan/neocortexap
 
 ### Bitmap representation of Image using Spatial Pooler
 
-In the context of Hierarchical Temporal Memory (HTM) theory, the Spatial Pooler (SP) plays a crucial role in transforming input data into Sparse Distributed Representations (SDRs). These representations capture the essential features of the input data in a way that emphasizes structural and semantic similarities. To visually understand the transformation process and the output of the Spatial Pooler, we can represent SDRs as bitmaps. This example elaborates on how active arrays generated by the SpatialPooler are converted into bitmap images, further enhancing our understanding of HTM's processing capabilities.
+In the context of Hierarchical Temporal Memory (HTM) theory, the Spatial Pooler (SP) plays a crucial role in transforming input data into Sparse Distributed Representations (SDRs). These representations capture the essential features of the input data in a way that emphasizes structural and semantic similarities. To visually understand the transformation process and the output of the Spatial Pooler, SDRs can be represented as bitmaps. This example elaborates on how active arrays generated by the SpatialPooler are converted into bitmap images, further enhancing the understanding of HTM's processing capabilities.
 
 #### Generating Inputs for Image Generation and Training in Spatial Pooler: 
 In the Spatial Pooler (SP), the generation of inputs for image processing and training involves several steps that lead to the creation of Sparse Distributed Representations (SDRs). The code snippets outlines how inputs are prepared, processed, and used for training the Spatial Pooler as well as generating SDRs.
@@ -396,12 +396,12 @@ In the Spatial Pooler (SP), the generation of inputs for image processing and tr
 // Define a folder for training files
 string trainingFolder = @"..\..\..\TestFiles\Sdr";
 
-// In the trainingImages variable, we are getting the input images for making binarized input 
+// In the trainingImages variable, the input images for making binarized input is found 
 var trainingImages = Directory.GetFiles(trainingFolder, "*.jpeg");
 
 ```
 Each image file within the directory is intended to be processed individually to generate binary representations that can be fed into the Spatial Pooler.
-The Image we have used for training is these:
+The Image that is used for training is these:
 
 ![Test7_2](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/aaac62b5-1a5f-4cea-94d7-c9dda22cc9fd)
 
@@ -447,11 +447,11 @@ The DrawBitmaps utility function generates bitmap images that visually represent
 
 ![Screenshot 2024-031331 000538](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/8368a405-0900-4516-973c-91a3e6882852)
 
-On the right side we can see the images generated from the binarized file of the input training image, on the left we have the sdr representation by SpatialPooler after feeding the training image.
+On the right side the images generated from the binarized file of the input training image can be seen, on the left is the sdr representation by SpatialPooler after feeding the training image.
 
 #### Example representing Overlap(Intersection),Difference and Union for Alphabet T and Neumeric 3 in Bitmap after computing in spatial pooler:
 
-Here we can see the Alphabet T and Neumeric 3
+Here the Alphabet T and Neumeric 3 can be seen
 
 ![Screenshot 2024-03-22 000510](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/4922914d-5bc9-4a6e-9d1b-6e79f2706928)
 
