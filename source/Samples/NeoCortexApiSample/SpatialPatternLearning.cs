@@ -1,4 +1,5 @@
-﻿using NeoCortexApi;
+﻿using NeoCortex;
+using NeoCortexApi;
 using NeoCortexApi.Encoders;
 using NeoCortexApi.Entities;
 using NeoCortexApi.Network;
@@ -6,6 +7,8 @@ using NeoCortexApi.Utility;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 
 namespace NeoCortexApiSample
@@ -45,10 +48,10 @@ namespace NeoCortexApiSample
                 PotentialRadius = (int)(0.15 * inputBits),
                 LocalAreaDensity = -1,
                 ActivationThreshold = 10,
-                
+
                 MaxSynapsesPerSegment = (int)(0.01 * numColumns),
                 Random = new ThreadSafeRandom(42),
-                StimulusThreshold=10,
+                StimulusThreshold = 10,
             };
 
             double max = 100;
@@ -81,10 +84,10 @@ namespace NeoCortexApiSample
 
             var sp = RunExperiment(cfg, encoder, inputValues);
 
-            RunRustructuringExperiment(sp, encoder, inputValues);
+            //RunRustructuringExperiment(sp, encoder, inputValues);
         }
 
-       
+
 
         /// <summary>
         /// Implements the experiment.
@@ -169,10 +172,14 @@ namespace NeoCortexApiSample
 
             int numStableCycles = 0;
 
+            Dictionary<double, int[]> SDRofSpatialPoolerAllInputs = new Dictionary<double, int[]>();
+            SpatialPatternLearning spl = new SpatialPatternLearning();
+            int flag = 0;
+
             for (int cycle = 0; cycle < maxSPLearningCycles; cycle++)
             {
-                Debug.WriteLine($"Cycle  ** {cycle} ** Stability: {isInStableState}");
-
+                Debug.WriteLine($"Cycle  * {cycle} * Stability: {isInStableState}");
+                if (isInStableState == true) flag++;
                 //
                 // This trains the layer on input pattern.
                 foreach (var input in inputs)
@@ -193,6 +200,22 @@ namespace NeoCortexApiSample
 
                     Debug.WriteLine($"[cycle={cycle.ToString("D4")}, i={input}, cols=:{actCols.Length} s={similarity}] SDR: {Helpers.StringifyVector(actCols)}");
 
+                    if (isInStableState == true)
+                    {
+                        if (flag == 2)
+                        {
+                            string basePath = Path.Combine(Environment.CurrentDirectory, "OutputOfSpatialPooler");
+                            if (!Directory.Exists(basePath))
+                            {
+                                Directory.CreateDirectory(basePath);
+                            }
+                            int[] fullArray = Enumerable.Repeat(0, mem.HtmConfig.NumColumns).ToArray();
+                            fullArray = spl.ConvertZerosToOnesAtIndexes(fullArray, activeColumns);
+                            int[,] twoDimArray = ArrayUtils.Make2DArray<int>(fullArray, (int)Math.Sqrt(mem.HtmConfig.NumColumns), (int)Math.Sqrt(mem.HtmConfig.NumColumns));
+                            NeoCortexUtils.DrawBitmap(twoDimArray, 10, $"{basePath}\\input {input}.png", Color.Black, Color.Yellow, text: input.ToString());
+                        }
+                    }
+
                     prevActiveCols[input] = activeColumns;
                     prevSimilarity[input] = similarity;
                 }
@@ -203,7 +226,9 @@ namespace NeoCortexApiSample
                 }
 
                 if (numStableCycles > 5)
+                {
                     break;
+                }
             }
 
             return sp;
@@ -224,5 +249,33 @@ namespace NeoCortexApiSample
                 Debug.WriteLine($"Input: {input} SDR: {Helpers.StringifyVector(actCols)}");
             }
         }
+        private int[] ConvertZerosToOnesAtIndexes(int[] fullArray, int[] indexesToConvert)
+        {
+            int[] resultArray = new int[fullArray.Length];
+
+            int currentIndex = 0;
+            for (int i = 0; i < fullArray.Length; i++)
+            {
+                if (indexesToConvert.Length == 0)
+                {
+                    resultArray[i] = fullArray[i];
+                }
+                else
+                {
+                    if (currentIndex < indexesToConvert.Length && i == indexesToConvert[currentIndex])
+                    {
+                        resultArray[i] = 1;
+                        currentIndex++;
+                    }
+                    else
+                    {
+                        resultArray[i] = fullArray[i];
+                    }
+                }
+            }
+
+            return resultArray;
+        }
+
     }
 }
