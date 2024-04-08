@@ -6,11 +6,18 @@ This document outlines the method for visualizing Sparse Distributed Representat
 
 ### What is SDR:
 
-Sparse Distributed Representation (SDR) is a concept used in computing that mirrors the brain's method of processing information. Essentially, it's a way of storing data where most of the bits are off (0), and only a few are on (1). This setup allows for handling a wide variety of information efficiently and robustly, much like how the brain operates with its neurons.
+Sparse Distributed Representation (SDR) is a concept used in computing that mirrors the brain's method of processing information. Essentially, it's a way of storing data where most of the bits are off (0), and only a few are on (1). This setup allows for handling a wide variety of information efficiently and robustly, much like how the brain operates with its neurons. Sparse Distributed Representations (SDRs) are pivotal in computational models that mimic the human brain's processing, such as Hierarchical Temporal Memory (HTM). Brain works on continuous stream of input patterns which represent input sequences based on the input stream's recursive pattern
 
 ### What is Bitmap:
 
-Bitmap is a type of file format which is used to store images. A bitmap is a spatially mapped array of bits i.e. a map of bits. For the purpose of representing SDRs as bitmaps, we first feed the output of encoders as inputs to the SP.
+Bitmap is a type of file format which is used to store images. A bitmap is a spatially mapped array of bits i.e. a map of bits. For the purpose of representing SDRs as bitmaps, first this needs to feed the output of encoders as inputs to the SP. The purpose of generating bitmaps to represent Sparse Distributed Representations (SDRs) in Hierarchical Temporal Memory (HTM) is to provide a visual representation of the encoded information and the processing performed by HTM algorithms such as encoders, spatial poolers, and temporal memory. By visualizing the SDRs as bitmaps, one can gain insights into how the input data is transformed and processed throughout the different stages of the HTM system. Bitmaps allow for easy interpretation of the sparsity and patterns within the representations, facilitating analysis and debugging of the HTM algorithms. Additionally, visualizing SDRs as bitmaps enables researchers and developers to observe the effects of parameter changes or optimizations on the encoded representations, aiding in the refinement and improvement of HTM algorithms. Bitmaps of SDRs serve as a valuable tool for understanding the inner workings of HTM algorithms and optimizing their performance for various applications.
+
+In the context of an encoder, bitmaps visually depict how raw input data is transformed into sparse binary patterns. Each bit in the bitmap represents the presence or absence of a feature or characteristic in the input data. By generating bitmaps of the encoded representations, one can observe how different input signals are represented sparsely in the binary space. This visualization aids in understanding how the encoder is capturing relevant information from the input data and converting it into a format suitable for further processing by the HTM network.
+
+For the spatial pooler, bitmaps illustrate the activation patterns of columns in response to input data. Each column's activation state is represented by a bit in the bitmap, where active columns are indicated by set bits and inactive columns by unset bits. By generating bitmaps of the spatial pooler's output, one can visualize how the input patterns are distributed and transformed across the columns of the spatial pooler. This visualization helps in analyzing the sparsity and distribution of active columns, as well as understanding the spatial pooling process and its impact on the input representations.
+
+In temporal memory, bitmaps depict the active cells and connections within the network over time. Each bit in the bitmap corresponds to the activation state of a cell or connection, representing the temporal sequence of patterns learned by the HTM network. By generating bitmaps of the temporal memory's activity, one can observe how the network learns and predicts sequences of input patterns, as well as analyze the stability and adaptability of the learned representations. This visualization aids in understanding the temporal processing capabilities of the HTM network and assessing its performance in sequence learning tasks.
+
 
 ### The DrawBitmap Method
 
@@ -32,7 +39,7 @@ void DrawBitmap(int[,] twoDimArray, int width, int height, string filePath, Colo
 - `Color activeCellColor`: The color used to represent active cells.
 - `string text`: Optional text to be included with the bitmap image.
 
-### Description
+### Methodology Description
 
 The `DrawBitmap` method transforms a two-dimensional array representing an SDR into a visual bitmap image. By specifying the dimensions, colors, and additional text, users can customize the visualization to suit their analysis needs. The method scales the SDR array to fit the specified bitmap dimensions, allowing for a clear and adjustable representation of the SDR's structure.
 
@@ -56,11 +63,169 @@ Turning an SDR into a visual bitmap involves a few straightforward steps:
 
 This method simplifies analyzing and understanding SDR patterns by providing a visual representation.
 
-## Examples
+There are three functions of DrawBitMaps in this project. Two DrawBitMaps functions take a two dimensional array and one DrawBitMaps function takes a list of two dimensional arrays. 
+The main function of DrawBitMaps is: 
+```csharp
+public static void DrawBitmap(int[,] twoDimArray, int scale, String filePath, Color inactiveCellColor, Color activeCellColor, string text = null)
+        {
+            int w = twoDimArray.GetLength(0);
+            int h = twoDimArray.GetLength(1);
+
+            System.Drawing.Bitmap myBitmap = new System.Drawing.Bitmap(w * scale, h * scale);
+            int k = 0;
+            for (int Xcount = 0; Xcount < w; Xcount++)
+            {
+                for (int Ycount = 0; Ycount < h; Ycount++)
+                {
+                    for (int padX = 0; padX < scale; padX++)
+                    {
+                        for (int padY = 0; padY < scale; padY++)
+                        {
+                            if (twoDimArray[Xcount, Ycount] == 1)
+                            {
+                                //myBitmap.SetPixel(Xcount, Ycount, System.Drawing.Color.Yellow); // HERE IS YOUR LOGIC
+                                myBitmap.SetPixel(Xcount * scale + padX, Ycount * scale + padY, activeCellColor); // HERE IS YOUR LOGIC
+                                k++;
+                            }
+                            else
+                            {
+                                //myBitmap.SetPixel(Xcount, Ycount, System.Drawing.Color.Black); // HERE IS YOUR LOGIC
+                                myBitmap.SetPixel(Xcount * scale + padX, Ycount * scale + padY, inactiveCellColor); // HERE IS YOUR LOGIC
+                                k++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            Graphics g = Graphics.FromImage(myBitmap);
+            var fontFamily = new FontFamily(System.Drawing.Text.GenericFontFamilies.SansSerif);
+            g.DrawString(text, new Font(fontFamily, 32), SystemBrushes.Control, new PointF(0, 0));
+
+            myBitmap.Save(filePath, ImageFormat.Png);
+        }
+```
+
+This function takes a two-dimensional array twoDimArray representing a binary image, along with parameters for scale, file path, inactive cell color, active cell color, and an optional text label. First, it determines the dimensions of the array w and h. Then, it creates a new bitmap image with dimensions w * scale by h * scale. It iterates over each element in the array, and for each active cell (value of 1), it sets the corresponding pixel in the bitmap to the active cell color, while for inactive cells (value of 0), it sets the pixel to the inactive cell color. This process is repeated at scale times to scale up the image. Additionally, if a text label is provided, it draws the text onto the bitmap. Finally, the bitmap is saved to the specified file path as a PNG image. The function effectively converts a binary array into a bitmap image with customizable colors and text. This function is mainly for generating the SDRs for active columns. This same function can be used for encoder also with transposing the two dimensional array that this function takes as an input.
+
+Also, Another function is written as shown below and that is also for active columns with small changes.
+
+```csharp
+public static void DrawBitmap(int[,] twoDimArray, int width, int height, String filePath, Color inactiveCellColor, Color activeCellColor, string text = null)
+        {
+            int w = twoDimArray.GetLength(0);
+            int h = twoDimArray.GetLength(1);
+
+            if (w > width || h > height)
+                throw new ArgumentException("Requested width/height must be greather than width/height inside of array.");
+
+            var scale = width / w;
+
+            if (scale * w < width)
+                scale++;
+
+            DrawBitmap(twoDimArray, scale, filePath, inactiveCellColor, activeCellColor, text);
+
+        }
+```
+This function also takes input as a two dimensional array and additionally it takes height and width which is validated by two dimensional array’s row length and column length. Here, ‘w’ is the row's length and ‘h’ is the column’s length. If the condition met then it throws an argument exception else the previous method of draw bitmap function is used.
+
+Another function was written which takes a list of two dimensional arrays as shown follow.
+ ```csharp
+ public static void DrawBitmaps(List<int[,]> twoDimArrays, String filePath, Color inactiveCellColor, Color activeCellColor, int bmpWidth = 1024, int bmpHeight = 1024)
+        {
+            int widthOfAll = 0, heightOfAll = 0;
+
+            foreach (var arr in twoDimArrays)
+            {
+                widthOfAll += arr.GetLength(0);
+                heightOfAll += arr.GetLength(1);
+            }
+
+            if (widthOfAll > bmpWidth || heightOfAll > bmpHeight)
+                throw new ArgumentException("Size of all included arrays must be less than specified 'bmpWidth' and 'bmpHeight'");
+
+            System.Drawing.Bitmap myBitmap = new System.Drawing.Bitmap(bmpWidth, bmpHeight);
+            int k = 0;
+
+            for (int n = 0; n < twoDimArrays.Count; n++)
+            {
+                var arr = twoDimArrays[n];
+
+                int w = arr.GetLength(0);
+                int h = arr.GetLength(1);
+
+                var scale = ((bmpWidth) / twoDimArrays.Count) / (w + 1);// +1 is for offset between pictures in X dim.
+
+                //if (scale * (w + 1) < (bmpWidth))
+                //    scale++;
+
+                for (int Xcount = 0; Xcount < w; Xcount++)
+                {
+                    for (int Ycount = 0; Ycount < h; Ycount++)
+                    {
+                        for (int padX = 0; padX < scale; padX++)
+                        {
+                            for (int padY = 0; padY < scale; padY++)
+                            {
+                                if (arr[Xcount, Ycount] == 1)
+                                {
+                                    myBitmap.SetPixel(n * (bmpWidth / twoDimArrays.Count) + Xcount * scale + padX, Ycount * scale + padY, activeCellColor); // HERE IS YOUR LOGIC
+                                    k++;
+                                }
+                                else
+                                {
+                                    myBitmap.SetPixel(n * (bmpWidth / twoDimArrays.Count) + Xcount * scale + padX, Ycount * scale + padY, inactiveCellColor); // HERE IS YOUR LOGIC
+                                    k++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            myBitmap.Save(filePath, ImageFormat.Png);
+        }
+ ```
+
+At first, this function takes a list of two dimensional arrays then iterates through each two dimensional array. After this, the two dimensional array also validated like the previous method of draw bitmap function. Here the different thing is, it is calculating the scale value based on the specified bitmap width and the number of arrays (two dimensional arrays) count. At the end, it generates the bitmaps and saves the image.
+
+As of now, there are no bitmap functions of an one dimensional array. That’s why, created a function for representing the SDRs for a one dimensional array
+
+```csharp
+public static void Draw1DBitmap(int[] array, string filePath, int scale = 10)
+ {
+     // The height is fixed to a small value since we're creating a 1D image (a line)
+     int height = 300;
+     int width = array.Length * scale;
+     using (var bitmap = new System.Drawing.Bitmap(width, height))
+     {
+         using (var g = Graphics.FromImage(bitmap))
+         {
+             g.Clear(Color.White); // Background color
+
+             // Drawing each bit
+             for (int i = 0; i < array.Length; i++)
+             {
+                 Color color = array[i] == 1 ? Color.Black : Color.White; // Active bits are black
+                 int x = i * scale;
+                 g.FillRectangle(new SolidBrush(color), x, 0, scale, height);
+             }
+         }
+
+         bitmap.Save(filePath, ImageFormat.Png);
+     }
+ }
+```
+
+This Draw1DBitmap method creates a 1D bitmap image representing a binary array. Each element in the array corresponds to a bit in the bitmap image. Active bits (with a value of 1) are represented as black rectangles, while inactive bits (with a value of 0) are represented as white rectangles. The dimensions of the bitmap are determined by the length of the input array and a specified scale factor. The resulting bitmap image is saved to the specified file path in PNG.
+
+## Result
+This project showcasing how different data types, including numbers, geographical coordinates, and temporal information, can be visually represented. In this experiment we can input any significant individual data to convert it into the bitmap. Some examples with experiment details provided here in this section.
 
 ### Basic SDR Examples with binary encoders
 
-At first, visualizing a basic SDR with a pattern of activation. This simple example will help understand the visualization process. So for this by taking a simple value say ```40148```. Now it needs SDR to encode this data in order to visualize.
+Binary encoder encodes the data and the via the encoder it converts the data into SDR which will then shown in the bitmap using drawbitmap method. At first, visualizing a basic SDR with a pattern of activation. This simple example will help understand the visualization process. So for this by taking a simple value say ```40148```. Now it needs SDR to encode this data in order to visualize.
 ```csharp
             // This snippet creates a dictionary, encoderSettings, to hold the configuration parameters for the encoder. The dictionary contains key-value pairs where each key is a setting name,and the associated value               // is the setting's value. In this case, the only parameter specified is "N", set to 156. The parameter "N" represents the size of the output encoded vector, 
             var encoderSettings = new Dictionary<string, object>
@@ -93,12 +258,12 @@ After that put this data in the DrawBitMap method.
 // and set the inactive bits to black by passing the Color.Black, and active bits to yellow.
 NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, filePath, Color.Black, Color.Yellow);
 ```
-As next the below image is generated from the DrawBitMap method
+After that the below image is generated from the DrawBitMap method
 
 <img src="https://github.com/TanzeemHasan/neocortexapi/assets/74203937/9bfc6c35-925a-41cc-95db-50f494a8cedd" width="400" height="400" />
 
 
-For another example, take a random integer value ```50149```. This value will encode by setting up the sdr encoder settings and encode the value with that settings and also set up the two dimensional array
+Similarly, for another example, taken a random integer value ```50149```. This value will encode by setting up the sdr encoder settings and encode the value with that settings and also set up the two dimensional array
 ```csharp
             // This snippet creates a dictionary, encoderSettings, to hold the configuration parameters for the encoder. The dictionary contains key-value pairs where each key is a setting name,and the associated value               // is the setting's value. In this case, the only parameter specified is "N", set to 156. The parameter "N" represents the size of the output encoded vector, 
             var encoderSettings = new Dictionary<string, object>
@@ -156,14 +321,14 @@ This one can also use DrawBitMap method for generating 1D images by getting the 
             // Encode the input value.
             var result = encoder.Encode(inputValue);
 ```
-As next method which can generate Images from the 1D sdrs from the binary encoder and make the data suitable for the DrawBitMap method to generate a 1D Image is created
-```csharp
+This method which can generate Images from the 1D sdrs from the binary encoder and make the data suitable for the DrawBitMap method to generate a 1D Image which is created.
 
+```csharp
 // The created method can be called and pass the sdrs named result, filepath and a sample scale vale of 200
 NeoCortexUtils.Draw1DBitmap(result, filePath, 200);
 ```
 
-Here is the Modified Draw1DBitmap
+Here is the implemented Draw1DBitmap
 ```csharp
         /// <summary>
         /// Draws a 1D bitmap from an array of values.
@@ -253,7 +418,10 @@ Here are some other example generated bitmap of different datetimes
 
 The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/44772a45ac31c48e74a648ca9b1386fb82520590/source/UnitTestsProject/EncoderTests/DateTimeEncoderTests.cs#L78). 
 
+
 ### Drawing AQI Values with Scalar Encoder
+Scalar encoders are crucial in Hierarchical Temporal Memory (HTM) for converting scalar values into sparse distributed representations (SDRs), facilitating efficient storage, computation, and pattern recognition tasks. They enable HTM networks to encode diverse data types while capturing important spatial and temporal patterns, supporting learning, inference, and prediction from complex and high-dimensional data. </br>
+
 The Scalar Encoder converts AQI levels into SDRs, capturing the essence of air quality in a binary format. For instance, the AQI levels are segmented into:
 
 0-49: Good
@@ -322,7 +490,7 @@ NeoCortexUtils.DrawBitmap(twoDimArray, 1024, 1024, Path.Combine(folderName, file
 ```
 
 Bitmap Visualization Outcomes
-The DrawBitmap method is instrumental in converting SDRs into insightful bitmap images, with active bits represented in Dark Orange and inactive bits in Yellow. The method parameters set the bitmap's height and width to 1024 pixels, ensuring a detailed and clear visual output. Each bitmap image is saved with a corresponding index value in the top left corner, facilitating easy identification.
+The DrawBitmap method is instrumental in converting SDRs into insightful bitmap images, with active bits and inactive bits. The method parameters set the bitmap's height and width to 1024 pixels, ensuring a detailed and clear visual output. Each bitmap image is saved with a corresponding index value in the top left corner, facilitating easy identification.
 
 The generated bitmap are as follows:
 
@@ -383,10 +551,32 @@ The output will be different for the same value. The bitmaps generated in this c
 The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/2220f6f125c412a236e7ed88402878c9e4cbaa61/source/UnitTestsProject/EncoderTests/GeoSpatialEncoderExperimentalTests.cs#L410). 
 
 
-### Bitmap representation of Image using Spatial Pooler
+
+### Bitmap representation using Spatial Pooler
 
 In the context of Hierarchical Temporal Memory (HTM) theory, the Spatial Pooler (SP) plays a crucial role in transforming input data into Sparse Distributed Representations (SDRs). These representations capture the essential features of the input data in a way that emphasizes structural and semantic similarities. To visually understand the transformation process and the output of the Spatial Pooler, SDRs can be represented as bitmaps. This example elaborates on how active arrays generated by the SpatialPooler are converted into bitmap images, further enhancing the understanding of HTM's processing capabilities.
 
+### Bitmap representation of Numbers using Spatial Pooler
+
+When a number is encoded then it goes into spatial pooler algorithm to find out the active mini columns which will be activated for that number. So, bitmap representation will present to see which mini columns will be activated. 
+Here, used `SpatialPatternLearningExperiment.cs` for getting a range of inputs active columns easily. In this experiment, there is a term called `isInStableState` which defines whether all the inputs active mini columns are stable or instable. So, after `isInStableState` is true just taking all inputs active mini columns and passing the value to `DrawBitMap` function. Generating the bitmaps of all inputs active mini columns.
+```csharp
+if(isInStableState == true)
+{
+    if(flag == 2)
+    {
+        string basePath = Path.Combine(Environment.CurrentDirectory, "OutputOfSpatialPooler");
+        if (!Directory.Exists(basePath))
+        {
+            Directory.CreateDirectory(basePath);
+        }
+        int[] fullArray = Enumerable.Repeat(0, mem.HtmConfig.NumColumns).ToArray();
+        fullArray = spl.ConvertZerosToOnesAtIndexes(fullArray, activeColumns);
+        int[,] twoDimArray = ArrayUtils.Make2DArray<int>(fullArray, (int)Math.Sqrt(mem.HtmConfig.NumColumns), (int)Math.Sqrt(mem.HtmConfig.NumColumns));
+        NeoCortexUtils.DrawBitmap(twoDimArray, 10, $"{basePath}\\input {input}.png", Color.Blue, Color.Yellow, text: input.ToString());
+    }
+}
+```
 #### Generating Inputs for Image Generation and Training in Spatial Pooler: 
 In the Spatial Pooler (SP), the generation of inputs for image processing and training involves several steps that lead to the creation of Sparse Distributed Representations (SDRs). The code snippets outlines how inputs are prepared, processed, and used for training the Spatial Pooler as well as generating SDRs.
 
@@ -453,11 +643,6 @@ Here the Alphabet T and Neumeric 3 can be seen
 
 ![Screenshot 2024-03-22 000510](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/4922914d-5bc9-4a6e-9d1b-6e79f2706928)
 
-Below are the represenatation for Overlap, Difference and Union:
-
-![generated_diffusion](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/0710ef8e-12c0-4ed3-aebf-f6ee13f93147)
-
-Two SDRs are compared with the help of UnionSDRFun(), DiffSDRFun() and OverlapSDRFun() functions. The overlap.png shows very few intersections as the SDRs are very different from each other. Basically, the combination of Overlap and Difference gives us Union.
 
 #### Example representing Overlap(Intersection),Difference and Union for Alphabet T and 1 in Bitmap after computing in spatial pooler
 
@@ -465,14 +650,14 @@ Generated Bitmap representation of T and 1 is shown below:
 
 ![Screenshot 2024-03-22 001009](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/61375b26-37eb-46d6-9448-fb2fec6d190d)
 
-Below are the representation for Overlap, Difference and Union:
-
-![generate_diffusion_2](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/57a4b93b-934c-423e-ab60-3e3e29469fde)
-
-On comparison between two SDRs, the overlap.png shows more overlaps/intersections in comparison to the above example. SDRs are similar to each other.
 
 The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/8de0bf4d823b94393381b63984c8c1c5a47e330d/source/UnitTestsProject/SdrRepresentation/SpatialPoolerColumnActivityTest.cs#L19).
 
 
+## Conclusion
+
+In conclusion, [This]() function of drawbitmap can be used for any input values which can then scale and used to generate the bitmap for each and every types of data. Visualizing SDRs as bitmap images can interprete the complex patterns encoded in HTM systems.
+In spatial pooler, it encoded the input bits and then when these values can pass through the spatial pooler that will active the mini colums. From there the program can find the active and inactive mini columns which then can also be represent using the that similar function. 
+This approach not only aids in the analysis of HTM models but also paves the way for analyzing different types of data pattern from the input. Overall, this project can generate new sparse distribution and all together a process to run the experiment with bitmap generation of SDRs whether it would be 1D or 2D. 
 
    
