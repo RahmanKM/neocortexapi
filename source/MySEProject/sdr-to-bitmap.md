@@ -576,7 +576,12 @@ if(isInStableState == true)
     }
 }
 ```
-#### Generating Inputs for Image Generation and Training in Spatial Pooler: 
+### Generating Bitmaps for Numbers from Spatial Pooler:
+Bitmaps of mini columns as a SDR generated for numbers using spatial pooler algorithm. For this, spatial pattern learning experiment is used. There is a variable called isInStableState which is responsible for to decide whether all the active mini columns of input is stable or not. After isInStableState turns to true, generated bitmaps for input 0 to input 99 which were used by spatial pattern learning eperiment. Here is the example output for input 20: </br>
+![Bitmap of mini columns for input 20](https://github.com/TanzeemHasan/neocortexapi/blob/master/source/MySEProject/images/input%2020.png)</br>
+
+
+#### Generating Bitmaps for Image Generation and Training in Spatial Pooler: 
 In the Spatial Pooler (SP), the generation of inputs for image processing and training involves several steps that lead to the creation of Sparse Distributed Representations (SDRs). The code snippets outlines how inputs are prepared, processed, and used for training the Spatial Pooler as well as generating SDRs.
 
 ```csharp
@@ -636,18 +641,9 @@ The DrawBitmaps utility function generates bitmap images that visually represent
 
 On the right side the images generated from the binarized file of the input training image can be seen, on the left is the sdr representation by SpatialPooler after feeding the training image.
 
-#### Example representing Overlap(Intersection),Difference and Union for Alphabet T and Neumeric 3 in Bitmap after computing in spatial pooler:
-
 Here the Alphabet T and Neumeric 3 can be seen
 
 ![Screenshot 2024-03-22 000510](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/4922914d-5bc9-4a6e-9d1b-6e79f2706928)
-
-
-#### Example representing Overlap(Intersection),Difference and Union for Alphabet T and 1 in Bitmap after computing in spatial pooler
-
-Generated Bitmap representation of T and 1 is shown below:
-
-![Screenshot 2024-03-22 001009](https://github.com/TanzeemHasan/neocortexapi/assets/110496336/61375b26-37eb-46d6-9448-fb2fec6d190d)
 
 
 The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/8de0bf4d823b94393381b63984c8c1c5a47e330d/source/UnitTestsProject/SdrRepresentation/SpatialPoolerColumnActivityTest.cs#L19).
