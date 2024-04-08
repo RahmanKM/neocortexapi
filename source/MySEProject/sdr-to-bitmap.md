@@ -418,7 +418,6 @@ Here are some other example generated bitmap of different datetimes
 
 The full example can be found [here](https://github.com/TanzeemHasan/neocortexapi/blob/44772a45ac31c48e74a648ca9b1386fb82520590/source/UnitTestsProject/EncoderTests/DateTimeEncoderTests.cs#L78). 
 
-
 ### Drawing AQI Values with Scalar Encoder
 Scalar encoders are crucial in Hierarchical Temporal Memory (HTM) for converting scalar values into sparse distributed representations (SDRs), facilitating efficient storage, computation, and pattern recognition tasks. They enable HTM networks to encode diverse data types while capturing important spatial and temporal patterns, supporting learning, inference, and prediction from complex and high-dimensional data. </br>
 
@@ -656,7 +655,7 @@ The full example can be found [here](https://github.com/TanzeemHasan/neocortexap
 
 ## Conclusion
 
-In conclusion, [This]() function of drawbitmap can be used for any input values which can then scale and used to generate the bitmap for each and every types of data. Visualizing SDRs as bitmap images can interprete the complex patterns encoded in HTM systems.
+In conclusion, [This]() function of drawbitmap can be used for any input values which can then scale and used to generate the bitmap for each and every types of data. Visualizing SDRs as bitmap images can interprete the complex patterns encoded in HTM systems. </br>
 In spatial pooler, it encoded the input bits and then when these values can pass through the spatial pooler that will active the mini colums. From there the program can find the active and inactive mini columns which then can also be represent using the that similar function. 
 This approach not only aids in the analysis of HTM models but also paves the way for analyzing different types of data pattern from the input. Overall, this project can generate new sparse distribution and all together a process to run the experiment with bitmap generation of SDRs whether it would be 1D or 2D. 
 
