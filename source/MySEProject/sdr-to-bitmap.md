@@ -12,6 +12,8 @@ Sparse Distributed Representation (SDR) is a concept used in computing that mirr
 
 Bitmap is a type of file format which is used to store images. A bitmap is a spatially mapped array of bits i.e. a map of bits. For the purpose of representing SDRs as bitmaps, first this needs to feed the output of encoders as inputs to the SP. The purpose of generating bitmaps to represent Sparse Distributed Representations (SDRs) in Hierarchical Temporal Memory (HTM) is to provide a visual representation of the encoded information and the processing performed by HTM algorithms such as encoders, spatial poolers, and temporal memory. By visualizing the SDRs as bitmaps, one can gain insights into how the input data is transformed and processed throughout the different stages of the HTM system. Bitmaps allow for easy interpretation of the sparsity and patterns within the representations, facilitating analysis and debugging of the HTM algorithms. Additionally, visualizing SDRs as bitmaps enables researchers and developers to observe the effects of parameter changes or optimizations on the encoded representations, aiding in the refinement and improvement of HTM algorithms. Bitmaps of SDRs serve as a valuable tool for understanding the inner workings of HTM algorithms and optimizing their performance for various applications.
 
+### The Purpose of Using Bitmaps Representation
+
 In the context of an encoder, bitmaps visually depict how raw input data is transformed into sparse binary patterns. Each bit in the bitmap represents the presence or absence of a feature or characteristic in the input data. By generating bitmaps of the encoded representations, one can observe how different input signals are represented sparsely in the binary space. This visualization aids in understanding how the encoder is capturing relevant information from the input data and converting it into a format suitable for further processing by the HTM network.
 
 For the spatial pooler, bitmaps illustrate the activation patterns of columns in response to input data. Each column's activation state is represented by a bit in the bitmap, where active columns are indicated by set bits and inactive columns by unset bits. By generating bitmaps of the spatial pooler's output, one can visualize how the input patterns are distributed and transformed across the columns of the spatial pooler. This visualization helps in analyzing the sparsity and distribution of active columns, as well as understanding the spatial pooling process and its impact on the input representations.
@@ -220,8 +222,8 @@ public static void Draw1DBitmap(int[] array, string filePath, int scale = 10)
 
 This Draw1DBitmap method creates a 1D bitmap image representing a binary array. Each element in the array corresponds to a bit in the bitmap image. Active bits (with a value of 1) are represented as black rectangles, while inactive bits (with a value of 0) are represented as white rectangles. The dimensions of the bitmap are determined by the length of the input array and a specified scale factor. The resulting bitmap image is saved to the specified file path in PNG.
 
-## Result
-This project showcasing how different data types, including numbers, geographical coordinates, and temporal information, can be visually represented. In this experiment we can input any significant individual data to convert it into the bitmap. Some examples with experiment details provided here in this section.
+## Examples of DrawBitMap Function
+BitMap images of SDRs can be different by using different types of encoders as stated above. Based on the needs of visualization, 1D or 2D images can be drawn. Few examples of drawing bitmaps using different kinds of Encoders and Spatial Poolers are given below for better understanding of the method and the whole process of its usage.
 
 ### Basic SDR Examples with binary encoders
 
@@ -326,39 +328,6 @@ This method which can generate Images from the 1D sdrs from the binary encoder a
 ```csharp
 // The created method can be called and pass the sdrs named result, filepath and a sample scale vale of 200
 NeoCortexUtils.Draw1DBitmap(result, filePath, 200);
-```
-
-Here is the implemented Draw1DBitmap
-```csharp
-        /// <summary>
-        /// Draws a 1D bitmap from an array of values.
-        /// </summary>
-        /// <param name="array">1D array of values where each value should be 0 or 1.</param>
-        /// <param name="filePath">The bitmap PNG filename.</param>
-        /// <param name="scale">Scale factor for each bit in the array. Determines the width of each bit in the image.</param>
-        public static void Draw1DBitmap(int[] array, string filePath, int scale = 10)
-        {
-            // The height is fixed to a small value since we're creating a 1D image (a line)
-            int height = 300;
-            int width = array.Length * scale;
-            using (var bitmap = new System.Drawing.Bitmap(width, height))
-            {
-                using (var g = Graphics.FromImage(bitmap))
-                {
-                    g.Clear(Color.White); // Background color
-
-                    // Drawing each bit
-                    for (int i = 0; i < array.Length; i++)
-                    {
-                        Color color = array[i] == 1 ? Color.Black : Color.White; // Active bits are black
-                        int x = i * scale;
-                        g.FillRectangle(new SolidBrush(color), x, 0, scale, height);
-                    }
-                }
-
-                bitmap.Save(filePath, ImageFormat.Png);
-            }
-        }
 ```
 
 Here is the output image:
