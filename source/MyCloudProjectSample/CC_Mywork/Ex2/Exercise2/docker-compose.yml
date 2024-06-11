@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  exercise2:
+    image: ${DOCKER_REGISTRY-}exercise2
+    build:
+      context: .
+      dockerfile: Exercise2/Dockerfile
