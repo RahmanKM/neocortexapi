@@ -23,11 +23,19 @@ namespace MyExperiment
 
         private MyConfig config;
 
-        public Experiment(IConfigurationSection configSection, IStorageProvider storageProvider, ILogger log)
+        private string expectedProjectName;
+        /// <summary>
+        /// construct the class
+        /// </summary>
+        /// <param name="configSection"></param>
+        /// <param name="storageProvider"></param>
+        /// <param name="expectedPrjName"></param>
+        /// <param name="log"></param>
+        public Experiment(IConfigurationSection configSection, IStorageProvider storageProvider, string expectedPrjName, ILogger log)
         {
             this.storageProvider = storageProvider;
             this.logger = log;
-
+            this.expectedProjectName = expectedPrjName;
             config = new MyConfig();
             configSection.Bind(config);
         }
