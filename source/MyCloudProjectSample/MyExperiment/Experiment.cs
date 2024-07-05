@@ -40,6 +40,11 @@ namespace MyExperiment
             configSection.Bind(config);
         }
 
+        /// <summary>
+        /// Run Software Engineering project method
+        /// </summary>
+        /// <param name="inputFile">The input file.</param>
+        /// <returns>experiment result object</returns>
         public Task<IExperimentResult> Run(string inputFile)
         {
             // TODO read file
