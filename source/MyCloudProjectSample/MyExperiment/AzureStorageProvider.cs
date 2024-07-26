@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using MyCloudProject.Common;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,27 +39,57 @@ namespace MyExperiment
 
         public async Task UploadExperimentResult(IExperimentResult result)
         {
+            Random rnd = new Random();
+            int rowKeyNumber = rnd.Next(0, 1000);
+            string rowKey = "rahmancc-" + rowKeyNumber.ToString();
+            string partitionKey = "rahman-cc-proj-" + rowKey;
+
+            var testResult = new ExperimentResult(partitionKey, rowKey)
+            {
+
+                ExperimentId = result.ExperimentId,
+                Name = result.Name,
+                Description = result.Description,
+                StartTimeUtc = result.StartTimeUtc,
+                EndTimeUtc = result.EndTimeUtc,
+                TestData = result.TestData,
+            };
+            Console.WriteLine($"Upload ExperimentResult to table: {this.config.ResultTable}");
             var client = new TableClient(this.config.StorageConnectionString, this.config.ResultTable);
 
             await client.CreateIfNotExistsAsync();
-
-            ExperimentResult res = new ExperimentResult("damir", "123")
+            try
             {
-                //Timestamp = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc),
-
-                Accuracy = (float)0.5,
-            };
-
-         
-            await client.UpsertEntityAsync((ExperimentResult)result);
+                await client.AddEntityAsync<ExperimentResult>(testResult);
+                //await client.UpsertEntityAsync<ExperimentResult>(minimalResult);
+                Console.WriteLine("Uploaded to Table Storage completed");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to upload to Table Storage: {ex.ToString()}");
+            }
 
         }
 
-        public async Task<byte[]> UploadResultFile(string fileName, byte[] data)
+        public async Task UploadResultFile(string fileName, byte[] data)
         {
+            var experimentLabel = fileName;
 
+            BlobServiceClient blobServiceClient = new BlobServiceClient(this.config.StorageConnectionString);
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(this.config.ResultContainer);
 
-            throw new NotImplementedException();
+            // Write encoded data to text file
+            byte[] testData = data;
+
+            string blobName = experimentLabel;
+
+            // Upload the text data to the blob container
+            BlobClient blobClient = containerClient.GetBlobClient(blobName);
+            using (MemoryStream memoryStream = new MemoryStream(testData))
+            {
+                await blobClient.UploadAsync(memoryStream);
+            }
+
         }
 
     }
