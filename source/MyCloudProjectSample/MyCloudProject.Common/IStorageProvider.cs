@@ -25,7 +25,7 @@ namespace MyCloudProject.Common
         /// <param name="fileName">The name of the file at some remote (cloud) location  where the file will be uploaded.</param>
         /// <returns>Not used. It can be null.</returns>
         /// <remarks>See step 4 (oposite way) in the architecture picture.</remarks>
-        Task<byte[]> UploadResultFile(string fileName, byte[] data);
+        Task UploadResultFile(string fileName, byte[] data);
 
         /// <summary>
         /// Uploads results of the experiment to the remote (cloud) location. For example the fileshare or as the entity to the table storage.
