@@ -202,6 +202,35 @@ namespace MyExperiment.SEProject
             myBitmap.Save(filePath, ImageFormat.Png);
         }
 
+        public static void DrawBitmap(int[,] bitmapData, int width, int height, Stream outputStream, Color backgroundColor, Color foregroundColor)
+        {
+            // Create a bitmap object
+            using (var bitmap = new Bitmap(width, height))
+            {
+                // Fill the bitmap with the background color
+                using (var g = Graphics.FromImage(bitmap))
+                {
+                    g.Clear(backgroundColor);
+
+                    // Draw the foreground pixels
+                    for (int y = 0; y < height; y++)
+                    {
+                        for (int x = 0; x < width; x++)
+                        {
+                            if (bitmapData[x, y] == 1)
+                            {
+                                bitmap.SetPixel(x, y, foregroundColor);
+                            }
+                        }
+                    }
+                }
+
+                // Save the bitmap to the provided stream
+                bitmap.Save(outputStream, System.Drawing.Imaging.ImageFormat.Png);
+            }
+        }
+
+
         /// <summary>
         /// Draws a 1D bitmap from an array of values.
         /// </summary>

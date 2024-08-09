@@ -3,8 +3,10 @@ using Azure.Storage.Queues.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MyCloudProject.Common;
+using MyExperiment.SEProject;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -45,19 +47,40 @@ namespace MyExperiment
         /// </summary>
         /// <param name="inputFile">The input file.</param>
         /// <returns>experiment result object</returns>
+        /// <summary>
+        /// Run Software Engineering project method
+        /// </summary>
+        /// <param name="inputFile">The input file.</param>
+        /// <returns>experiment result object</returns>
         public Task<IExperimentResult> Run(string inputFile)
         {
-            // TODO read file
+            Random rnd = new Random();
+            int rowKeyNumber = rnd.Next(0, 1000);
+            string rowKey = "rahman-cc-" + rowKeyNumber.ToString();
 
-            // YOU START HERE WITH YOUR SE EXPERIMENT!!!!
-
-            ExperimentResult res = new ExperimentResult(this.config.GroupId, null);
+            ExperimentResult res = new ExperimentResult(this.config.GroupId, rowKey);
 
             res.StartTimeUtc = DateTime.UtcNow;
+            res.ExperimentId = DateTime.UtcNow.ToString("yyyyMMddHHmmssfff");
+            res.RowKey = rowKey;
+            res.PartitionKey = "rahman-cc-proj-" + rowKey;
 
-            // Run your experiment code here.
+            if (inputFile == "runccproject")
+            {
+                res.TestName = "SDR to Bitmap";
+                string testResults = "This is the testResults";
 
-            return Task.FromResult<IExperimentResult>(res); // TODO...
+                // Serialize the test results to JSON
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(testResults, Newtonsoft.Json.Formatting.Indented);
+                res.Description = json;
+                this.logger?.LogInformation($"The file result we got {json}");
+                res.TestData = string.IsNullOrEmpty(json) ? null : Encoding.UTF8.GetBytes(json);
+                res.Accuracy = 100;
+            }
+            res.EndTimeUtc = DateTime.UtcNow;
+
+            this.logger?.LogInformation("The process successfully completed");
+            return Task.FromResult<IExperimentResult>(res);
         }
 
 
@@ -106,7 +129,13 @@ namespace MyExperiment
                         await storageProvider.UploadResultFile("outputfile.txt", null);
 
                         // Step 5.
-                        await storageProvider.UploadExperimentResult(result);
+                        // Generate the SDR bitmap
+                        SdrToBitmap sdrToBitmap = new SdrToBitmap();
+                        byte[] bitmapData = sdrToBitmap.EncodeAndVisualizeSingleValueTest();
+
+                        // Upload the bitmap to the blob container
+                        string bitmapFileName = "EncodedValueVisualization-18_112.png";
+                        await storageProvider.UploadResultFile(bitmapFileName, bitmapData);
 
                         await queueClient.DeleteMessageAsync(message.MessageId, message.PopReceipt);
                     }
