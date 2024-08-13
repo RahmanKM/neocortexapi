@@ -74,7 +74,7 @@ namespace MyExperiment
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(testResults, Newtonsoft.Json.Formatting.Indented);
                 res.Description = json;
                 this.logger?.LogInformation($"The file result we got {json}");
-                res.TestData = string.IsNullOrEmpty(json) ? null : Encoding.UTF8.GetBytes(json);
+                res.TestData = string.IsNullOrEmpty(json) ? null : json;
                 res.Accuracy = 100;
             }
             res.EndTimeUtc = DateTime.UtcNow;
@@ -117,17 +117,18 @@ namespace MyExperiment
 
                         // The message in the step 3 on architecture picture.
                         ExerimentRequestMessage request = JsonSerializer.Deserialize<ExerimentRequestMessage>(msgTxt);
+                        this.logger?.LogInformation($"The real message {request.InputFile}");
 
                         // Step 4.
-                        var inputFile = await this.storageProvider.DownloadInputFile(request.InputFile);
+                        var inputFile = request.InputFile;
 
                         // Here is your SE Project code started.(Between steps 4 and 5).
                         IExperimentResult result = await this.Run(inputFile);
 
                         // Step 4 (oposite direction)
                         //TODO. do serialization of the result.
-                        await storageProvider.UploadResultFile("outputfile.txt", null);
-
+                        //await storageProvider.UploadResultFile("outputfile.txt", null);
+                      
                         // Step 5.
                         // Generate the SDR bitmap
                         SdrToBitmap sdrToBitmap = new SdrToBitmap();
@@ -136,6 +137,7 @@ namespace MyExperiment
                         // Upload the bitmap to the blob container
                         string bitmapFileName = "EncodedValueVisualization-18_112.png";
                         await storageProvider.UploadResultFile(bitmapFileName, bitmapData);
+                        await storageProvider.UploadExperimentResult(result);
 
                         await queueClient.DeleteMessageAsync(message.MessageId, message.PopReceipt);
                     }

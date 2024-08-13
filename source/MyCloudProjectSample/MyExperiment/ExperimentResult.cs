@@ -44,7 +44,7 @@ namespace MyExperiment
 
         public float Accuracy { get; set; }
 
-        public byte[] TestData { get; set; }
+        public string TestData { get; set; }
 
         public string TestName { get; set; }
     }

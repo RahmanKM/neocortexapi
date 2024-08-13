@@ -5,4 +5,4 @@ services:
     image: ${DOCKER_REGISTRY-}mycloudproject
     build:
       context: .
-      dockerfile: MyCloudProject/Dockerfile
+      dockerfile: ./MyCloudProject/Dockerfile

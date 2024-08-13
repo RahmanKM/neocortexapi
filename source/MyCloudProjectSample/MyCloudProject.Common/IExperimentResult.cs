@@ -17,7 +17,7 @@ namespace MyCloudProject.Common
 
         DateTime? EndTimeUtc { get; set; }
 
-        byte[] TestData { get; set; }
+        string TestData { get; set; }
     }
 
 }

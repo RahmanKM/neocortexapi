@@ -12,7 +12,7 @@ namespace MyExperiment.SEProject
     /// <summary>
     /// Set of helper methods.
     /// </summary>
-    public class NeoCortexUtils
+    public class NeoCortexUtils1
     {
         /// <summary>
         /// Binarize image to the file with the test name.
@@ -126,138 +126,102 @@ namespace MyExperiment.SEProject
         }
 
         /// <summary>
-        /// TODO: add comment
+        /// Draws bitmaps from a list of 2D arrays and returns the byte array of the combined bitmap.
+        /// Allows specifying bitmap dimensions and colors for active and inactive cells.
         /// </summary>
-        /// <param name="twoDimArrays"></param>
-        /// <param name="filePath"></param>
-        /// <param name="bmpWidth"></param>
-        /// <param name="bmpHeight"></param>
-        public static void DrawBitmaps(List<int[,]> twoDimArrays, String filePath, int bmpWidth = 1024, int bmpHeight = 1024)
+        public static byte[] DrawBitmaps(List<int[,]> twoDimArrays, int bmpWidth, int bmpHeight, Color inactiveCellColor, Color activeCellColor)
         {
-            DrawBitmaps(twoDimArrays, filePath, Color.DarkGray, Color.Yellow, bmpWidth, bmpHeight);
+            Bitmap bitmap = new Bitmap(bmpWidth, bmpHeight);
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.Clear(inactiveCellColor);
+                int offsetX = 0;
+
+                foreach (int[,] array in twoDimArrays)
+                {
+                    int arrayWidth = array.GetLength(0);
+                    int arrayHeight = array.GetLength(1);
+                    int scaleW = bmpWidth / twoDimArrays.Count / arrayWidth;
+                    int scaleH = bmpHeight / arrayHeight;
+
+                    for (int y = 0; y < arrayHeight; y++)
+                    {
+                        for (int x = 0; x < arrayWidth; x++)
+                        {
+                            Color color = array[x, y] == 1 ? activeCellColor : inactiveCellColor;
+                            g.FillRectangle(new SolidBrush(color), offsetX + x * scaleW, y * scaleH, scaleW, scaleH);
+                        }
+                    }
+                    offsetX += arrayWidth * scaleW;
+                }
+            }
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                bitmap.Save(memoryStream, ImageFormat.Png);
+                return memoryStream.ToArray();
+            }
+        }
+
+
+        public static void DrawBitmap(int[,] twoDimArray, int width, int height, Stream outputStream, Color inactiveCellColor, Color activeCellColor, string text = null)
+        {
+            Bitmap bitmap = new Bitmap(width, height);
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.Clear(inactiveCellColor);  // Set the background color
+
+                int w = twoDimArray.GetLength(0);
+                int h = twoDimArray.GetLength(1);
+                int cellWidth = width / w;
+                int cellHeight = height / h;
+
+                for (int y = 0; y < h; y++)
+                {
+                    for (int x = 0; x < w; x++)
+                    {
+                        Color color = twoDimArray[x, y] == 1 ? activeCellColor : inactiveCellColor;
+                        g.FillRectangle(new SolidBrush(color), x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(text))
+                {
+                    Font font = new Font("Arial", 20, FontStyle.Bold);
+                    g.DrawString(text, font, Brushes.White, new PointF(0, 0));
+                }
+            }
+
+            bitmap.Save(outputStream, ImageFormat.Png);
         }
 
 
         /// <summary>
-        /// Drawas bitmaps from list of arrays.
+        /// Draws a 1D bitmap from an array of values and returns the byte array.
         /// </summary>
-        /// <param name="twoDimArrays">List of arrays to be represented as bitmaps.</param>
-        /// <param name="filePath">Output image path.</param>
-        /// <param name="inactiveCellColor">Color of inactive bit.</param>
-        /// <param name="activeCellColor">Color of active bit.</param>
-        /// <param name="bmpWidth">The width of the bitmap.</param>
-        /// <param name="bmpHeight">The height of the bitmap.</param>
-        public static void DrawBitmaps(List<int[,]> twoDimArrays, String filePath, Color inactiveCellColor, Color activeCellColor, int bmpWidth = 1024, int bmpHeight = 1024)
+        public static byte[] Draw1DBitmap(int[] array, int scale)
         {
-            int widthOfAll = 0, heightOfAll = 0;
-
-            foreach (var arr in twoDimArrays)
-            {
-                widthOfAll += arr.GetLength(0);
-                heightOfAll += arr.GetLength(1);
-            }
-
-            if (widthOfAll > bmpWidth || heightOfAll > bmpHeight)
-                throw new ArgumentException("Size of all included arrays must be less than specified 'bmpWidth' and 'bmpHeight'");
-
-            System.Drawing.Bitmap myBitmap = new System.Drawing.Bitmap(bmpWidth, bmpHeight);
-            int k = 0;
-
-            for (int n = 0; n < twoDimArrays.Count; n++)
-            {
-                var arr = twoDimArrays[n];
-
-                int w = arr.GetLength(0);
-                int h = arr.GetLength(1);
-
-                var scale = ((bmpWidth) / twoDimArrays.Count) / (w + 1);// +1 is for offset between pictures in X dim.
-
-                //if (scale * (w + 1) < (bmpWidth))
-                //    scale++;
-
-                for (int Xcount = 0; Xcount < w; Xcount++)
-                {
-                    for (int Ycount = 0; Ycount < h; Ycount++)
-                    {
-                        for (int padX = 0; padX < scale; padX++)
-                        {
-                            for (int padY = 0; padY < scale; padY++)
-                            {
-                                if (arr[Xcount, Ycount] == 1)
-                                {
-                                    myBitmap.SetPixel(n * (bmpWidth / twoDimArrays.Count) + Xcount * scale + padX, Ycount * scale + padY, activeCellColor); // HERE IS YOUR LOGIC
-                                    k++;
-                                }
-                                else
-                                {
-                                    myBitmap.SetPixel(n * (bmpWidth / twoDimArrays.Count) + Xcount * scale + padX, Ycount * scale + padY, inactiveCellColor); // HERE IS YOUR LOGIC
-                                    k++;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            myBitmap.Save(filePath, ImageFormat.Png);
-        }
-
-        public static void DrawBitmap(int[,] bitmapData, int width, int height, Stream outputStream, Color backgroundColor, Color foregroundColor)
-        {
-            // Create a bitmap object
-            using (var bitmap = new Bitmap(width, height))
-            {
-                // Fill the bitmap with the background color
-                using (var g = Graphics.FromImage(bitmap))
-                {
-                    g.Clear(backgroundColor);
-
-                    // Draw the foreground pixels
-                    for (int y = 0; y < height; y++)
-                    {
-                        for (int x = 0; x < width; x++)
-                        {
-                            if (bitmapData[x, y] == 1)
-                            {
-                                bitmap.SetPixel(x, y, foregroundColor);
-                            }
-                        }
-                    }
-                }
-
-                // Save the bitmap to the provided stream
-                bitmap.Save(outputStream, System.Drawing.Imaging.ImageFormat.Png);
-            }
-        }
-
-
-        /// <summary>
-        /// Draws a 1D bitmap from an array of values.
-        /// </summary>
-        /// <param name="array">1D array of values where each value should be 0 or 1.</param>
-        /// <param name="filePath">The bitmap PNG filename.</param>
-        /// <param name="scale">Scale factor for each bit in the array. Determines the width of each bit in the image.</param>
-        public static void Draw1DBitmap(int[] array, string filePath, int scale = 10)
-        {
-            // The height is fixed to a small value since we're creating a 1D image (a line)
-            int height = 300;
+            int height = 50; // Smaller height for a 1D bitmap visualization
             int width = array.Length * scale;
-            using (var bitmap = new System.Drawing.Bitmap(width, height))
+
+            using (Bitmap bitmap = new Bitmap(width, height))
             {
-                using (var g = Graphics.FromImage(bitmap))
+                using (Graphics g = Graphics.FromImage(bitmap))
                 {
                     g.Clear(Color.White); // Background color
 
-                    // Drawing each bit
                     for (int i = 0; i < array.Length; i++)
                     {
-                        Color color = array[i] == 1 ? Color.Black : Color.White; // Active bits are black
-                        int x = i * scale;
-                        g.FillRectangle(new SolidBrush(color), x, 0, scale, height);
+                        Color color = array[i] == 1 ? Color.Black : Color.White;
+                        g.FillRectangle(new SolidBrush(color), i * scale, 0, scale, height);
                     }
                 }
 
-                bitmap.Save(filePath, ImageFormat.Png);
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    bitmap.Save(memoryStream, ImageFormat.Png);
+                    return memoryStream.ToArray();
+                }
             }
         }
 

@@ -1,11 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="SEProject\NeoCortexUtils.txt" />
+	  <None Remove="SEProject\NeoCortexUtils1 - Copy.txt" />
+	  <None Remove="SEProject\NeoCortexUtilsImageSharp.txt" />
+	</ItemGroup>
+
+	<!--<ItemGroup>
+	  <Compile Include="SEProject\NeoCortexUtils.txt" />
+	  <Compile Include="SEProject\NeoCortexUtils1 - Copy.txt" />
+	  <Compile Include="SEProject\NeoCortexUtilsImageSharp.txt" />
+	</ItemGroup>-->
 
 	<ItemGroup>
 		<PackageReference Include="Azure.Storage.Queues" Version="12.10.0" />
@@ -14,11 +26,15 @@
 		<PackageReference Include="GemBox.Spreadsheet" Version="49.0.1767" />
 		<PackageReference Include="ImageBinarizer" Version="1.5.6" />
 		<PackageReference Include="NeoCortexApi" Version="1.1.5" />
-		<PackageReference Include="System.Drawing.Common" Version="8.0.7" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\MyCloudProject.Common\MyCloudProject.Common.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="runtimeconfig.template.json" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+
 
 </Project>
