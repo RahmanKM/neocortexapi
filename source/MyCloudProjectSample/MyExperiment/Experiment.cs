@@ -144,8 +144,8 @@ namespace MyExperiment
         }
 
 
-        #region Private Methods
-        private async Task seProject(string dateTimeFileName, string aqiFileName) {
+        #region Methods
+        public async Task seProject(string dateTimeFileName, string aqiFileName) {
             // Generate bitmap with binary encoder
             SdrToBitmap sdrToBitmap = new SdrToBitmap();
             byte[] bitmapData = sdrToBitmap.EncodeAndVisualizeSingleValueTest();
@@ -180,6 +180,13 @@ namespace MyExperiment
 
             foreach (var dataRow in dataRows)
             {
+                this.logger?.LogInformation(
+                    "DataRow - W: {W}, R: {R}, Input: {Input}, ExpectedOutput: {ExpectedOutput}",
+                    dataRow.W,
+                    dataRow.R,
+                    dataRow.Input,
+                    string.Join(", ", dataRow.ExpectedOutput)
+                );
                 SdrToBitmap sdrToBitmap = new SdrToBitmap();
                 byte[] result = sdrToBitmap.EncodeFullDateTimeTest(dataRow.W, dataRow.R, dataRow.Input, dataRow.ExpectedOutput);
                 string fileName = "DateTimeBitMap_" + dataRow.Input + "_" + DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
@@ -194,20 +201,34 @@ namespace MyExperiment
 
             foreach (var dataRow in dataRows)
             {
+                this.logger?.LogInformation(
+                    "DataRow - Inputs: {Inputs}, MinValue: {MinValue}, MacValue: {MaxValue}",
+                    dataRow.Inputs,
+                    dataRow.MinValue,
+                    string.Join(", ", dataRow.MaxValue)
+                );
                 SdrToBitmap sdrToBitmap = new SdrToBitmap();
                 List<byte[]> results = sdrToBitmap.ScalarEncodingExperimentWithAQI(dataRow.Inputs, dataRow.MinValue, dataRow.MaxValue);
-                await storageProvider.UploadResultFiles("ScalarAQIBitmap_", results);                
+                foreach (var result in results)
+                {
+                    string fileName = "ScalarAQIBitmap_" + DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
+                    await storageProvider.UploadResultFile(fileName, result);
+                }
             }
         }
 
-        private async Task<List<DateTimeDataRow>> GetDateTimeDataRowsAsync(string jsonFileName)
+        public async Task<List<DateTimeDataRow>> GetDateTimeDataRowsAsync(string jsonFileName)
         {
             string jsonString = await storageProvider.DownloadInputFile(jsonFileName);
             var dateTimeDataRows = JsonSerializer.Deserialize<Dictionary<string, List<DateTimeDataRow>>>(jsonString);
+
+            var formattedJson = JsonSerializer.Serialize(dateTimeDataRows, new JsonSerializerOptions { WriteIndented = true });
+            this.logger?.LogInformation("Deserialized and formatted JSON data: {FormattedJson}", formattedJson);
+
             return dateTimeDataRows["DateTimeDataRow"];
         }
 
-        private async Task<List<ScalarEncoderDataWithAQI>> GetScalarEncoderDataWithAQI(string jsonFileName)
+        public async Task<List<ScalarEncoderDataWithAQI>> GetScalarEncoderDataWithAQI(string jsonFileName)
         {
             string jsonString = await storageProvider.DownloadInputFile(jsonFileName);
             var scalarEncoderDataRows = JsonSerializer.Deserialize<Dictionary<string, List<ScalarEncoderDataWithAQI>>>(jsonString);
@@ -216,7 +237,7 @@ namespace MyExperiment
 
 
 
-        private class DateTimeDataRow
+        public class DateTimeDataRow
         {
             public int W { get; set; }
             public double R { get; set; }
