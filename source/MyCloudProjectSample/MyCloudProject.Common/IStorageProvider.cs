@@ -26,6 +26,7 @@ namespace MyCloudProject.Common
         /// <returns>Not used. It can be null.</returns>
         /// <remarks>See step 4 (oposite way) in the architecture picture.</remarks>
         Task UploadResultFile(string fileName, byte[] data);
+        Task UploadResultFiles(string fileName, List<byte[]> images);
 
         /// <summary>
         /// Uploads results of the experiment to the remote (cloud) location. For example the fileshare or as the entity to the table storage.

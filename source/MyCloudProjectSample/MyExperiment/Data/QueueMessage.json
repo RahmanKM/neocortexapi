@@ -4,5 +4,7 @@
   "Description": "SDR to Bitmap",
   "ProjectName": "ML23/24-06. Improve samples and documentation for SDR representation",
   "GroupName": "rahmanKM",
-  "Students": [ "Rahman Shahriar Khan" ]
+  "Students": [ "Rahman Shahriar Khan" ],
+  "DateTimeDataRow": "DateTimeDataRow.json",
+  "ScalarEncoderAQI": "ScalarEncoderAQI.json"
 }

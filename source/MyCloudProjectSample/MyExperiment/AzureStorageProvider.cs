@@ -92,6 +92,26 @@ namespace MyExperiment
 
         }
 
+        public async Task UploadResultFiles(string baseFileName, List<byte[]> resultImages)
+        {
+            BlobServiceClient blobServiceClient = new BlobServiceClient(this.config.StorageConnectionString);
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(this.config.ResultContainer);
+
+            for (int i = 0; i < resultImages.Count; i++)
+            {
+                string fileName = $"{baseFileName}_{i + 1}.png";  // Generate a unique file name for each image
+
+                byte[] imageData = resultImages[i];
+
+                BlobClient blobClient = containerClient.GetBlobClient(fileName);
+                using (MemoryStream memoryStream = new MemoryStream(imageData))
+                {
+                    await blobClient.UploadAsync(memoryStream);
+                }
+            }
+        }
+
+
     }
 
 

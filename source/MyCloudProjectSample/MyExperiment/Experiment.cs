@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Queues;
 using Azure.Storage.Queues.Models;
+using LearningFoundation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MyCloudProject.Common;
@@ -88,16 +89,6 @@ namespace MyExperiment
         /// <inheritdoc/>
         public async Task RunQueueListener(CancellationToken cancelToken)
         {
-            //ExperimentResult res = new ExperimentResult("damir", "123")
-            //{
-            //    //Timestamp = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc),
-                
-            //    Accuracy = (float)0.5,
-            //};
-
-            //await storageProvider.UploadExperimentResult(res);
-
-
             QueueClient queueClient = new QueueClient(this.config.StorageConnectionString, this.config.Queue);
 
             //
@@ -121,22 +112,18 @@ namespace MyExperiment
 
                         // Step 4.
                         var inputFile = request.InputFile;
+                        var dateTimeFile = request.DateTimeDataRow;
+                        var scalarEncoderAQIFile = request.ScalarEncoderAQI;
 
                         // Here is your SE Project code started.(Between steps 4 and 5).
                         IExperimentResult result = await this.Run(inputFile);
 
+                        await this.seProject(dateTimeFile, scalarEncoderAQIFile);
+
                         // Step 4 (oposite direction)
                         //TODO. do serialization of the result.
                         //await storageProvider.UploadResultFile("outputfile.txt", null);
-                      
-                        // Step 5.
-                        // Generate the SDR bitmap
-                        SdrToBitmap sdrToBitmap = new SdrToBitmap();
-                        byte[] bitmapData = sdrToBitmap.EncodeAndVisualizeSingleValueTest();
-
-                        // Upload the bitmap to the blob container
-                        string bitmapFileName = "EncodedValueVisualization-18_112.png";
-                        await storageProvider.UploadResultFile(bitmapFileName, bitmapData);
+                        
                         await storageProvider.UploadExperimentResult(result);
 
                         await queueClient.DeleteMessageAsync(message.MessageId, message.PopReceipt);
@@ -158,7 +145,98 @@ namespace MyExperiment
 
 
         #region Private Methods
+        private async Task seProject(string dateTimeFileName, string aqiFileName) {
+            // Generate bitmap with binary encoder
+            SdrToBitmap sdrToBitmap = new SdrToBitmap();
+            byte[] bitmapData = sdrToBitmap.EncodeAndVisualizeSingleValueTest();
 
+            // Upload the bitmap to the blob container
+            string bitmapFileName = "EncodedValueVisualization_ScalarEncoder_"+ DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
+            await storageProvider.UploadResultFile(bitmapFileName, bitmapData);
+
+            // generate 1D Bitmap with binary encoder
+            byte[] bitmapData1D = sdrToBitmap.EncodeAndVisualizeSingleValueTest3();
+            string bitmapFileName1D = "Draw1DBitmap_" + DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
+            await storageProvider.UploadResultFile(bitmapFileName1D, bitmapData1D);
+
+            // DateTime encoder test 
+            await this.RunEncodeTestsAsync(dateTimeFileName);
+
+            // ScalarEncoder AQI Test Bitmap run
+            await this.RunScalarAQITestsAsync(aqiFileName);
+
+            // GeoSpatial Data
+            byte[] bitmapGeoSpatialData = sdrToBitmap.GeoSpatialEncoderTestDrawBitMap();
+
+            // Upload the bitmap to the blob container
+            string bitmapGeoSpatialFileName = "GeoSpatialBitmap_" + DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
+            await storageProvider.UploadResultFile(bitmapGeoSpatialFileName, bitmapGeoSpatialData);
+
+        } 
+
+        public async Task RunEncodeTestsAsync(string jsonFileName)
+        {
+            var dataRows = await GetDateTimeDataRowsAsync(jsonFileName);
+
+            foreach (var dataRow in dataRows)
+            {
+                SdrToBitmap sdrToBitmap = new SdrToBitmap();
+                byte[] result = sdrToBitmap.EncodeFullDateTimeTest(dataRow.W, dataRow.R, dataRow.Input, dataRow.ExpectedOutput);
+                string fileName = "DateTimeBitMap_" + dataRow.Input + "_" + DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
+
+                await storageProvider.UploadResultFile(fileName, result);
+            }
+        }
+
+        public async Task RunScalarAQITestsAsync(string jsonFileName)
+        {
+            var dataRows = await GetScalarEncoderDataWithAQI(jsonFileName);
+
+            foreach (var dataRow in dataRows)
+            {
+                SdrToBitmap sdrToBitmap = new SdrToBitmap();
+                List<byte[]> results = sdrToBitmap.ScalarEncodingExperimentWithAQI(dataRow.Inputs, dataRow.MinValue, dataRow.MaxValue);
+
+                foreach (var result in results) {
+
+                    string fileName = "ScalarAQIBitmap_" + DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
+                    await storageProvider.UploadResultFile(fileName, result);
+
+                }
+                
+            }
+        }
+
+        private async Task<List<DateTimeDataRow>> GetDateTimeDataRowsAsync(string jsonFileName)
+        {
+            string jsonString = await storageProvider.DownloadInputFile(jsonFileName);
+            var dateTimeDataRows = JsonSerializer.Deserialize<Dictionary<string, List<DateTimeDataRow>>>(jsonString);
+            return dateTimeDataRows["DateTimeDataRow"];
+        }
+
+        private async Task<List<ScalarEncoderDataWithAQI>> GetScalarEncoderDataWithAQI(string jsonFileName)
+        {
+            string jsonString = await storageProvider.DownloadInputFile(jsonFileName);
+            var scalarEncoderDataRows = JsonSerializer.Deserialize<Dictionary<string, List<ScalarEncoderDataWithAQI>>>(jsonString);
+            return scalarEncoderDataRows["ScalarEncoderDataWithAQI"];
+        }
+
+
+
+        private class DateTimeDataRow
+        {
+            public int W { get; set; }
+            public double R { get; set; }
+            public string Input { get; set; }
+            public int[] ExpectedOutput { get; set; }
+        }
+
+        public class ScalarEncoderDataWithAQI
+        {
+            public int[] Inputs { get; set; }
+            public double MinValue { get; set; }
+            public double MaxValue { get; set; }
+        }
 
         #endregion
     }
