@@ -42,7 +42,7 @@ docker pull rahmankm.azurecr.io/mycloudproject:tag-rahmankm
 
 ## How to run the experiment
 ## Step1 : Message input from azure portal
-at a message to queues inside Azure storage account.
+add a message to queues inside Azure storage account.
 p.s Uncheck "Encode the message body in Base64"
 
 **How to add message :** 
