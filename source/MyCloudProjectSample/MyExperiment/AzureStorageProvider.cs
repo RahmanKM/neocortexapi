@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Azure.Data.Tables;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Configuration;
 using MyCloudProject.Common;
 using System;
@@ -24,17 +25,28 @@ namespace MyExperiment
 
         public async Task<string> DownloadInputFile(string fileName)
         {
-            BlobContainerClient container = new BlobContainerClient("read from config", "sample-container TODO. Read from config");
+            BlobContainerClient container = new BlobContainerClient(this.config.StorageConnectionString, this.config.TrainingContainer);
             await container.CreateIfNotExistsAsync();
 
             // Get a reference to a blob named "sample-file"
             BlobClient blob = container.GetBlobClient(fileName);
 
-            //throw if not exists:
-            //blob.ExistsAsync
+            // Check if the blob exists
+            if (await blob.ExistsAsync())
+            {
+                // Download the blob content as a stream
+                BlobDownloadInfo download = await blob.DownloadAsync();
 
-            // return "../myinputfilexy.csv"
-            throw new NotImplementedException();
+                // Read the content from the stream and return it as a string
+                using (StreamReader reader = new StreamReader(download.Content))
+                {
+                    return await reader.ReadToEndAsync();
+                }
+            }
+            else
+            {
+                throw new FileNotFoundException($"The file '{fileName}' does not exist in the blob container.");
+            }
         }
 
         public async Task UploadExperimentResult(IExperimentResult result)

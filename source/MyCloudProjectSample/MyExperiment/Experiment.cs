@@ -196,14 +196,7 @@ namespace MyExperiment
             {
                 SdrToBitmap sdrToBitmap = new SdrToBitmap();
                 List<byte[]> results = sdrToBitmap.ScalarEncodingExperimentWithAQI(dataRow.Inputs, dataRow.MinValue, dataRow.MaxValue);
-
-                foreach (var result in results) {
-
-                    string fileName = "ScalarAQIBitmap_" + DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
-                    await storageProvider.UploadResultFile(fileName, result);
-
-                }
-                
+                await storageProvider.UploadResultFiles("ScalarAQIBitmap_", results);                
             }
         }
 
