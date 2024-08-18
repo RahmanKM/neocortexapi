@@ -23,8 +23,8 @@ In this experiment we have implemented our Software Engineering project in Azure
 |  |  |  |
 | --- | --- | --- |
 | Resource Group | ```RG-Rahman-Khan``` | --- |
-| Container Registry | ```rahmankm``` | --- |
-| Container Registry server | ```rahmankm.azurecr.io``` | --- |
+| Container Registry | ```rahmankmc``` | --- |
+| Container Registry server | ```rahmankmc.azurecr.io``` | --- |
 | Container Instance | ```rahmankm3rd``` | --- |
 | Storage account | ```ccrahmankm``` | --- |
 | Queue storage | ```rahmanqueue``` | Queue which containes trigger message |
@@ -34,10 +34,10 @@ In this experiment we have implemented our Software Engineering project in Azure
 
 The experiment Docker image can be pulled from the Azure Container Registry using the instructions below.
 ~~~
-docker login rahmankm.azurecr.io -u rahmankm -p 3a0mVHc554ceRVW4OPTQHw5rZjI+j5gfxKR2Q5YgEF+ACRBWFIk2
+docker login rahmankm.azurecr.io -u rahmankmc -p VUzpuJyxzCkdY+gktuALRAYxp6sfPpGVfSPVlR7OSo+ACRDYM1TB
 ~~~
 ~~~
-docker pull rahmankm.azurecr.io/mycloudproject:tag-rahmankm
+docker pull rahmankmc.azurecr.io/mycloudproject:tag-rahmankm
 ~~~
 
 ## How to run the experiment
