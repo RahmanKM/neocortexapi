@@ -145,16 +145,28 @@ namespace MyExperiment
 
 
         #region Methods
-        public async Task seProject(string dateTimeFileName, string aqiFileName) {
+        /// <summary>
+        /// Executes a series of encoding and visualization tests, generates bitmap images, 
+        /// and uploads them to the cloud storage. This method runs multiple encoding tests including:
+        /// 1. Encoding and visualizing a single scalar value.
+        /// 2. Generating a 1D bitmap using a scalar encoder.
+        /// 3. Running DateTime encoding tests.
+        /// 4. Running scalar encoding tests with AQI data.
+        /// 5. Generating and uploading geospatial data visualizations.
+        /// </summary>
+        /// <param name="dateTimeFileName">The JSON file name containing the DateTime data for encoding tests.</param>
+        /// <param name="aqiFileName">The JSON file name containing the AQI data for scalar encoding tests.</param>
+        public async Task seProject(string dateTimeFileName, string aqiFileName)
+        {
             // Generate bitmap with binary encoder
             SdrToBitmap sdrToBitmap = new SdrToBitmap();
             byte[] bitmapData = sdrToBitmap.EncodeAndVisualizeSingleValueTest();
 
             // Upload the bitmap to the blob container
-            string bitmapFileName = "EncodedValueVisualization_ScalarEncoder_"+ DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
+            string bitmapFileName = "EncodedValueVisualization_ScalarEncoder_" + DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
             await storageProvider.UploadResultFile(bitmapFileName, bitmapData);
 
-            // generate 1D Bitmap with binary encoder
+            // Generate 1D Bitmap with binary encoder
             byte[] bitmapData1D = sdrToBitmap.EncodeAndVisualizeSingleValueTest3();
             string bitmapFileName1D = "Draw1DBitmap_" + DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
             await storageProvider.UploadResultFile(bitmapFileName1D, bitmapData1D);
@@ -171,9 +183,15 @@ namespace MyExperiment
             // Upload the bitmap to the blob container
             string bitmapGeoSpatialFileName = "GeoSpatialBitmap_" + DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
             await storageProvider.UploadResultFile(bitmapGeoSpatialFileName, bitmapGeoSpatialData);
+        }
 
-        } 
-
+        /// <summary>
+        /// Runs the DateTime encoding tests by processing a list of data rows extracted from a JSON file.
+        /// For each data row, the method encodes the DateTime, generates a bitmap image, and uploads the image to cloud storage.
+        /// The details of each data row are logged for debugging and auditing purposes.
+        /// </summary>
+        /// <param name="jsonFileName">The JSON file name containing DateTime data rows.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         public async Task RunEncodeTestsAsync(string jsonFileName)
         {
             var dataRows = await GetDateTimeDataRowsAsync(jsonFileName);
@@ -187,6 +205,7 @@ namespace MyExperiment
                     dataRow.Input,
                     string.Join(", ", dataRow.ExpectedOutput)
                 );
+
                 SdrToBitmap sdrToBitmap = new SdrToBitmap();
                 byte[] result = sdrToBitmap.EncodeFullDateTimeTest(dataRow.W, dataRow.R, dataRow.Input, dataRow.ExpectedOutput);
                 string fileName = "DateTimeBitMap_" + dataRow.Input + "_" + DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
@@ -195,6 +214,13 @@ namespace MyExperiment
             }
         }
 
+        /// <summary>
+        /// Runs the scalar encoding tests using AQI data by processing a list of data rows extracted from a JSON file.
+        /// For each data row, the method encodes the AQI values, generates multiple bitmap images, and uploads each image to cloud storage.
+        /// The details of each data row are logged for debugging and auditing purposes.
+        /// </summary>
+        /// <param name="jsonFileName">The JSON file name containing AQI data rows.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         public async Task RunScalarAQITestsAsync(string jsonFileName)
         {
             var dataRows = await GetScalarEncoderDataWithAQI(jsonFileName);
@@ -202,13 +228,15 @@ namespace MyExperiment
             foreach (var dataRow in dataRows)
             {
                 this.logger?.LogInformation(
-                    "DataRow - Inputs: {Inputs}, MinValue: {MinValue}, MacValue: {MaxValue}",
-                    dataRow.Inputs,
+                    "DataRow - Inputs: {Inputs}, MinValue: {MinValue}, MaxValue: {MaxValue}",
+                    string.Join(", ", dataRow.Inputs),
                     dataRow.MinValue,
-                    string.Join(", ", dataRow.MaxValue)
+                    dataRow.MaxValue
                 );
+
                 SdrToBitmap sdrToBitmap = new SdrToBitmap();
                 List<byte[]> results = sdrToBitmap.ScalarEncodingExperimentWithAQI(dataRow.Inputs, dataRow.MinValue, dataRow.MaxValue);
+
                 foreach (var result in results)
                 {
                     string fileName = "ScalarAQIBitmap_" + DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
@@ -217,6 +245,12 @@ namespace MyExperiment
             }
         }
 
+        /// <summary>
+        /// Retrieves and deserializes DateTime data rows from a JSON file stored in cloud storage.
+        /// Logs the deserialized and formatted JSON data for debugging purposes.
+        /// </summary>
+        /// <param name="jsonFileName">The JSON file name to be downloaded and deserialized.</param>
+        /// <returns>A Task representing the asynchronous operation, with a result of a list of DateTimeDataRow objects.</returns>
         public async Task<List<DateTimeDataRow>> GetDateTimeDataRowsAsync(string jsonFileName)
         {
             string jsonString = await storageProvider.DownloadInputFile(jsonFileName);
@@ -228,6 +262,11 @@ namespace MyExperiment
             return dateTimeDataRows["DateTimeDataRow"];
         }
 
+        /// <summary>
+        /// Retrieves and deserializes scalar encoder data with AQI from a JSON file stored in cloud storage.
+        /// </summary>
+        /// <param name="jsonFileName">The JSON file name to be downloaded and deserialized.</param>
+        /// <returns>A Task representing the asynchronous operation, with a result of a list of ScalarEncoderDataWithAQI objects.</returns>
         public async Task<List<ScalarEncoderDataWithAQI>> GetScalarEncoderDataWithAQI(string jsonFileName)
         {
             string jsonString = await storageProvider.DownloadInputFile(jsonFileName);
@@ -235,8 +274,10 @@ namespace MyExperiment
             return scalarEncoderDataRows["ScalarEncoderDataWithAQI"];
         }
 
-
-
+        /// <summary>
+        /// Represents a data row used in DateTime encoding tests.
+        /// Contains the width (W), radius (R), input DateTime string, and expected output array.
+        /// </summary>
         public class DateTimeDataRow
         {
             public int W { get; set; }
@@ -245,12 +286,17 @@ namespace MyExperiment
             public int[] ExpectedOutput { get; set; }
         }
 
+        /// <summary>
+        /// Represents a data row used in scalar encoding tests with AQI data.
+        /// Contains the input values, minimum value, and maximum value.
+        /// </summary>
         public class ScalarEncoderDataWithAQI
         {
             public int[] Inputs { get; set; }
             public double MinValue { get; set; }
             public double MaxValue { get; set; }
         }
+
 
         #endregion
     }
