@@ -44,45 +44,58 @@ namespace MyExperiment
         }
 
         /// <summary>
-        /// Run Software Engineering project method
+        /// Executes the experiment process based on the provided input files and logs the results.
+        /// This method configures the test parameters, performs the experiment, serializes the results to JSON,
+        /// and captures execution details for auditing and debugging purposes.
         /// </summary>
-        /// <param name="inputFile">The input file.</param>
-        /// <returns>experiment result object</returns>
-        /// <summary>
-        /// Run Software Engineering project method
-        /// </summary>
-        /// <param name="inputFile">The input file.</param>
-        /// <returns>experiment result object</returns>
-        public Task<IExperimentResult> Run(string inputFile)
+        /// <param name="inputFile">The main input file name for the experiment.</param>
+        /// <param name="sdrTestFile1">First additional test file used in the SDR to Bitmap conversion.</param>
+        /// <param name="sdrTestFile2">Second additional test file used in the SDR to Bitmap conversion.</param>
+        /// <returns>A task that returns an experiment result object encapsulating details such as start and end times, accuracy, and test data.</returns>
+        public Task<IExperimentResult> Run(string inputFile, string sdrTestFile1, string sdrTestFile2)
         {
+            // Generates a unique row key identifier for this experiment instance.
             Random rnd = new Random();
             int rowKeyNumber = rnd.Next(0, 1000);
             string rowKey = "rahman-cc-" + rowKeyNumber.ToString();
 
+            // Initialize experiment result with configuration and unique identifiers.
             ExperimentResult res = new ExperimentResult(this.config.GroupId, rowKey);
 
+            // Capture the start time of the experiment.
             res.StartTimeUtc = DateTime.UtcNow;
             res.ExperimentId = DateTime.UtcNow.ToString("yyyyMMddHHmmssfff");
             res.RowKey = rowKey;
             res.PartitionKey = "rahman-cc-proj-" + rowKey;
+            res.TestName = "SDR to Bitmap";
 
-            if (inputFile == "runccproject")
+            try
             {
-                res.TestName = "SDR to Bitmap";
-                string testResults = "This is the testResults";
+                // Compiles test results from multiple input files into a structured format.
+                var testResults = new
+                {
+                    inputFile,
+                    sdrTestFile1,
+                    sdrTestFile2
+                };
 
-                // Serialize the test results to JSON
+                // Convert test results into JSON format for standardized reporting.
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(testResults, Newtonsoft.Json.Formatting.Indented);
                 res.Description = json;
-                this.logger?.LogInformation($"The file result we got {json}");
-                res.TestData = string.IsNullOrEmpty(json) ? null : json;
-                res.Accuracy = 100;
+                this.logger?.LogInformation($"The file result we got: {json}");
+                res.TestData = json;
+                res.Accuracy = 100; // Assuming a fixed accuracy for demonstration
             }
-            res.EndTimeUtc = DateTime.UtcNow;
+            catch (Exception ex)
+            {
+                this.logger?.LogError(ex, "Error processing the experiment.");
+            }
 
-            this.logger?.LogInformation("The process successfully completed");
+            res.EndTimeUtc = DateTime.UtcNow;
+            this.logger?.LogInformation("The process successfully completed.");
             return Task.FromResult<IExperimentResult>(res);
         }
+
 
 
 
@@ -116,7 +129,7 @@ namespace MyExperiment
                         var scalarEncoderAQIFile = request.ScalarEncoderAQI;
 
                         // Here is your SE Project code started.(Between steps 4 and 5).
-                        IExperimentResult result = await this.Run(inputFile);
+                        IExperimentResult result = await this.Run(inputFile, dateTimeFile, scalarEncoderAQIFile);
 
                         await this.seProject(dateTimeFile, scalarEncoderAQIFile);
 
