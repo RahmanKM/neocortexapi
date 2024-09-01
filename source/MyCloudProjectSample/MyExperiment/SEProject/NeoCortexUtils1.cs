@@ -164,6 +164,24 @@ namespace MyExperiment.SEProject
         }
 
 
+        /// <summary>
+        /// Draws a bitmap based on a 2D array of integer values, where each value represents the state of a cell in the bitmap.
+        /// The method creates a bitmap image, colors the cells based on the active and inactive states, and optionally adds text to the image.
+        /// The resulting bitmap is saved to the provided output stream in PNG format.
+        /// </summary>
+        /// <param name="twoDimArray">
+        /// A 2D array of integers where each value indicates the state of a cell in the bitmap.
+        /// A value of 1 indicates an active cell, and any other value indicates an inactive cell.
+        /// </param>
+        /// <param name="width">The width of the bitmap in pixels.</param>
+        /// <param name="height">The height of the bitmap in pixels.</param>
+        /// <param name="outputStream">The stream where the generated bitmap will be saved.</param>
+        /// <param name="inactiveCellColor">The color used to fill inactive cells in the bitmap.</param>
+        /// <param name="activeCellColor">The color used to fill active cells in the bitmap.</param>
+        /// <param name="text">
+        /// Optional text to be drawn on the bitmap. The text is drawn in white color, using Arial font, bold style, and size 20.
+        /// If no text is provided, the bitmap is generated without any text overlay.
+        /// </param>
         public static void DrawBitmap(int[,] twoDimArray, int width, int height, Stream outputStream, Color inactiveCellColor, Color activeCellColor, string text = null)
         {
             Bitmap bitmap = new Bitmap(width, height);
