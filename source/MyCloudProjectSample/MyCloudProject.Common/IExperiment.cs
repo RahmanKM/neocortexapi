@@ -14,7 +14,7 @@ namespace MyCloudProject.Common
         /// </summary>
         /// <param name="inputFile"></param>
         /// <returns></returns>
-        Task<IExperimentResult> Run(string inputFile, string file1, string file2);
+        Task<IExperimentResult> Run(string file1, string file2);
 
         /// <summary>
         /// Starts the listening for incomming messages, which will trigger the experiment.

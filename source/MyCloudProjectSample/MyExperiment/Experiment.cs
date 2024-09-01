@@ -48,11 +48,10 @@ namespace MyExperiment
         /// This method configures the test parameters, performs the experiment, serializes the results to JSON,
         /// and captures execution details for auditing and debugging purposes.
         /// </summary>
-        /// <param name="inputFile">The main input file name for the experiment.</param>
         /// <param name="sdrTestFile1">First additional test file used in the SDR to Bitmap conversion.</param>
         /// <param name="sdrTestFile2">Second additional test file used in the SDR to Bitmap conversion.</param>
         /// <returns>A task that returns an experiment result object encapsulating details such as start and end times, accuracy, and test data.</returns>
-        public Task<IExperimentResult> Run(string inputFile, string sdrTestFile1, string sdrTestFile2)
+        public Task<IExperimentResult> Run(string sdrTestFile1, string sdrTestFile2)
         {
             // Generates a unique row key identifier for this experiment instance.
             Random rnd = new Random();
@@ -74,7 +73,6 @@ namespace MyExperiment
                 // Compiles test results from multiple input files into a structured format.
                 var testResults = new
                 {
-                    inputFile,
                     sdrTestFile1,
                     sdrTestFile2
                 };
@@ -129,7 +127,7 @@ namespace MyExperiment
                         var scalarEncoderAQIFile = request.ScalarEncoderAQI;
 
                         // Here is your SE Project code started.(Between steps 4 and 5).
-                        IExperimentResult result = await this.Run(inputFile, dateTimeFile, scalarEncoderAQIFile);
+                        IExperimentResult result = await this.Run(dateTimeFile, scalarEncoderAQIFile);
 
                         await this.seProject(dateTimeFile, scalarEncoderAQIFile);
 
