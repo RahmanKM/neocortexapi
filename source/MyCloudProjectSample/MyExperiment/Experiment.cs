@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MyCloudProject.Common;
 using MyExperiment.SEProject;
+using SixLabors.ImageSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,8 +51,11 @@ namespace MyExperiment
         /// </summary>
         /// <param name="sdrTestFile1">First additional test file used in the SDR to Bitmap conversion.</param>
         /// <param name="sdrTestFile2">Second additional test file used in the SDR to Bitmap conversion.</param>
+        /// <param name="value1">Third additional input data for first method  </param>
+        /// <param name="value2">Fourth additional input data for Second method  </param>
+        /// <param name="value3">Third additional input data for third method  </param>
         /// <returns>A task that returns an experiment result object encapsulating details such as start and end times, accuracy, and test data.</returns>
-        public Task<IExperimentResult> Run(string sdrTestFile1, string sdrTestFile2)
+        public Task<IExperimentResult> Run(string sdrTestFile1, string sdrTestFile2, string value1, string value2, string value3)
         {
             // Generates a unique row key identifier for this experiment instance.
             Random rnd = new Random();
@@ -70,11 +74,14 @@ namespace MyExperiment
 
             try
             {
-                // Compiles test results from multiple input files into a structured format.
+                // Compiles test results from multiple input files and input values into a structured format.
                 var testResults = new
                 {
                     sdrTestFile1,
-                    sdrTestFile2
+                    sdrTestFile2,
+                    value1,
+                    value2,
+                    value3,
                 };
 
                 // Convert test results into JSON format for standardized reporting.
@@ -129,19 +136,18 @@ namespace MyExperiment
                         ExerimentRequestMessage request = JsonSerializer.Deserialize<ExerimentRequestMessage>(msgTxt);
                         this.logger?.LogInformation($"The real message {request.InputFile}");
 
-                        // Step 4.
+                        // Step 4: fetch the file names and values for sdr to bitmap methods.
                         var inputFile = request.InputFile;
                         var dateTimeFile = request.DateTimeDataRow;
                         var scalarEncoderAQIFile = request.ScalarEncoderAQI;
+                        var value1 = request.Value1;
+                        var value2 = request.Value2;
+                        var value3 = request.Value3;
 
-                        // Here is your SE Project code started.(Between steps 4 and 5).
-                        IExperimentResult result = await this.Run(dateTimeFile, scalarEncoderAQIFile);
+                        // Here is my SE Project code started.(Between steps 4 and 5).
+                        IExperimentResult result = await this.Run(dateTimeFile, scalarEncoderAQIFile, value1, value2, value3.ToString());
 
-                        await this.seProject(dateTimeFile, scalarEncoderAQIFile);
-
-                        // Step 4 (oposite direction)
-                        //TODO. do serialization of the result.
-                        //await storageProvider.UploadResultFile("outputfile.txt", null);
+                        await this.seProject(dateTimeFile, scalarEncoderAQIFile, value1, value2, value3);
                         
                         await storageProvider.UploadExperimentResult(result);
 
@@ -175,18 +181,18 @@ namespace MyExperiment
         /// </summary>
         /// <param name="dateTimeFileName">The JSON file name containing the DateTime data for encoding tests.</param>
         /// <param name="aqiFileName">The JSON file name containing the AQI data for scalar encoding tests.</param>
-        public async Task seProject(string dateTimeFileName, string aqiFileName)
+        public async Task seProject(string dateTimeFileName, string aqiFileName, string value1, string value2, double value3)
         {
             // Generate bitmap with binary encoder
             SdrToBitmap sdrToBitmap = new SdrToBitmap();
-            byte[] bitmapData = sdrToBitmap.EncodeAndVisualizeSingleValueTest();
+            byte[] bitmapData = sdrToBitmap.EncodeAndVisualizeSingleValueTest(value1);
 
             // Upload the bitmap to the blob container
             string bitmapFileName = "EncodedValueVisualization_ScalarEncoder_" + DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
             await storageProvider.UploadResultFile(bitmapFileName, bitmapData);
 
             // Generate 1D Bitmap with binary encoder
-            byte[] bitmapData1D = sdrToBitmap.EncodeAndVisualizeSingleValueTest3();
+            byte[] bitmapData1D = sdrToBitmap.EncodeAndVisualizeSingleValueTest3(value2);
             string bitmapFileName1D = "Draw1DBitmap_" + DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
             await storageProvider.UploadResultFile(bitmapFileName1D, bitmapData1D);
 
@@ -197,7 +203,7 @@ namespace MyExperiment
             await this.RunScalarAQITestsAsync(aqiFileName);
 
             // GeoSpatial Data
-            byte[] bitmapGeoSpatialData = sdrToBitmap.GeoSpatialEncoderTestDrawBitMap();
+            byte[] bitmapGeoSpatialData = sdrToBitmap.GeoSpatialEncoderTestDrawBitMap(value3);
 
             // Upload the bitmap to the blob container
             string bitmapGeoSpatialFileName = "GeoSpatialBitmap_" + DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";

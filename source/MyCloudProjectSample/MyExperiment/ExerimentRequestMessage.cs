@@ -12,6 +12,10 @@ namespace MyExperiment
         public string Name { get; set; }
         public string Description { get; set; }
 
+        public string Value1 { get; set; }
+        public string Value2 { get; set; }
+        public double Value3 { get; set; }
+
         public string ScalarEncoderAQI { get; set; }
         public string DateTimeDataRow { get; set; }
     }

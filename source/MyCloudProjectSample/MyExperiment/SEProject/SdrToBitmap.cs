@@ -13,12 +13,6 @@ using System.Threading.Tasks;
 
 namespace MyExperiment.SEProject
 {
-    public class EncoderResult
-    {
-        public string Title { get; set; }  // Title of the method
-        public string SDR { get; set; }    // SDR as JSON string
-        public byte[] Image { get; set; }  // Image as byte array
-    }
 
     public class SdrToBitmap
     {
@@ -28,7 +22,7 @@ namespace MyExperiment.SEProject
         /// The resulting binary pattern is rendered as a black and yellow bitmap, where active bits are represented by yellow pixels on a black background.
         /// </summary>
         /// <returns>A byte array containing the bitmap data of the encoded numeric value, formatted as a PNG file.</returns>
-        public byte[] EncodeAndVisualizeSingleValueTest()
+        public byte[] EncodeAndVisualizeSingleValueTest(string value)
         {
             var encoderSettings = new Dictionary<string, object>
             {
@@ -37,7 +31,7 @@ namespace MyExperiment.SEProject
 
             var encoder = new BinaryEncoder(encoderSettings); // Assuming you have a BinaryEncoder class defined
 
-            string inputValue = "50149";
+            string inputValue = value;
             var result = encoder.Encode(inputValue);
 
             int[,] twoDimArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));
@@ -59,7 +53,7 @@ namespace MyExperiment.SEProject
         /// <returns>
         /// A byte array containing the generated 1D bitmap image in PNG format, representing the encoded input value.
         /// </returns>
-        public byte[] EncodeAndVisualizeSingleValueTest3()
+        public byte[] EncodeAndVisualizeSingleValueTest3(string value)
         {
             // Configure the binary encoder settings. 
             // 'N' specifies the number of bits in the SDR representation.
@@ -72,7 +66,7 @@ namespace MyExperiment.SEProject
             var encoder = new BinaryEncoder(encoderSettings);
 
             // The input value to encode. This is the value that will be converted into a binary representation.
-            object inputValue = "56.7";
+            object inputValue = value;
 
             // Encode the input value into an SDR (sparse distributed representation).
             var result = encoder.Encode(inputValue);
@@ -215,7 +209,7 @@ namespace MyExperiment.SEProject
         /// <returns>
         /// A byte array representing the encoded latitude value visualized as a 1024x1024 PNG bitmap.
         /// </returns>
-        public byte[] GeoSpatialEncoderTestDrawBitMap(double input = 48.75)
+        public byte[] GeoSpatialEncoderTestDrawBitMap(double inputValue)
         {
             // Create a dictionary to hold the encoder settings.
             Dictionary<string, object> encoderSettings = new Dictionary<string, object>
@@ -234,7 +228,7 @@ namespace MyExperiment.SEProject
             GeoSpatialEncoderExperimental encoder = new GeoSpatialEncoderExperimental(encoderSettings);
 
             // Encode the input latitude value into an SDR (Sparse Distributed Representation).
-            var result = encoder.Encode(input);
+            var result = encoder.Encode(inputValue);
 
             // Convert the 1D SDR array into a 2D array for visualization.
             int[,] twoDimenArray = ArrayUtils.Make2DArray<int>(result, (int)Math.Sqrt(result.Length), (int)Math.Sqrt(result.Length));

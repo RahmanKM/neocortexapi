@@ -17,6 +17,10 @@ namespace MyCloudProject.Common
 
         string Description { get; set; }
 
+        string Value1 { get; set; }
+        string Value2 { get; set; }
+        double Value3 { get; set; }
+
         string ScalarEncoderAQI { get; set; }
         string DateTimeDataRow { get; set; }
 
