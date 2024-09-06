@@ -4,7 +4,7 @@ In the world of data science and machine learning, Sparse Distributed Representa
 
 The goal was simple: make it easier for people to grasp how SDRs are converted into bitmaps. This involved not just improving the documentation, but also enhancing how these methods are implemented and used. We realized that clear, accessible documentation is essential for anyone who wants to work with SDRs, especially those who might not be experts in the field.
 
-We took advantage of the cloud’s ability to scale and provide easy access to powerful computing resources. This means that now, instead of needing high-end hardware to run these processes, anyone can do it from virtually anywhere, using the cloud. This is especially useful when working with large datasets or complex visualizations that require more processing power.
+I took advantage of the cloud’s ability to scale and provide easy access to powerful computing resources. This means that now, instead of needing high-end hardware to run these processes, anyone can do it from virtually anywhere, using the cloud. This is especially useful when working with large datasets or complex visualizations that require more processing power.
 
 Moreover, I uploaded SDRs to a training container in the cloud. So now, users can easily access, train, and visualize their data directly in the cloud, making the workflow smoother and more efficient.
 
@@ -16,13 +16,13 @@ If you need to obtain a copy of our project on your own system, use these links 
 ## What is this experiment about
 This project explores the necessity and methodology of adapting the Spatial Distributed Representation (SDR) to Bitmap conversion methods to function optimally in cloud environments. This adaptation is crucial for leveraging scalable cloud resources to handle intensive computational tasks more efficiently.
 
-## Why Adapt SDR to Bitmap for the Cloud?
-Running SDR to Bitmap conversions on local machines limits the scalability and efficiency of processing large datasets. By migrating these operations to the cloud, we harness the power of distributed computing, leading to faster processing times and reduced local resource consumption.
+## Goal of this project:
+Running SDR to Bitmap conversions on local machines limits the scalability and efficiency of processing large datasets. By migrating these operations to the cloud, I harnessed the power of distributed computing, leading to faster processing times and reduced local resource consumption. Now I can upload large number of sdrs and values and create sdrs and bitmaps based on my need and can save them for future processing purpose.
 
 ## Methodology
 
 ### Stream-Based File Handling
-Originally, our methods involved direct file handling, which was not optimal for cloud-based execution. We transitioned to stream-based processing to enhance flexibility and performance. This change facilitates direct interactions with cloud storage without the need for intermediate storage, reducing I/O overhead.
+Originally, my methods involved direct file handling, which was not optimal for cloud-based execution. I transitioned to stream-based processing to enhance flexibility and performance. This change facilitates direct interactions with cloud storage without the need for intermediate storage, reducing I/O overhead.
 
 #### Modified Method Example
 ```csharp
@@ -43,7 +43,7 @@ public byte[] EncodeFullDateTimeTest(int w, double r, Object input, int[] expect
 }
 
 ```
-We used memorystream to hold the temprarily before uploading to cloud 
+I used memorystream to hold the temprarily before uploading to cloud 
 ```csharp
 // Utilizing MemoryStream to hold data temporarily
 using (MemoryStream memoryStream = new MemoryStream()) {
@@ -357,7 +357,7 @@ The ```RunScalarAQITestsAsync``` method is responsible for downloading and passi
         }
 ```
 
-In this experiment we have implemented our Software Engineering project in Azure cloud. Below is the total algorithm of the project:
+In this experiment I have implemented our Software Engineering project in Azure cloud. Below is the total algorithm of the project:
 
 ![image](images/mushfiqs_diagram.png)
 
