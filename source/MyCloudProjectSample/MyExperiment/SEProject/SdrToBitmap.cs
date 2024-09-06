@@ -13,9 +13,21 @@ using System.Threading.Tasks;
 
 namespace MyExperiment.SEProject
 {
+    public class EncoderResult
+    {
+        public string Title { get; set; }  // Title of the method
+        public string SDR { get; set; }    // SDR as JSON string
+        public byte[] Image { get; set; }  // Image as byte array
+    }
+
     public class SdrToBitmap
     {
-        // Generate bitmap image for a randdom integer value
+        /// <summary>
+        /// Encodes a given single numeric value into a Sparse Distributed Representation (SDR) and visualizes this representation as a bitmap.
+        /// This method is designed to work with numerical data, transforming it into a binary format that can be easily visualized for analysis.
+        /// The resulting binary pattern is rendered as a black and yellow bitmap, where active bits are represented by yellow pixels on a black background.
+        /// </summary>
+        /// <returns>A byte array containing the bitmap data of the encoded numeric value, formatted as a PNG file.</returns>
         public byte[] EncodeAndVisualizeSingleValueTest()
         {
             var encoderSettings = new Dictionary<string, object>
