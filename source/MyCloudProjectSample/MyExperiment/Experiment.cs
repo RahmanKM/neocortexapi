@@ -97,7 +97,15 @@ namespace MyExperiment
 
 
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Executes the experiment process based on the provided input files and logs the results.
+        /// This method configures the test parameters, performs the experiment, serializes the results to JSON,
+        /// and captures execution details for auditing and debugging purposes.
+        /// </summary>
+        /// <param name="inputFile">The main input file name for the experiment.</param>
+        /// <param name="sdrTestFile1">First additional test file used in the SDR to Bitmap conversion.</param>
+        /// <param name="sdrTestFile2">Second additional test file used in the SDR to Bitmap conversion.</param>
+        /// <returns>A task that returns an experiment result object encapsulating details such as start and end times, accuracy, and test data.</returns>
         public async Task RunQueueListener(CancellationToken cancelToken)
         {
             QueueClient queueClient = new QueueClient(this.config.StorageConnectionString, this.config.Queue);
