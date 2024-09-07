@@ -122,6 +122,9 @@ Handles incoming tasks, processes them, and uploads results to cloud storage, en
         /// <param name="inputFile">The main input file name for the experiment.</param>
         /// <param name="sdrTestFile1">First additional test file used in the SDR to Bitmap conversion.</param>
         /// <param name="sdrTestFile2">Second additional test file used in the SDR to Bitmap conversion.</param>
+        /// <param name="value1">Third additional input data for EncodeAndVisualizeSingleValueTest method in the SDR to Bitmap conversion.</param>
+        /// <param name="value2">Fourth additional input data for EncodeAndVisualizeSingleValueTest3 method in the SDR to Bitmap conversion.</param>
+        /// <param name="value3">Third additional input data for GeoSpatialEncoderTestDrawBitMap method in the SDR to Bitmap conversion.</param>
         /// <returns>A task that returns an experiment result object encapsulating details such as start and end times, accuracy, and test data.</returns>
         public async Task RunQueueListener(CancellationToken cancelToken)
         {
@@ -192,6 +195,9 @@ The queue message trigger the ```seProject``` method and ```Run``` methods and t
         /// </summary>
         /// <param name="dateTimeFileName">The JSON file name containing the DateTime data for encoding tests.</param>
         /// <param name="aqiFileName">The JSON file name containing the AQI data for scalar encoding tests.</param>
+        /// <param name="value1">Third additional input data for EncodeAndVisualizeSingleValueTest method in the SDR to Bitmap conversion.</param>
+        /// <param name="value2">Fourth additional input data for EncodeAndVisualizeSingleValueTest3 method in the SDR to Bitmap conversion.</param>
+        /// <param name="value3">Third additional input data for GeoSpatialEncoderTestDrawBitMap method in the SDR to Bitmap conversion.</param>
         public async Task seProject(string dateTimeFileName, string aqiFileName)
         {
             // Generate bitmap with binary encoder
@@ -222,7 +228,7 @@ The queue message trigger the ```seProject``` method and ```Run``` methods and t
         }
 ```
 
-The ```Run()``` methods takes all the ran file names and values and upload the results in to a table and completes the task
+The ```Run()``` methods takes all the ran file names and compiles them in a structured format and values and upload the results in to a table and completes the task
 
 ```csharp
 /// <summary>
@@ -232,9 +238,9 @@ The ```Run()``` methods takes all the ran file names and values and upload the r
         /// </summary>
         /// <param name="sdrTestFile1">First additional test file used in the SDR to Bitmap conversion.</param>
         /// <param name="sdrTestFile2">Second additional test file used in the SDR to Bitmap conversion.</param>
-        /// <param name="value1">Third additional input data for first method  </param>
-        /// <param name="value2">Fourth additional input data for Second method  </param>
-        /// <param name="value3">Third additional input data for third method  </param>
+        /// <param name="value1">Third additional input data for EncodeAndVisualizeSingleValueTest method in the SDR to Bitmap conversion.</param>
+        /// <param name="value2">Fourth additional input data for EncodeAndVisualizeSingleValueTest3 method in the SDR to Bitmap conversion.</param>
+        /// <param name="value3">Third additional input data for GeoSpatialEncoderTestDrawBitMap method in the SDR to Bitmap conversion.</param>
         /// <returns>A task that returns an experiment result object encapsulating details such as start and end times, accuracy, and test data.</returns>
         public Task<IExperimentResult> Run(string sdrTestFile1, string sdrTestFile2, string value1, string value2, string value3)
         {
@@ -270,7 +276,6 @@ The ```Run()``` methods takes all the ran file names and values and upload the r
                 res.Description = json;
                 this.logger?.LogInformation($"The file result we got: {json}");
                 res.TestData = json;
-                res.Accuracy = 100; // Assuming a fixed accuracy for demonstration
             }
             catch (Exception ex)
             {

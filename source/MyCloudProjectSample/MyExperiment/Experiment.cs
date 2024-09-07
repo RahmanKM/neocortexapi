@@ -51,9 +51,9 @@ namespace MyExperiment
         /// </summary>
         /// <param name="sdrTestFile1">First additional test file used in the SDR to Bitmap conversion.</param>
         /// <param name="sdrTestFile2">Second additional test file used in the SDR to Bitmap conversion.</param>
-        /// <param name="value1">Third additional input data for first method  </param>
-        /// <param name="value2">Fourth additional input data for Second method  </param>
-        /// <param name="value3">Third additional input data for third method  </param>
+        /// <param name="value1">Third additional input data for EncodeAndVisualizeSingleValueTest method in the SDR to Bitmap conversion.</param>
+        /// <param name="value2">Fourth additional input data for EncodeAndVisualizeSingleValueTest3 method in the SDR to Bitmap conversion.</param>
+        /// <param name="value3">Third additional input data for GeoSpatialEncoderTestDrawBitMap method in the SDR to Bitmap conversion.</param>
         /// <returns>A task that returns an experiment result object encapsulating details such as start and end times, accuracy, and test data.</returns>
         public Task<IExperimentResult> Run(string sdrTestFile1, string sdrTestFile2, string value1, string value2, string value3)
         {
@@ -112,6 +112,9 @@ namespace MyExperiment
         /// <param name="inputFile">The main input file name for the experiment.</param>
         /// <param name="sdrTestFile1">First additional test file used in the SDR to Bitmap conversion.</param>
         /// <param name="sdrTestFile2">Second additional test file used in the SDR to Bitmap conversion.</param>
+        /// <param name="value1">Third additional input data for EncodeAndVisualizeSingleValueTest method in the SDR to Bitmap conversion.</param>
+        /// <param name="value2">Fourth additional input data for EncodeAndVisualizeSingleValueTest3 method in the SDR to Bitmap conversion.</param>
+        /// <param name="value3">Third additional input data for GeoSpatialEncoderTestDrawBitMap method in the SDR to Bitmap conversion.</param>
         /// <returns>A task that returns an experiment result object encapsulating details such as start and end times, accuracy, and test data.</returns>
         public async Task RunQueueListener(CancellationToken cancelToken)
         {
@@ -181,6 +184,9 @@ namespace MyExperiment
         /// </summary>
         /// <param name="dateTimeFileName">The JSON file name containing the DateTime data for encoding tests.</param>
         /// <param name="aqiFileName">The JSON file name containing the AQI data for scalar encoding tests.</param>
+        /// <param name="value1">Third additional input data for EncodeAndVisualizeSingleValueTest method in the SDR to Bitmap conversion.</param>
+        /// <param name="value2">Fourth additional input data for EncodeAndVisualizeSingleValueTest3 method in the SDR to Bitmap conversion.</param>
+        /// <param name="value3">Third additional input data for GeoSpatialEncoderTestDrawBitMap method in the SDR to Bitmap conversion.</param>
         public async Task seProject(string dateTimeFileName, string aqiFileName, string value1, string value2, double value3)
         {
             // Generate bitmap with binary encoder
