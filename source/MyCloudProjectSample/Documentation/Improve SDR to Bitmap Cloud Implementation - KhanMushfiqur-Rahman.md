@@ -97,6 +97,7 @@ A override method ```DrawBitmaps``` [source](https://github.com/RahmanKM/neocort
             }
         }
 ```
+Also I modified the `Draw1DBitmap` [source](https://github.com/RahmanKM/neocortexapi/blob/5adb2ebfcf724bf390743fed1ec0cd70db0a2b25/source/MyCloudProjectSample/MyExperiment/SEProject/NeoCortexUtils1.cs#L220) in the `NeocortexUtils1` class that we created for our SE Project.
 
 #### Cloud Storage Integration
 This facilitates secure and scalable handling of large data volumes by directly interacting with Azure Blob Storage.
