@@ -22,9 +22,10 @@ Running SDR to Bitmap conversions on local machines limits the scalability and e
 ## Methodology
 
 ### Stream-Based File Handling
-Originally, my methods involved direct file handling, which was not optimal for cloud-based execution. I transitioned to stream-based processing to enhance flexibility and performance. This change facilitates direct interactions with cloud storage without the need for intermediate storage, reducing I/O overhead.
+Originally, my methods involved direct file handling, which was not optimal for cloud-based execution. I transitioned to stream-based processing to enhance flexibility and performance. This change facilitates direct interactions with cloud storage without the need for intermediate storage, reducing I/O overhead. The changes were made to all the methods of ```SdrToBitmap``` class for generating memorystreams rather than saving file in storage. Here you can find the [codebase](https://github.com/RahmanKM/neocortexapi/blob/c4973d55f5095f98da56f1983b4b3a48e67c8155/source/MyCloudProjectSample/MyExperiment/SEProject/SdrToBitmap.cs#L17) and below is one of the method modification example:
 
 #### Modified Method Example
+
 ```csharp
 public byte[] EncodeFullDateTimeTest(int w, double r, Object input, int[] expectedOutput) {
     // Initializations and encoder settings
@@ -40,9 +41,10 @@ public byte[] EncodeFullDateTimeTest(int w, double r, Object input, int[] expect
         DrawBitmap(result, memoryStream);
         return memoryStream.ToArray();
     }
-}
+} 
 
 ```
+
 I used memorystream to hold the temprarily before uploading to cloud 
 ```csharp
 // Utilizing MemoryStream to hold data temporarily
@@ -52,6 +54,48 @@ using (MemoryStream memoryStream = new MemoryStream()) {
     // Converting the memory stream to an array for further use
     return memoryStream.ToArray();
 }
+```
+
+A override method ```DrawBitmaps``` [source](https://github.com/RahmanKM/neocortexapi/blob/c4973d55f5095f98da56f1983b4b3a48e67c8155/source/MyCloudProjectSample/MyExperiment/SEProject/NeoCortexUtils1.cs#L132) was introduced to handle such kind of BitMap generation task in `memoryStream` format in the ```NeoCortexUtils1``` class additional to the existing class methods. 
+
+```csharp
+/// <summary>
+        /// Draws bitmaps from a list of 2D arrays and returns the byte array of the combined bitmap.
+        /// Allows specifying bitmap dimensions and colors for active and inactive cells.
+        /// </summary>
+        public static byte[] DrawBitmaps(List<int[,]> twoDimArrays, int bmpWidth, int bmpHeight, Color inactiveCellColor, Color activeCellColor)
+        {
+            Bitmap bitmap = new Bitmap(bmpWidth, bmpHeight);
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.Clear(inactiveCellColor);
+                int offsetX = 0;
+
+                foreach (int[,] array in twoDimArrays)
+                {
+                    int arrayWidth = array.GetLength(0);
+                    int arrayHeight = array.GetLength(1);
+                    int scaleW = bmpWidth / twoDimArrays.Count / arrayWidth;
+                    int scaleH = bmpHeight / arrayHeight;
+
+                    for (int y = 0; y < arrayHeight; y++)
+                    {
+                        for (int x = 0; x < arrayWidth; x++)
+                        {
+                            Color color = array[x, y] == 1 ? activeCellColor : inactiveCellColor;
+                            g.FillRectangle(new SolidBrush(color), offsetX + x * scaleW, y * scaleH, scaleW, scaleH);
+                        }
+                    }
+                    offsetX += arrayWidth * scaleW;
+                }
+            }
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                bitmap.Save(memoryStream, ImageFormat.Png);
+                return memoryStream.ToArray();
+            }
+        }
 ```
 
 #### Cloud Storage Integration
@@ -239,7 +283,7 @@ The ```Run()``` methods takes all the ran file names and values and upload the r
         }
 ```
 
-The method ```RunEncodeTestAsync``` is responsible for running ```EncodeFullDateTimeTest``` from ```SdrToBitmap``` class. Here it downloads the file from azure blob storage and pass the sdrs into the method
+The method ```RunEncodeTestAsync``` is responsible for running ```EncodeFullDateTimeTest``` from ```SdrToBitmap``` class. Here it [downloads](https://github.com/RahmanKM/neocortexapi/blob/c4973d55f5095f98da56f1983b4b3a48e67c8155/source/MyCloudProjectSample/MyExperiment/Experiment.cs#L279) the file from azure blob storage and pass the sdrs into the method
 ```csharp
 /// <summary>
         /// Runs the DateTime encoding tests by processing a list of data rows extracted from a JSON file.
@@ -300,7 +344,7 @@ The method ```RunEncodeTestAsync``` is responsible for running ```EncodeFullDate
         }
 ```
 
-The ```RunScalarAQITestsAsync``` method is responsible for downloading and passing the sdrs to ```ScalarEncodingExperimentWithAQI``` method from ```SdrToBitmap``` class. 
+The ```RunScalarAQITestsAsync``` method is responsible for [downloading](https://github.com/RahmanKM/neocortexapi/blob/c4973d55f5095f98da56f1983b4b3a48e67c8155/source/MyCloudProjectSample/MyExperiment/Experiment.cs#L295) and passing the sdrs to ```ScalarEncodingExperimentWithAQI``` method from ```SdrToBitmap``` class. 
 ```csharp
 /// <summary>
         /// Runs the scalar encoding tests using AQI data by processing a list of data rows extracted from a JSON file.
@@ -357,6 +401,8 @@ The ```RunScalarAQITestsAsync``` method is responsible for downloading and passi
         }
 ```
 
+
+
 In this experiment I have implemented our Software Engineering project in Azure cloud. Below is the total algorithm of the project:
 
 ![image](images/mushfiqs_diagram.png)
@@ -402,6 +448,9 @@ Azure portal > Home > RG-Rahman-Khan | Queues > rahmanqueue> Add message
   "ProjectName": "ML23/24-06. Improve samples and documentation for SDR representation",
   "GroupName": "rahmanKM",
   "Students": [ "Rahman Shahriar Khan" ],
+  "Value1": "50149",
+  "Value2": "56.7",
+  "Value3": 48.75,
   "DateTimeDataRow": "DateTimeDataRow.json",
   "ScalarEncoderAQI": "ScalarEncoderAQI.json"
 }
