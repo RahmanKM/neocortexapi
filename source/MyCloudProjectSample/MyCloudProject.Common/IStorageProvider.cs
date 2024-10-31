@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MyCloudProject.Common
@@ -11,29 +12,35 @@ namespace MyCloudProject.Common
     public interface IStorageProvider
     {
         /// <summary>
+        /// Receives the next message from the queue.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns>NULL if there are no messages in the queue.</returns>
+        IExerimentRequest ReceiveExperimentRequestAsync(CancellationToken token);
+
+        /// <summary>
         /// Downloads the input file for training. This file contains all required input for the experiment.
         /// The file is stored in the cloud or any other kind of store or database.
         /// </summary>
         /// <param name="fileName">The name of the file at some remote (cloud) location from where the file will be downloaded.</param>
         /// <returns>The fullpath name of the file as downloaded locally.</returns>
         /// <remarks>See step 4 in the architecture picture.</remarks>
-        Task<string> DownloadInputFile(string fileName);
+        Task<string> DownloadInputAsync(string fileName);
 
         /// <summary>
-        /// Uploadds the result of the experiment in the cloud or any other kind of store or database.
+        /// Uploads the result of the experiment in the cloud or any other kind of store or database.
         /// </summary>
-        /// <param name="fileName">The name of the file at some remote (cloud) location  where the file will be uploaded.</param>
-        /// <returns>Not used. It can be null.</returns>
-        /// <remarks>See step 4 (oposite way) in the architecture picture.</remarks>
-        Task UploadResultFile(string fileName, byte[] data);
-        Task UploadResultFiles(string fileName, List<byte[]> images);
+        /// <param name="experimentName">The name of the experiment at the remote (cloud) location. The operation creates the file with the name of experiment.</param>
+        /// <param name="result">The result of the experiment that should be uploaded to the table.</param>
+        /// <remarks>See step 5 (oposite way) in the architecture picture.</remarks>
+        Task UploadResultAsync(string experimentName, IExperimentResult result);
 
         /// <summary>
-        /// Uploads results of the experiment to the remote (cloud) location. For example the fileshare or as the entity to the table storage.
+        /// Makes sure that the message is deleted from the queue.
         /// </summary>
-        /// <param name="result"></param>
-        /// <returns>Not used.</returns>
-       /// <remarks>See step 5 in the architecture picture.</remarks>
-        Task UploadExperimentResult(IExperimentResult result);
+        /// <param name="request">The requests received by <see cref="nameof(IStorageProvider.ReceiveExperimentRequestAsync)"/>.</param>
+        /// <returns></returns>
+        Task CommitRequestAsync(IExerimentRequest request);
+
     }
 }

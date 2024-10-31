@@ -7,20 +7,18 @@ using System.Threading.Tasks;
 
 namespace MyCloudProject.Common
 {
+    /// <summary>
+    /// Defines the interface for experiment.
+    /// </summary>
     public interface IExperiment
     {
-        /// <summary>
-        /// Runs experiment.
-        /// </summary>
-        /// <param name="inputFile"></param>
-        /// <returns></returns>
-        Task<IExperimentResult> Run(string file1, string file2, string value1, string value2, string value3);
 
         /// <summary>
-        /// Starts the listening for incomming messages, which will trigger the experiment.
+        /// Runs the experiment.
         /// </summary>
-        /// <param name="cancelToken">Token used to cancel the listening process.</param>
-        /// <returns></returns>
-        Task RunQueueListener(CancellationToken cancelToken);
+        /// <param name="inputData">The name of the local file which contains the experiment's input data.</param>
+        /// <returns>The result.</returns>
+        Task<IExperimentResult> RunAsync(string inputData);
+
     }
 }

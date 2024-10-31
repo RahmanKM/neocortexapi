@@ -5,6 +5,10 @@ using Microsoft.Extensions.Configuration;
 using System.Threading;
 using MyExperiment;
 using System.Threading.Tasks;
+using Azure.Storage.Queues.Models;
+using Azure.Storage.Queues;
+using System.Text.Json;
+using System.Text;
 
 namespace MyCloudProject
 {
@@ -13,7 +17,9 @@ namespace MyCloudProject
         /// <summary>
         /// Your project ID from the last semester.
         /// </summary>
-        private static string projectName = "ML23/24-06. Improve samples and documentation for SDR representation";
+        private static string _projectName = "ML 22/23-6";
+
+        string test;
 
         static async Task Main(string[] args)
         {
@@ -25,26 +31,69 @@ namespace MyCloudProject
                 tokeSrc.Cancel();
             };
 
-            Console.WriteLine($"Started experiment: {projectName}");
+            Console.WriteLine($"Started experiment: {_projectName}");
 
-            //init configuration
+            // Init configuration
             var cfgRoot = Common.InitHelpers.InitConfiguration(args);
 
             var cfgSec = cfgRoot.GetSection("MyConfig");
 
             // InitLogging
             var logFactory = InitHelpers.InitLogging(cfgRoot);
+          
             var logger = logFactory.CreateLogger("Train.Console");
 
-            logger?.LogInformation($"{DateTime.Now} -  Started experiment: {projectName}");
+            logger?.LogInformation($"{DateTime.Now} -  Started experiment: {_projectName}");
 
             IStorageProvider storageProvider = new AzureStorageProvider(cfgSec);
 
-            Experiment experiment = new Experiment(cfgSec, storageProvider, projectName, logger/* put some additional config here */);
+            IExperiment experiment = new Experiment(cfgSec, storageProvider, logger/* put some additional config here */);
 
-            await experiment.RunQueueListener(tokeSrc.Token);
+            //
+            // Implements the step 3 in the architecture picture.
+            while (tokeSrc.Token.IsCancellationRequested == false)
+            {
+                // Step 3
+                IExerimentRequest request = storageProvider.ReceiveExperimentRequestAsync(tokeSrc.Token);
 
-            logger?.LogInformation($"{DateTime.Now} -  Experiment exit: {projectName}");
+                if (request != null)
+                {
+                    try
+                    {
+                        // logging
+
+                        // Step 4.
+                        var localFileWithInputArgs = await storageProvider.DownloadInputAsync(request.InputFile);
+
+                        // logging
+
+                        // Here is your SE Project code started.(Between steps 4 and 5).
+                        IExperimentResult result = await experiment.RunAsync(localFileWithInputArgs);
+
+                        // logging
+
+                        // Step 5.
+                        await storageProvider.UploadResultAsync("outputfile", result);
+
+                        // logging
+
+                        await storageProvider.CommitRequestAsync(request);
+
+                        // loggingx
+                    }
+                    catch (Exception ex)
+                    {
+                        // logging
+                    }
+                }
+                else
+                {
+                    await Task.Delay(500);
+                    logger?.LogTrace("Queue empty...");
+                }
+            }
+
+            logger?.LogInformation($"{DateTime.Now} -  Experiment exit: {_projectName}");
         }
 
 

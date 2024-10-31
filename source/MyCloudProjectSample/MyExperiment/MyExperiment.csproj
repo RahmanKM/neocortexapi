@@ -1,41 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="SEProject\NeoCortexUtils.txt" />
-	  <None Remove="SEProject\NeoCortexUtils1 - Copy.txt" />
-	  <None Remove="SEProject\NeoCortexUtilsImageSharp.txt" />
-	</ItemGroup>
-
-	<!--<ItemGroup>
-	  <Compile Include="SEProject\NeoCortexUtils.txt" />
-	  <Compile Include="SEProject\NeoCortexUtils1 - Copy.txt" />
-	  <Compile Include="SEProject\NeoCortexUtilsImageSharp.txt" />
-	</ItemGroup>-->
-
-	<ItemGroup>
-		<PackageReference Include="Azure.Storage.Queues" Version="12.10.0" />
-		<PackageReference Include="Azure.Storage.Blobs" Version="12.21.2" />
-		<PackageReference Include="Azure.Data.Tables" Version="12.5.0" />
-		<PackageReference Include="GemBox.Spreadsheet" Version="49.0.1767" />
-		<PackageReference Include="ImageBinarizer" Version="1.5.6" />
-		<PackageReference Include="NeoCortexApi" Version="1.1.5" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Azure.Storage.Queues" Version="12.18.0" />
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.20.0" />
+		<PackageReference Include="Azure.Data.Tables" Version="12.8.3" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\MyCloudProject.Common\MyCloudProject.Common.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="runtimeconfig.template.json" CopyToOutputDirectory="PreserveNewest" />
-	</ItemGroup>
-
 
 </Project>

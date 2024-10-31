@@ -24,6 +24,7 @@ namespace MyExperiment
 
         public ETag ETag { get; set; }
 
+
         public string ExperimentId { get; set; }
 
         public string Name { get; set; }
@@ -43,6 +44,8 @@ namespace MyExperiment
 
         public float Accuracy { get; set; }
 
-        public TimeSpan Duration { get; set; }
+        public string TestData { get; set; }
+
+        public string TestName { get; set; }
     }
 }

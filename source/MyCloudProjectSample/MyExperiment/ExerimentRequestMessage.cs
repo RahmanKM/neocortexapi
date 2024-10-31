@@ -5,29 +5,13 @@ using System.Text;
 
 namespace MyExperiment
 {
-    internal class ExerimentRequestMessage : IExerimentRequestMessage
+    internal class ExerimentRequestMessage : IExerimentRequest
     {
         public string ExperimentId { get; set; }
         public string InputFile { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-
-        public string Value1 { get; set; }
-        public string Value2 { get; set; }
-        public double Value3 { get; set; }
-
-        public string ScalarEncoderAQI { get; set; }
-        public string DateTimeDataRow { get; set; }
+        public string MessageId { get; set; }
+        public string MessageReceipt { get; set; }
     }
 }
-
-
-/*
- 
- {
-    "ExperimentId": "sasa",
-    "InputFile":"sasss",
-
-}
- 
- */ 
