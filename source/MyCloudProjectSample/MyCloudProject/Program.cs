@@ -15,11 +15,9 @@ namespace MyCloudProject
     class Program
     {
         /// <summary>
-        /// Your project ID from the last semester.
+        /// Project ID with title and small description.
         /// </summary>
-        private static string _projectName = "ML 22/23-6";
-
-        string test;
+        private static string _projectName = "ML23/24-06. Improve samples and documentation for SDR representation";
 
         static async Task Main(string[] args)
         {
