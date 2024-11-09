@@ -22,7 +22,7 @@ namespace MyExperiment
             configSection.Bind(_config);
         }
 
-        public Task CommitRequestAsync(IExerimentRequest request)
+        public Task CommitRequestAsync(IExperimentRequest request)
         {
             throw new NotImplementedException();
         }
@@ -32,7 +32,7 @@ namespace MyExperiment
             throw new NotImplementedException();
         }
 
-        public IExerimentRequest ReceiveExperimentRequestAsync(CancellationToken token)
+        public IExperimentRequest ReceiveExperimentRequestAsync(CancellationToken token)
         {
             // Receive the message and make sure that it is serialized to IExperimentResult.
             throw new NotImplementedException();
