@@ -1,0 +1,99 @@
+﻿using SkiaSharp;
+using System;
+using System.IO;
+
+public static class NeoCortexUtils
+{
+    // Standard color definitions
+    private static readonly SKColor Black = new SKColor(0, 0, 0);
+    private static readonly SKColor White = new SKColor(255, 255, 255);
+
+    /// <summary>
+    /// Loads an image, resizes it, converts it to grayscale, and applies a binarization threshold.
+    /// </summary>
+    /// <param name="imagePath">Path to the input image.</param>
+    /// <param name="imageSize">New size to which the image should be resized.</param>
+    /// <param name="outputFileName">File name for the output image.</param>
+    /// <returns>Path to the output file.</returns>
+    public static string BinarizeImage(string imagePath, int imageSize, string outputFileName)
+    {
+        string outputFilePath = $"{outputFileName}.png";
+        if (File.Exists(outputFilePath))
+            File.Delete(outputFilePath);
+
+        using (var original = SKBitmap.Decode(imagePath))
+        {
+            var resizedImage = original.Resize(new SKImageInfo(imageSize, imageSize), SKFilterQuality.High);
+            using (var surface = SKSurface.Create(new SKImageInfo(imageSize, imageSize)))
+            {
+                var canvas = surface.Canvas;
+                canvas.DrawBitmap(resizedImage, 0, 0);
+
+                using (var paint = new SKPaint())
+                {
+                    for (int y = 0; y < resizedImage.Height; y++)
+                    {
+                        for (int x = 0; x < resizedImage.Width; x++)
+                        {
+                            var pixel = resizedImage.GetPixel(x, y);
+                            byte grayScale = (byte)(0.299 * pixel.Red + 0.587 * pixel.Green + 0.114 * pixel.Blue);
+                            SKColor color = grayScale > 128 ? White : Black;
+                            paint.Color = color;
+                            canvas.DrawPoint(x, y, paint);
+                        }
+                    }
+                }
+
+                using (var image = surface.Snapshot())
+                using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
+                using (var stream = File.OpenWrite(outputFilePath))
+                {
+                    data.SaveTo(stream);
+                }
+            }
+        }
+
+        return outputFilePath;
+    }
+
+    /// <summary>
+    /// Draws a bitmap from a two-dimensional array of integers where 1 represents a colored pixel.
+    /// </summary>
+    /// <param name="twoDimArray">The two-dimensional array of integers.</param>
+    /// <param name="width">Width of the resulting image.</param>
+    /// <param name="height">Height of the resulting image.</param>
+    /// <param name="filePath">Path to save the resulting image.</param>
+    public static void DrawBitmap(int[,] twoDimArray, int width, int height, MemoryStream memoryStream)
+    {
+        using (var bitmap = new SKBitmap(width, height))
+        {
+            using (var canvas = new SKCanvas(bitmap))
+            {
+                canvas.Clear(SKColors.White); // Set background to white
+                var blackPaint = new SKPaint { Color = SKColors.Black };
+
+                int cellWidth = width / twoDimArray.GetLength(1);
+                int cellHeight = height / twoDimArray.GetLength(0);
+
+                for (int y = 0; y < twoDimArray.GetLength(0); y++)
+                {
+                    for (int x = 0; x < twoDimArray.GetLength(1); x++)
+                    {
+                        if (twoDimArray[y, x] == 1)
+                        {
+                            canvas.DrawRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight, blackPaint);
+                        }
+                    }
+                }
+            }
+
+            // Encode the SKBitmap to PNG and save to MemoryStream
+            using (var image = SKImage.FromBitmap(bitmap))
+            using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
+            {
+                data.SaveTo(memoryStream);
+            }
+        }
+    }
+
+}

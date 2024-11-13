@@ -1,0 +1,136 @@
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.PixelFormats;
+using System;
+using System.IO;
+using SixLabors.ImageSharp.Drawing.Processing;
+using System.Collections.Generic;
+using SixLabors.Fonts;
+using SkiaSharp;
+
+namespace MyExperiment.SEProject
+{
+    public class NeoCortexUtilsImageSharp
+    {
+        // Standard color definitions
+        private static readonly Rgba32 Black = new Rgba32(0, 0, 0);
+        private static readonly Rgba32 White = new Rgba32(255, 255, 255);
+        private static readonly Rgba32 Green = new Rgba32(0, 255, 0);
+        private static readonly Rgba32 Yellow = new Rgba32(255, 255, 0);
+        private static readonly Rgba32 DarkGray = new Rgba32(105, 105, 105); // Equivalent to System.Drawing.Color.DarkGray
+
+        public static string BinarizeImage(string imagePath, int imageSize, string outputFileName)
+        {
+            // Construct the output file path
+            string outputFilePath = $"{outputFileName}.png";
+            if (File.Exists(outputFilePath))
+                File.Delete(outputFilePath);
+
+            // Load the image
+            using (var input = File.OpenRead(imagePath))
+            using (var inputStream = new SKManagedStream(input))
+            using (var original = SKBitmap.Decode(inputStream))
+            {
+                // Resize the image if necessary
+                var resizedImage = new SKBitmap(imageSize, imageSize, original.ColorType, original.AlphaType);
+                original.ScalePixels(resizedImage, SKFilterQuality.High);
+
+                // Create a new image for the binarized output
+                using (var surface = SKSurface.Create(new SKImageInfo(imageSize, imageSize)))
+                {
+                    var canvas = surface.Canvas;
+                    canvas.DrawBitmap(resizedImage, 0, 0);
+
+                    // Access pixel data
+                    var pixels = resizedImage.Pixels;
+                    for (int y = 0; y < resizedImage.Height; y++)
+                    {
+                        for (int x = 0; x < resizedImage.Width; x++)
+                        {
+                            int index = y * resizedImage.Width + x;
+                            var color = pixels[index];
+                            byte grayScale = (byte)(0.299 * color.Red + 0.587 * color.Green + 0.114 * color.Blue);
+                            // Apply threshold
+                            SKColor newColor = grayScale > 128 ? SKColors.White : SKColors.Black;
+                            pixels[index] = newColor;
+                        }
+                    }
+
+                    resizedImage.Pixels = pixels;
+
+                    // Save the new image
+                    using (var image = SKImage.FromBitmap(resizedImage))
+                    using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
+                    using (var stream = File.OpenWrite(outputFilePath))
+                    {
+                        data.SaveTo(stream);
+                    }
+                }
+            }
+
+            return outputFilePath;
+        }
+
+        public static void DrawBitmap(int[,] twoDimArray, int width, int height, string filePath, string text = null)
+        {
+            using (var image = new Image<Rgba32>(width, height))
+            {
+                image.Mutate(ctx =>
+                {
+                    ctx.Fill(Black); // Set background color
+
+                    for (int y = 0; y < height; y++)
+                    {
+                        for (int x = 0; x < width; x++)
+                        {
+                            if (twoDimArray[x, y] == 1)
+                            {
+                                image[x, y] = Green; // Set active cell color
+                            }
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        var font = SystemFonts.CreateFont("Arial", 12);
+                        ctx.DrawText(text, font, White, new PointF(0, 0)); // Draw white text
+                    }
+                });
+
+                image.Save(filePath); // Save the image
+            }
+        }
+
+        public static void DrawBitmaps(List<int[,]> twoDimArrays, string filePath, int bmpWidth = 1024, int bmpHeight = 1024)
+        {
+            using (var image = new Image<Rgba32>(bmpWidth, bmpHeight))
+            {
+                image.Mutate(ctx =>
+                {
+                    ctx.Fill(DarkGray); // Fill background
+
+                    int offset = 0;
+                    foreach (var array in twoDimArrays)
+                    {
+                        int arrayWidth = array.GetLength(0);
+                        int arrayHeight = array.GetLength(1);
+
+                        for (int y = 0; y < arrayHeight; y++)
+                        {
+                            for (int x = 0; x < arrayWidth; x++)
+                            {
+                                if (array[x, y] == 1)
+                                {
+                                    ctx.Fill(Yellow, new SixLabors.ImageSharp.Rectangle(offset + x, y, 1, 1));
+                                }
+                            }
+                        }
+                        offset += arrayWidth;
+                    }
+                });
+
+                image.Save(filePath);
+            }
+        }
+    }
+}
