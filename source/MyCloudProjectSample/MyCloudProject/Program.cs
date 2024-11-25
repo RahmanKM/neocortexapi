@@ -52,13 +52,14 @@ namespace MyCloudProject
             while (tokeSrc.Token.IsCancellationRequested == false)
             {
                 // Step 3
-                IExperimentRequest request = storageProvider.ReceiveExperimentRequestAsync(tokeSrc.Token);
-
+                Task<IExperimentRequest> request = storageProvider.ReceiveExperimentRequestAsync(tokeSrc.Token);
+                IExperimentRequest fileNamesAndValues = await request;
                 if (request != null)
                 {
                     try
                     {
                         // logging
+                        logger?.LogInformation($"{DateTime.Now} - Queue message serialized into fileNamesAndValues");
 
                         // Step 4.
                         var localFileWithInputArgs = await storageProvider.DownloadInputAsync(request.InputFile);
