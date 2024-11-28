@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Azure.Data.Tables;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Azure.Storage.Queues;
 using Azure.Storage.Queues.Models;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using MyCloudProject.Common;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -50,10 +52,48 @@ namespace MyExperiment
             }
         }
 
-        public Task<string> DownloadInputAsync(string fileName)
+        /// <summary>
+        /// Downloads the content of a specified file from an Azure Blob Storage container.
+        /// </summary>
+        /// <param name="fileName">The name of the file to download from the blob storage.</param>
+        /// <returns>
+        /// A string containing the contents of the file if it exists in the blob storage.
+        /// </returns>
+        /// <exception cref="FileNotFoundException">
+        /// Thrown when the specified file does not exist in the blob container.
+        /// </exception>
+        public async Task<string> DownloadInputAsync(string fileName)
         {
-            throw new NotImplementedException();
+            // Create a connection to the specified blob container using configuration settings.
+            BlobContainerClient container = new BlobContainerClient(this._config.StorageConnectionString, this._config.TrainingContainer);
+
+            // Ensure the blob container exists; create it if it does not.
+            await container.CreateIfNotExistsAsync();
+
+            // Retrieve a reference to the blob using the provided file name.
+            BlobClient blob = container.GetBlobClient(fileName);
+
+            // Check if the specified blob exists in the container.
+            if (await blob.ExistsAsync())
+            {
+                // Download the blob's content as a stream.
+                BlobDownloadInfo download = await blob.DownloadAsync();
+
+                // Read the contents of the file using a StreamReader.
+                using (StreamReader reader = new StreamReader(download.Content))
+                {
+                    // Read the entire file content asynchronously and return it as a string.
+                    string fileContent = await reader.ReadToEndAsync();
+                    return fileContent;
+                }
+            }
+            else
+            {
+                // Throw an exception if the specified file does not exist in the blob container.
+                throw new FileNotFoundException($"'{fileName}' could not be found.");
+            }
         }
+
 
         /// <summary>
         /// Receives an experiment request from the Azure queue asynchronously.

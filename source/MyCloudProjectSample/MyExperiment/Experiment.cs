@@ -33,7 +33,7 @@ namespace MyExperiment
         }
 
 
-        public Task<IExperimentResult> RunAsync(string inputData)
+        public Task<IExperimentResult> RunAsync(string dateTimeFile, string scalarEncoderAQIFile, string value1, string value2, double value3)
         {
             // TODO read file
 
@@ -49,5 +49,7 @@ namespace MyExperiment
 
             return Task.FromResult<IExperimentResult>(res); // TODO...
         }
+
+       
     }
 }

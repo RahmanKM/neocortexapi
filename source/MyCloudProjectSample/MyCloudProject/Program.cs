@@ -61,13 +61,22 @@ namespace MyCloudProject
                         // logging
                         logger?.LogInformation($"{DateTime.Now} - Queue message serialized into fileNamesAndValues");
 
+                        // assign downloaded queue message information to different variables.
+                        var dateTimeFile = fileNamesAndValues.DateTimeDataRow;
+                        var scalarEncoderAQIFile = fileNamesAndValues.ScalarEncoderAQI;
+                        var value1 = fileNamesAndValues.Value1;
+                        var value2 = fileNamesAndValues.Value2;
+                        var value3 = fileNamesAndValues.Value3;
+
                         // Step 4.
-                        var localFileWithInputArgs = await storageProvider.DownloadInputAsync(request.InputFile);
+                        var dateTimeFiles = await storageProvider.DownloadInputAsync(dateTimeFile);
+                        var scalarEncoderFiles = await storageProvider.DownloadInputAsync(scalarEncoderAQIFile);
 
                         // logging
+                        logger?.LogInformation($"{DateTime.Now} - No error while downloading files");
 
                         // Here is your SE Project code started.(Between steps 4 and 5).
-                        IExperimentResult result = await experiment.RunAsync(localFileWithInputArgs);
+                        IExperimentResult result = await experiment.RunAsync(dateTimeFiles, scalarEncoderFiles, value1, value2, value3);
 
                         // logging
 
@@ -76,7 +85,7 @@ namespace MyCloudProject
 
                         // logging
 
-                        await storageProvider.CommitRequestAsync(request);
+                        //await storageProvider.CommitRequestAsync(request);
 
                         // loggingx
                     }
