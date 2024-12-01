@@ -42,5 +42,13 @@ namespace MyCloudProject.Common
         /// <returns></returns>
         Task CommitRequestAsync(IExperimentRequest request);
 
+        /// <summary>
+        /// Uploadds the result of the experiment in the cloud or any other kind of store or database.
+        /// </summary>
+        /// <param name="fileName">The name of the file at some remote (cloud) location  where the file will be uploaded.</param>
+        /// <returns>Not used. It can be null.</returns>
+        /// <remarks>See step 4 (oposite way) in the architecture picture.</remarks>
+        Task UploadResultFile(string fileName, byte[] data);
+
     }
 }

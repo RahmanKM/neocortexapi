@@ -138,6 +138,25 @@ namespace MyExperiment
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Uploads a single result file to Azure Blob Storage.
+        /// </summary>
+        /// <param name="fileName">The name of the file to upload.</param>
+        /// <param name="data">The data to upload in byte array format.</param>
+        public async Task UploadResultFile(string fileName, byte[] data)
+        {
+            BlobServiceClient blobServiceClient = new BlobServiceClient(this._config.StorageConnectionString);
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(this._config.ResultContainer);
+
+            BlobClient blobClient = containerClient.GetBlobClient(fileName);
+
+            // Prepare the data for uploading
+            using (MemoryStream memoryStream = new MemoryStream(data)) 
+            {
+                await blobClient.UploadAsync(memoryStream);
+            }
+        }
+
         public Task UploadResultAsync(string experimentName, IExperimentResult result)
         {
             throw new NotImplementedException();
