@@ -54,7 +54,7 @@ namespace MyCloudProject
                 // Step 3
                 Task<IExperimentRequest> request = storageProvider.ReceiveExperimentRequestAsync(tokeSrc.Token);
                 IExperimentRequest fileNamesAndValues = await request;
-                if (request != null)
+                if (fileNamesAndValues != null)
                 {
                     try
                     {
@@ -80,12 +80,12 @@ namespace MyCloudProject
 
                         // logging
 
-                        // Step 5.
-                        await storageProvider.UploadResultAsync("outputfile", result);
+                        // Step 5 Upload results to database
+                        await storageProvider.UploadResultAsync(result);
 
                         // logging
 
-                        //await storageProvider.CommitRequestAsync(request);
+                        await storageProvider.CommitRequestAsync(fileNamesAndValues);
 
                         // loggingx
                     }

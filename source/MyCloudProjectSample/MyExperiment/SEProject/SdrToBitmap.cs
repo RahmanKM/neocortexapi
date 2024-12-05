@@ -107,7 +107,7 @@ namespace MyExperiment.SEProject
         /// Thrown when the length of the encoded SDR is an odd number, which is a limitation for 2D drawing.
         /// The encoder's offset properties must be set to ensure the SDR length is an even number.
         /// </exception>
-        public byte[] EncodeFullDateTimeTest(int w, double r, Object input, int[] expectedOutput)
+        public byte[] EncodeFullDateTimeTest(int w, double r, Object input)
         {
             CortexNetworkContext ctx = new CortexNetworkContext();
 

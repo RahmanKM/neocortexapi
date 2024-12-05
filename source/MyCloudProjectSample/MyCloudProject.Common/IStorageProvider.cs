@@ -30,10 +30,9 @@ namespace MyCloudProject.Common
         /// <summary>
         /// Uploads the result of the experiment in the cloud or any other kind of store or database.
         /// </summary>
-        /// <param name="experimentName">The name of the experiment at the remote (cloud) location. The operation creates the file with the name of experiment.</param>
         /// <param name="result">The result of the experiment that should be uploaded to the table.</param>
         /// <remarks>See step 5 (oposite way) in the architecture picture.</remarks>
-        Task UploadResultAsync(string experimentName, IExperimentResult result);
+        Task UploadResultAsync(IExperimentResult result);
 
         /// <summary>
         /// Makes sure that the message is deleted from the queue.

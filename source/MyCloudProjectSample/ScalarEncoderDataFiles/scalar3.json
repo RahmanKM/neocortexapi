@@ -1,0 +1,35 @@
+{
+    "ScalarEncoderDataWithAQI": [
+      {
+        "Inputs": [5, 18, 45],
+        "MinValue": 0.0,
+        "MaxValue": 50.0
+      },
+      {
+        "Inputs": [51, 95, 140],
+        "MinValue": 50.0,
+        "MaxValue": 150.0
+      },
+      {
+        "Inputs": [155, 200, 245],
+        "MinValue": 150.0,
+        "MaxValue": 250.0
+      },
+      {
+        "Inputs": [255, 300, 335],
+        "MinValue": 250.0,
+        "MaxValue": 350.0
+      },
+      {
+        "Inputs": [360, 400, 420],
+        "MinValue": 350.0,
+        "MaxValue": 450.0
+      },
+      {
+        "Inputs": [460, 480],
+        "MinValue": 450.0,
+        "MaxValue": 500.0
+      }
+    ]
+  }
+  

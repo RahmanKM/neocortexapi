@@ -157,9 +157,35 @@ namespace MyExperiment
             }
         }
 
-        public Task UploadResultAsync(string experimentName, IExperimentResult result)
+        public async Task UploadResultAsync(IExperimentResult result)
         {
-            throw new NotImplementedException();
+            string rowKey = $"{Guid.NewGuid()}";
+            string partitionKey = "rahman-cc-" + rowKey;
+
+            var testResult = new ExperimentResult(partitionKey, rowKey)
+            {
+                ExperimentId = result.ExperimentId,
+                Description = result.Description,
+                StartTimeUtc = result.StartTimeUtc,
+                EndTimeUtc = result.EndTimeUtc,
+                OutputFiles = result.OutputFiles,
+                Duration= result.Duration,
+            };
+
+            Console.WriteLine($"Upload ExperimentResult to table: {this._config.ResultTable}");
+            var client = new TableClient(this._config.StorageConnectionString, this._config.ResultTable);
+
+            await client.CreateIfNotExistsAsync();
+
+            try
+            {
+                await client.AddEntityAsync<ExperimentResult>(testResult);
+                Console.WriteLine("Uploaded to Table Storage completed");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to upload to Table Storage: {ex.ToString()}");
+            }
         }
     }
 

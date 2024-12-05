@@ -86,7 +86,6 @@ namespace MyExperiment
 
                 // Store the result files
                 res.OutputFiles = new string[] { scalarFileName, bitmap1DFileName, geoSpatialFileName };
-                res.Accuracy = CalculateAccuracy(); // Placeholder method to calculate accuracy
                 res.Description = "Experiment completed successfully";
 
                 return res;
@@ -95,7 +94,6 @@ namespace MyExperiment
             {
                 logger?.LogError($"Experiment failed: {ex.Message}");
                 res.Description = "Experiment failed: " + ex.Message;
-                res.Accuracy = 0.0F; // Set accuracy to 0 for failed runs
                 return res;
             }
         }
@@ -159,15 +157,14 @@ namespace MyExperiment
             foreach (var dataRow in dataRows)
             {
                 this.logger?.LogInformation(
-                    "DataRow - W: {W}, R: {R}, Input: {Input}, ExpectedOutput: {ExpectedOutput}",
+                    "DataRow - W: {W}, R: {R}, Input: {Input}",
                     dataRow.W,
                     dataRow.R,
-                    dataRow.Input,
-                    string.Join(", ", dataRow.ExpectedOutput)
+                    dataRow.Input
                 );
 
                 SdrToBitmap sdrToBitmap = new SdrToBitmap();
-                byte[] result = sdrToBitmap.EncodeFullDateTimeTest(dataRow.W, dataRow.R, dataRow.Input, dataRow.ExpectedOutput);
+                byte[] result = sdrToBitmap.EncodeFullDateTimeTest(dataRow.W, dataRow.R, dataRow.Input);
                 string fileName = "DateTimeBitMap_" + dataRow.Input + "_" + DateTimeOffset.UtcNow.ToString("yyyyMMdd_HHmmss_fff") + ".png";
 
                 await storageProvider.UploadResultFile(fileName, result);
@@ -244,7 +241,6 @@ namespace MyExperiment
         public int W { get; set; }
         public double R { get; set; }
         public string Input { get; set; }
-        public int[] ExpectedOutput { get; set; }
     }
 
     /// <summary>

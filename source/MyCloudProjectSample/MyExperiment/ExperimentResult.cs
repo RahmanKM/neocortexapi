@@ -36,12 +36,7 @@ namespace MyExperiment
 
         public long DurationSec { get; set; }
 
-        public string InputFileUrl { get; set; }
-
         public string[] OutputFiles { get; set; }
-        // Your properties related to experiment.
-
-        public float Accuracy { get; set; }
 
         public TimeSpan Duration { get; set; }
     }
