@@ -1,0 +1,35 @@
+{
+    "ScalarEncodingExperimentWithAQI": [
+      {
+        "Inputs": [13, 20, 48],
+        "MinValue": 0.0,
+        "MaxValue": 50.0
+      },
+      {
+        "Inputs": [52, 111, 147],
+        "MinValue": 50.0,
+        "MaxValue": 150.0
+      },
+      {
+        "Inputs": [152, 215, 248],
+        "MinValue": 150.0,
+        "MaxValue": 250.0
+      },
+      {
+        "Inputs": [252, 329, 347],
+        "MinValue": 250.0,
+        "MaxValue": 350.0
+      },
+      {
+        "Inputs": [351, 402, 447],
+        "MinValue": 350.0,
+        "MaxValue": 450.0
+      },
+      {
+        "Inputs": [450, 497],
+        "MinValue": 450.0,
+        "MaxValue": 500.0
+      }
+    ]
+  }
+  

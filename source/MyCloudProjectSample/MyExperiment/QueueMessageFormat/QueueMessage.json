@@ -5,6 +5,6 @@
   "Value1": "50149",
   "Value2": "56.7",
   "Value3": 48.75,
-  "DateTimeDataRow": "DateTimeDataRow.json",
-  "ScalarEncoderAQI": "ScalarEncoderAQI.json"
+  "DateTimeDataRow": "DataRow3.json",
+  "ScalarEncoderAQI": "scalar3.json"
 }

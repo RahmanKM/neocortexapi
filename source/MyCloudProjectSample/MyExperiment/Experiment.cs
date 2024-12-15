@@ -85,7 +85,7 @@ namespace MyExperiment
                 logger?.LogInformation($"Experiment completed. Duration: {res.Duration}");
 
                 // Store the result files
-                res.OutputFiles = new string[] { scalarFileName, bitmap1DFileName, geoSpatialFileName };
+                res.OutputFiles = JsonSerializer.Serialize(new string[] { scalarFileName, bitmap1DFileName, geoSpatialFileName });
                 res.Description = "Experiment completed successfully";
 
                 return res;

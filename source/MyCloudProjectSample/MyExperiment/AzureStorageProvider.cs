@@ -132,12 +132,6 @@ namespace MyExperiment
             return null;
         }
 
-
-        public Task UploadExperimentResult(IExperimentResult result)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Uploads a single result file to Azure Blob Storage.
         /// </summary>
@@ -159,8 +153,8 @@ namespace MyExperiment
 
         public async Task UploadResultAsync(IExperimentResult result)
         {
-            string rowKey = $"{Guid.NewGuid()}";
-            string partitionKey = "rahman-cc-" + rowKey;
+            string rowKey = Guid.NewGuid().ToString("N");
+            string partitionKey = "rahman-cc";
 
             var testResult = new ExperimentResult(partitionKey, rowKey)
             {
@@ -169,7 +163,7 @@ namespace MyExperiment
                 StartTimeUtc = result.StartTimeUtc,
                 EndTimeUtc = result.EndTimeUtc,
                 OutputFiles = result.OutputFiles,
-                Duration= result.Duration,
+                Duration = result.Duration,
             };
 
             Console.WriteLine($"Upload ExperimentResult to table: {this._config.ResultTable}");

@@ -91,7 +91,7 @@ namespace MyCloudProject
                     }
                     catch (Exception ex)
                     {
-                        // logging
+                        logger?.LogError($"{DateTime.Now} - Error while downloading the files. {ex.Message}");
                     }
                 }
                 else

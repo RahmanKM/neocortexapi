@@ -17,7 +17,7 @@ namespace MyCloudProject.Common
 
         string Description { get; set; }
 
-        string[] OutputFiles { get; set; }
+        string OutputFiles { get; set; }
 
     }
 
