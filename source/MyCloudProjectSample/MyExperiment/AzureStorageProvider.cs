@@ -151,6 +151,18 @@ namespace MyExperiment
             }
         }
 
+        /*
+         * UploadResultAsync Method Summary:
+         * ---------------------------------
+         * This asynchronous method is responsible for uploading an experiment result to Azure Table Storage.
+         * It performs the following steps:
+         *   1. Generates a unique row key and uses a fixed partition key.
+         *   2. Constructs an ExperimentResult object based on the provided IExperimentResult data.
+         *   3. Logs the intention to upload to a specified table.
+         *   4. Creates the table if it doesn't already exist.
+         *   5. Attempts to add the new entity (experiment result) to the table.
+         *   6. Logs the success or failure of the operation.
+         */
         public async Task UploadResultAsync(IExperimentResult result)
         {
             string rowKey = Guid.NewGuid().ToString("N");

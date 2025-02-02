@@ -449,11 +449,6 @@ Azure portal > Home > RG-Rahman-Khan | Queues > rahmanqueue> Add message
 ~~~json
 {
   "ExperimentId": "1",
-  "InputFile": "runccproject",
-  "Description": "SDR to Bitmap",
-  "ProjectName": "ML23/24-06. Improve samples and documentation for SDR representation",
-  "GroupName": "rahmanKM",
-  "Students": [ "Rahman Shahriar Khan" ],
   "Value1": "50149",
   "Value2": "56.7",
   "Value3": 48.75,
@@ -461,6 +456,71 @@ Azure portal > Home > RG-Rahman-Khan | Queues > rahmanqueue> Add message
   "ScalarEncoderAQI": "ScalarEncoderAQI.json"
 }
 ~~~
+
+After putting this queue message, the file names from this queue message will be downloaded by the program from the training container and process the image 
+and finally upload all the results combined in to the table and all the generated images in the result container.
+
+For example the ```DateTimeDataRow.json``` will be processed by the the ```GetDateTimeDataRowsAsync``` and will process the data into sdr and therefore convert it into 
+bitmap images, the amount of dates this file hold will result in the number of sdrs and bitmaps. So for this file, if it holds three dates "03/03/2016 08:00:00", "10/10/2018 23:59:59", "05/05/2019 12:00:00"  it will result in three bitmaps in the result container. 
+
+| ID | Date and Time         | Image                                      |
+|----|-----------------------|--------------------------------------------|
+| 1  | 03/03/2016 08:00:00   | ![Image](images/datetime1.png)             |
+| 2  | 10/10/2018 23:59:59   | ![Image](images/datetime2.png)             |
+| 3  | 05/05/2019 12:00:00   | ![Image](images/datetime3.png)             |
+Table: Date time conversion to Bitmaps  
+
+ScalarEnderAQI method process the other files mentioned in key "ScalarEncoderAQI" and produce sdrs and bitmaps and upload them to resultcontainer as well. For example: 
+
+| ID | Scalar Values         | Image                                      |
+|----|-----------------------|--------------------------------------------|
+| 1  | {
+        "Inputs": [55, 108, 149],
+        "MinValue": 50.0,
+        "MaxValue": 150.0
+      }   | ![Image](images/scalar1.png)             |
+| 2  | {
+        "Inputs": [151, 210, 249],
+        "MinValue": 150.0,
+        "MaxValue": 250.0
+      }   | ![Image](images/scalar2.png)             |
+| 3  | {
+        "Inputs": [260, 315, 340],
+        "MinValue": 250.0,
+        "MaxValue": 350.0
+      }   | ![Image](images/scalar3.png)             |
+
+Table: ScalarEncoderAQI values to Bitmap
+
+```EncodeAndVisualizeSingleValueTest3``` method of "SdrToBitmap.cs" processes the ```value3``` from the queue and makes sdrs and bitmaps in 1D. for example: 
+
+| ID | values         | Image                                      |
+|----|-----------------------|--------------------------------------------|
+| 1  | 56.7   | ![Image](images/1d1.png)             |
+| 2  | 57.3   | ![Image](images/1d2.png)             |
+| 3  | 58.9   | ![Image](images/1d3.png)             |
+
+Table: values to 1D Bitmap
+
+value1 is processed by ```EncodeAndVisualizeSingleValueTest``` and can be given any random integer value to create sdrs and bitmaps. For example
+
+| ID | values         | Image                                      |
+|----|-----------------------|--------------------------------------------|
+| 1  | 56312   | ![Image](images/scalar6.png)             |
+| 2  | 57138   | ![Image](images/scalar9.png)             |
+| 3  | 52392   | ![Image](images/scalar10.png)             |
+Table: Random values to Bitmap
+
+
+
+The ```GeoSpatialEncoderTestDrawBitMap``` takes the value3 as the Geo data and create images for example
+
+| ID | Geo data         | Image                                      |
+|----|-----------------------|--------------------------------------------|
+| 1  | 48.75   | ![Image](images/geo1.png)             |
+| 2  | 51.86   | ![Image](images/geo2.png)             |
+
+Table: Geo data to bitmap
 
 Go to "rahmankm3rd ," "Containers," and "logs" to make sure the experiment is being run from a container instance. 
 
