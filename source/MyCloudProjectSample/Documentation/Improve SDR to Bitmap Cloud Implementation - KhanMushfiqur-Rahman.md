@@ -460,6 +460,20 @@ Azure portal > Home > RG-Rahman-Khan | Queues > rahmanqueue> Add message
 After putting this queue message, the file names from this queue message will be downloaded by the program from the training container and process the image 
 and finally upload all the results combined in to the table and all the generated images in the result container.
 
+So already pre-uploaded files from the ```rahmatrainingcontainer``` can be pass down to this queue message for example:
+```
+{
+  "ExperimentId": "1",
+  "Value1": "30123",
+  "Value2": "36.7",
+  "Value3": 51.65,
+  "DateTimeDataRow": "DataRow1.json",
+  "ScalarEncoderAQI": "scalar1.json"
+}
+```
+
+here the value1, value2 and value3 would be integer, double and double for methods top process and make sdrs and make bitmaps out of it and "DateTimeDataRow" contains file name of Datetime data files and "ScalarEncoderAQI" contains sclar data files where each files contains multiple data. The files can be found on ```rahmantrainingcontainer```, and the output of these processed files can be found in ```rahmanresultcontainer```.
+
 For example the ```DateTimeDataRow.json``` will be processed by the the ```GetDateTimeDataRowsAsync``` and will process the data into sdr and therefore convert it into 
 bitmap images, the amount of dates this file hold will result in the number of sdrs and bitmaps. So for this file, if it holds three dates "03/03/2016 08:00:00", "10/10/2018 23:59:59", "05/05/2019 12:00:00"  it will result in three bitmaps in the result container. 
 
