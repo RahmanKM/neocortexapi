@@ -457,6 +457,18 @@ Azure portal > Home > RG-Rahman-Khan | Queues > rahmanqueue> Add message
 }
 ~~~
 
+### Sample of Queue message json:
+
+| **Key**             | **Sample Value**            | **Value Type**  | **Notes**                                          |
+|---------------------|-----------------------------|-----------------|----------------------------------------------------|
+| ExperimentId        | "1"                         | String          | Unique identifier for the experiment. Processed by    EncodeAndVisualizeSingleValueTest method.        |
+| Value1              | "50149"                     | String          | Numeric value stored as a string. Processed by EncodeAndVisualizeSingleValueTest method.                 |
+| Value2              | "56.7"                      | String          | Numeric value stored as a string.  Processed by GeoSpatialEncoderTestDrawBitMap method.                 |
+| Value3              | 48.75                       | Float/Number    | Numeric value stored as a number. Processed by GeoSpatialEncoderTestDrawBitMap method                  |
+| DateTimeDataRow     | "DateRow1.json"      | String          | Filename stored in the training container starts with DataRow followed by a number. This is for DateTime Encoder        |
+| ScalarEncoderAQI    | "scalar1.json"     | String          | Filename stored in the training container. File name starts with scalar and followed by a number 1,2,3...etc. These files are for scalar encoder        |
+
+
 After putting this queue message, the file names from this queue message will be downloaded by the program from the training container and process the image 
 and finally upload all the results combined in to the table and all the generated images in the result container.
 
