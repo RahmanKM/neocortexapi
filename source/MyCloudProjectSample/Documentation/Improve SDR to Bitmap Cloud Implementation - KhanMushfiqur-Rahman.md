@@ -452,8 +452,8 @@ Azure portal > Home > RG-Rahman-Khan | Queues > rahmanqueue> Add message
   "Value1": "50149",
   "Value2": "56.7",
   "Value3": 48.75,
-  "DateTimeDataRow": "DateTimeDataRow.json",
-  "ScalarEncoderAQI": "ScalarEncoderAQI.json"
+  "DateTimeDataRow": "DataRow1.json",
+  "ScalarEncoderAQI": "scalar1.json"
 }
 ~~~
 
@@ -465,7 +465,7 @@ Azure portal > Home > RG-Rahman-Khan | Queues > rahmanqueue> Add message
 | Value1              | "50149"                | String          | Numeric value stored as a string. Processed by EncodeAndVisualizeSingleValueTest method.                       | "50149", "50200"                         |
 | Value2              | "56.7"                 | String          | Numeric value stored as a string. Processed by GeoSpatialEncoderTestDrawBitMap method.                         | "56.7", "60.2"                           |
 | Value3              | 48.75                  | Float/Number    | Numeric value stored as a number. Processed by GeoSpatialEncoderTestDrawBitMap method.                         | 48.75, 47.16                             |
-| DateTimeDataRow     | "DateRow1.json"        | String          | Filename stored in the training container. Starts with `DataRow` followed by a number (e.g., 1, 2, 3, ...). This is for the DateTime Encoder. | "DataRow1.json", "DataRow2.json"         |
+| DateTimeDataRow     | "DataRow1.json"        | String          | Filename stored in the training container. Starts with `DataRow` followed by a number (e.g., 1, 2, 3, ...). This is for the DateTime Encoder. | "DataRow1.json", "DataRow2.json"         |
 | ScalarEncoderAQI    | "scalar1.json"         | String          | Filename stored in the training container. File name starts with `scalar` followed by a number (e.g., 1, 2, 3, ...). These files are for the scalar encoder. | "scalar1.json", "scalar2.json"           |
 
 
